@@ -108,7 +108,6 @@
             100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        /* Custom Terminal Syntax Scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -128,10 +127,6 @@
             font-family: 'JetBrains Mono', monospace;
             background-color: #02040a;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
-        }
-
-        .gauge-meter-bg {
-            stroke: rgba(255, 255, 255, 0.08);
         }
     </style>
 </head>
@@ -161,7 +156,6 @@
 
             <!-- PBX Quick Presets & Signaling Transport Selector -->
             <div class="flex items-center flex-wrap gap-2 sm:gap-3">
-                <!-- Mode Selector -->
                 <div class="flex items-center bg-slate-950/80 p-1 rounded-xl border border-slate-800 text-xs">
                     <button id="mode-btn-sip" onclick="app.setTransportMode('sip')" class="px-3 py-1.5 rounded-lg font-semibold transition-all bg-brand-600 text-white shadow-sm">
                         <i class="fa-solid fa-network-wired mr-1.5"></i> SIP / WSS
@@ -174,13 +168,11 @@
                     </button>
                 </div>
 
-                <!-- Connect / Register SIP Button -->
                 <button id="btn-sip-register" onclick="app.toggleSipRegistration()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-emerald-600/20">
                     <i class="fa-solid fa-plug" id="sip-reg-icon"></i>
                     <span id="sip-reg-btn-text">REGISTER SIP</span>
                 </button>
 
-                <!-- Mic Permission -->
                 <button id="btn-request-mic" onclick="app.requestAudioPermission()" class="glass-btn px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 text-slate-300">
                     <i class="fa-solid fa-microphone text-brand-cyan" id="mic-status-icon"></i>
                     <span id="mic-status-text">Mic Ready</span>
@@ -231,8 +223,8 @@
 
                         <!-- Number / Extension Display -->
                         <div class="my-3 text-center">
-                            <input type="text" id="dial-display" readonly placeholder="Enter ext or SIP URI..." 
-                                class="w-full bg-transparent text-center font-mono text-2xl font-bold tracking-wider text-white focus:outline-none placeholder-slate-600">
+                            <input type="text" id="dial-display" placeholder="Enter ext or SIP URI..." 
+                                class="w-full bg-transparent text-center font-mono text-2xl font-bold tracking-wider text-white focus:outline-none placeholder-slate-600" value="1002">
                             <p id="dial-contact-name" class="text-xs text-brand-cyan font-medium h-4 mt-1"></p>
                         </div>
 
@@ -360,13 +352,11 @@
 
                     <!-- Visualizer Canvas Stack -->
                     <div class="space-y-3">
-                        <!-- Waveform Oscilloscope Canvas -->
                         <div class="relative bg-slate-950/95 rounded-xl overflow-hidden border border-slate-800/90 h-32 flex items-center justify-center">
                             <canvas id="canvas-oscilloscope" class="w-full h-full block"></canvas>
                             <span class="absolute top-2 left-3 text-[10px] font-mono text-cyan-400/80 font-bold tracking-wider">TIME DOMAIN WAVEFORM</span>
                         </div>
 
-                        <!-- Frequency Spectrum Canvas -->
                         <div class="relative bg-slate-950/95 rounded-xl overflow-hidden border border-slate-800/90 h-32 flex items-center justify-center">
                             <canvas id="canvas-spectrum" class="w-full h-full block"></canvas>
                             <span class="absolute top-2 left-3 text-[10px] font-mono text-purple-400/80 font-bold tracking-wider">FREQUENCY SPECTRUM (FFT)</span>
@@ -421,7 +411,6 @@
         <section id="view-console" class="tab-view hidden flex flex-col gap-4">
             <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
                 
-                <!-- Terminal Controls Toolbar -->
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
                     <div class="flex items-center gap-3">
                         <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -432,7 +421,6 @@
                         </span>
                     </div>
 
-                    <!-- Console Action Buttons -->
                     <div class="flex items-center flex-wrap gap-2">
                         <button onclick="app.clearConsole()" class="glass-btn px-2.5 py-1.5 rounded-xl text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1.5">
                             <i class="fa-solid fa-trash"></i> Clear Logs
@@ -446,7 +434,6 @@
                     </div>
                 </div>
 
-                <!-- Filter Pills Bar -->
                 <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
                     <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                         <span class="text-slate-500 font-semibold mr-1">Filter:</span>
@@ -456,7 +443,6 @@
                         <button onclick="app.setConsoleFilter('ACK/BYE')" id="filter-btn-ACK/BYE" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white font-medium">ACK / BYE</button>
                         <button onclick="app.setConsoleFilter('TX')" id="filter-btn-TX" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white font-medium">TX Outgoing</button>
                         <button onclick="app.setConsoleFilter('RX')" id="filter-btn-RX" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white font-medium">RX Incoming</button>
-                        <button onclick="app.setConsoleFilter('ERR')" id="filter-btn-ERR" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-rose-400 hover:text-rose-300 font-medium">Errors (4xx/5xx)</button>
                     </div>
 
                     <div class="relative min-w-[200px]">
@@ -465,297 +451,189 @@
                     </div>
                 </div>
 
-                <!-- Live Terminal Raw Log Output Stream -->
-                <div id="sip-terminal-box" class="terminal-scroll rounded-xl p-4 border border-slate-800 h-[520px] overflow-y-auto font-mono text-xs space-y-3 leading-relaxed">
-                    <!-- SIP packets inserted dynamically -->
+                <div id="sip-terminal-box" class="terminal-scroll rounded-xl p-4 border border-slate-800 h-[520px] overflow-y-auto space-y-3 font-mono text-xs">
+                    <div class="text-slate-600 italic">// Waiting for SIP WebSocket signaling traffic...</div>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW TAB 3: PBX CREDENTIALS & MEDIA SERVER SETTINGS -->
+        <!-- VIEW TAB 3: PBX & MEDIA GATEWAY CONFIGURATION -->
         <section id="view-settings" class="tab-view hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            <!-- PBX AUTHENTICATION & WEBSOCKET PARAMETERS (7 cols) -->
-            <div class="lg:col-span-7 glass-panel rounded-2xl p-6 border border-slate-800 flex flex-col gap-5">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                    <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-server text-brand-cyan"></i> PBX Connection & SIP Digest Authentication
-                    </h2>
-                    
-                    <!-- Quick Presets Dropdown -->
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-slate-400">Preset:</span>
-                        <select id="preset-select" onchange="app.applyPbxPreset()" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-brand-cyan font-semibold focus:outline-none">
+            <div class="lg:col-span-7 flex flex-col gap-4">
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-server text-amber-400"></i> PBX Connection & SIP Digest Authentication
+                        </h2>
+                        <select id="cfg-preset" onchange="app.applyPreset(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1 text-xs text-slate-300 focus:outline-none">
+                            <option value="render">Render Cloud WSS Endpoint</option>
                             <option value="asterisk">Asterisk PJSIP (WSS)</option>
                             <option value="freeswitch">FreeSWITCH Sofia (WSS)</option>
-                            <option value="janus">Janus Gateway (WS)</option>
-                            <option value="echo">Nexus Demo Echo Server</option>
+                            <option value="loopback">Offline Test Mode</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">WebSocket Server URL (WSS)</label>
-                        <input type="text" id="cfg-wss-url" value="wss://asterisk.local:8089/ws" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none focus:border-brand-500">
-                        <p class="text-[11px] text-slate-500 mt-1">Example: wss://pbx.yourcompany.com:8089/ws or ws://127.0.0.1:5066</p>
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block text-slate-400 mb-1 font-medium">WebSocket Server URL (WSS)</label>
+                            <input type="text" id="cfg-wss-url" value="wss://starbridge-global-softphone.onrender.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Example: wss://starbridge-global-softphone.onrender.com or ws://127.0.0.1:8089</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">SIP Realm / Domain</label>
+                                <input type="text" id="cfg-domain" value="starbridge-global-softphone.onrender.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">Outbound SIP Proxy (Optional)</label>
+                                <input type="text" id="cfg-proxy" placeholder="sip:proxy.domain.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">Extension / SIP User</label>
+                                <input type="text" id="cfg-ext" value="1001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">Auth Username</label>
+                                <input type="text" id="cfg-auth-user" value="1001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">SIP Password / Token</label>
+                                <input type="password" id="cfg-password" value="123456" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">Register Expires (Sec)</label>
+                                <input type="number" id="cfg-expires" value="600" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
+                            </div>
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">SIP Realm / Domain</label>
-                        <input type="text" id="cfg-sip-domain" value="asterisk.local" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Outbound SIP Proxy (Optional)</label>
-                        <input type="text" id="cfg-outbound-proxy" placeholder="sip:proxy.yourcompany.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Extension / SIP User</label>
-                        <input type="text" id="cfg-sip-user" value="1001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Auth Username</label>
-                        <input type="text" id="cfg-auth-user" value="1001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">SIP Password / Token</label>
-                        <input type="password" id="cfg-sip-pass" value="supersecretpass" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Register Expires (Sec)</label>
-                        <input type="number" id="cfg-expires" value="600" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none">
-                    </div>
-                </div>
-
-                <!-- Connect Button -->
-                <div class="pt-3 border-t border-slate-800 flex justify-end">
-                    <button onclick="app.saveAndRegisterSip()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-purple hover:from-brand-500 hover:to-brand-purple/90 text-white text-xs font-bold shadow-lg shadow-brand-500/20 flex items-center gap-2">
-                        <i class="fa-solid fa-floppy-disk"></i> Save & Initiate SIP REGISTER
-                    </button>
-                </div>
-            </div>
-
-            <!-- CODEC & ICE / WEBRTC MEDIA OPTIONS (5 cols) -->
-            <div class="lg:col-span-5 glass-panel rounded-2xl p-6 border border-slate-800 flex flex-col gap-5">
-                <h2 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
-                    <i class="fa-solid fa-sliders text-amber-400"></i> Codec & ICE STUN/TURN Topology
-                </h2>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">Primary Audio Codec Preference</label>
-                    <select id="setting-codec" onchange="app.updateCodecPreference()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                        <option value="Opus/48000">Opus 48kHz (Dynamic - Crystal Voice)</option>
-                        <option value="PCMU/8000">G.711 u-law / PCMU (8kHz - 64kbps US/JP)</option>
-                        <option value="PCMA/8000">G.711 a-law / PCMA (8kHz - 64kbps EU)</option>
-                        <option value="Speex/16000">Speex Wideband (16kHz)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">STUN / TURN ICE Servers</label>
-                    <div class="space-y-2" id="ice-servers-list">
-                        <!-- Populated dynamically -->
-                    </div>
-                    <div class="flex gap-2 mt-3">
-                        <input type="text" id="new-ice-url" placeholder="stun:stun.l.google.com:19302" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
-                        <button onclick="app.addIceServer()" class="px-3 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold">
-                            Add STUN
+                    <div class="pt-2">
+                        <button onclick="app.saveAndRegister()" class="w-full py-3 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-brand-500/20 text-xs flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Save & Initiate SIP REGISTER
                         </button>
                     </div>
                 </div>
-
-                <!-- Web Audio DSP Enhancements -->
-                <div class="space-y-3 pt-2">
-                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Audio DSP Enhancements</span>
-                    
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                        <div>
-                            <p class="text-xs font-semibold text-white">Acoustic Echo Cancellation (AEC)</p>
-                            <p class="text-[11px] text-slate-400">Suppresses local speaker feedback</p>
-                        </div>
-                        <input type="checkbox" id="dsp-aec" checked onchange="app.updateDspSettings()" class="w-4 h-4 accent-brand-500 rounded cursor-pointer">
-                    </div>
-
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                        <div>
-                            <p class="text-xs font-semibold text-white">Active Noise Suppression (ANS)</p>
-                            <p class="text-[11px] text-slate-400">Filters ambient background hum</p>
-                        </div>
-                        <input type="checkbox" id="dsp-ans" checked onchange="app.updateDspSettings()" class="w-4 h-4 accent-brand-500 rounded cursor-pointer">
-                    </div>
-                </div>
             </div>
-        </section>
 
-        <!-- VIEW TAB 4: QUALITY TELEMETRY & STRESS SIMULATOR -->
-        <section id="view-telemetry" class="tab-view hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            <!-- MOS SCORE GAUGE CARD (4 cols) -->
-            <div class="lg:col-span-4 glass-panel rounded-2xl p-6 border border-slate-800 flex flex-col items-center justify-between text-center">
-                <div class="w-full text-left">
-                    <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-gauge-high text-brand-cyan"></i> VoIP Quality Engine (MOS)
+            <!-- Codec & Media Topology -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
+                    <h2 class="text-base font-bold text-white border-b border-slate-800 pb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-brand-purple"></i> Media DSP & ICE STUN Topology
                     </h2>
-                    <p class="text-xs text-slate-400">ITU-T G.107 E-Model MOS Standard</p>
-                </div>
 
-                <!-- Semi-Circle Gauge SVG -->
-                <div class="relative w-48 h-48 my-4 flex items-center justify-center">
-                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="40" class="gauge-meter-bg" stroke-width="8" fill="transparent"/>
-                        <circle id="mos-gauge-arc" cx="50" cy="50" r="40" stroke="url(#mosGradient)" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="25" stroke-linecap="round" fill="transparent" class="transition-all duration-500"/>
-                        <defs>
-                            <linearGradient id="mosGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#f43f5e" />
-                                <stop offset="50%" stop-color="#f59e0b" />
-                                <stop offset="100%" stop-color="#10b981" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <div class="absolute flex flex-col items-center justify-center text-center">
-                        <span id="telemetry-mos-val" class="text-4xl font-extrabold font-mono text-white">4.41</span>
-                        <span id="telemetry-mos-label" class="text-xs font-bold text-emerald-400 uppercase tracking-wider mt-1">Excellent</span>
-                    </div>
-                </div>
-
-                <!-- Reference Scale -->
-                <div class="w-full bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-xs space-y-1.5">
-                    <div class="flex justify-between text-slate-400">
-                        <span>4.3 - 4.5: Toll Quality</span>
-                        <span class="text-emerald-400 font-semibold">Excellent</span>
-                    </div>
-                    <div class="flex justify-between text-slate-400">
-                        <span>4.0 - 4.2: Standard VoIP</span>
-                        <span class="text-teal-400 font-semibold">Good</span>
-                    </div>
-                    <div class="flex justify-between text-slate-400">
-                        <span>3.6 - 3.9: Noticeable Delay</span>
-                        <span class="text-amber-400 font-semibold">Fair</span>
-                    </div>
-                    <div class="flex justify-between text-slate-400">
-                        <span>1.0 - 3.5: Dropouts / Robotic</span>
-                        <span class="text-rose-400 font-semibold">Poor</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CHARTS & NETWORK IMPAIRMENT SIMULATOR (8 cols) -->
-            <div class="lg:col-span-8 flex flex-col gap-6">
-                
-                <!-- Live Telemetry Graph -->
-                <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-3">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-chart-area text-brand-purple"></i> Telemetry Metrics Over Time
-                        </h3>
-                        <span class="text-xs font-mono text-slate-400">Sampling Interval: 1000ms</span>
-                    </div>
-                    <div class="h-56 w-full relative">
-                        <canvas id="telemetryChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Impairment Simulator Controls -->
-                <div class="glass-panel rounded-2xl p-5 border border-slate-800">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-sliders text-amber-400"></i> Network Quality Stress Simulator
-                        </h3>
-                        <span class="text-xs text-slate-400">Inject artificial jitter and packet loss</span>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="space-y-4 text-xs">
                         <div>
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-slate-300">Added Latency</span>
-                                <span id="sim-latency-val" class="font-mono text-brand-cyan">0 ms</span>
-                            </div>
-                            <input type="range" id="sim-latency" min="0" max="400" value="0" step="5" oninput="app.updateSimMetrics()" class="w-full accent-brand-cyan bg-slate-800 rounded-lg cursor-pointer">
+                            <label class="block text-slate-400 mb-1 font-medium">Primary Audio Codec Preference</label>
+                            <select class="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-3.5 py-2 focus:outline-none">
+                                <option value="opus">Opus 48kHz (Dynamic - Crystal Voice)</option>
+                                <option value="pcmu">G.711 u-law (PCMU 8kHz)</option>
+                                <option value="pcma">G.711 a-law (PCMA 8kHz)</option>
+                            </select>
                         </div>
+
                         <div>
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-slate-300">Added Jitter</span>
-                                <span id="sim-jitter-val" class="font-mono text-brand-purple">1.8 ms</span>
+                            <label class="block text-slate-400 mb-1 font-medium">STUN / TURN ICE Servers</label>
+                            <div class="space-y-2">
+                                <input type="text" value="stun:stun.l.google.com:19302" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-slate-300 font-mono">
+                                <input type="text" value="stun:stun1.l.google.com:19302" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-slate-300 font-mono">
                             </div>
-                            <input type="range" id="sim-jitter" min="0" max="80" value="2" step="1" oninput="app.updateSimMetrics()" class="w-full accent-brand-purple bg-slate-800 rounded-lg cursor-pointer">
                         </div>
-                        <div>
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-slate-300">Packet Loss Rate</span>
-                                <span id="sim-loss-val" class="font-mono text-rose-400">0.0 %</span>
-                            </div>
-                            <input type="range" id="sim-loss" min="0" max="15" value="0" step="0.5" oninput="app.updateSimMetrics()" class="w-full accent-rose-500 bg-slate-800 rounded-lg cursor-pointer">
+
+                        <div class="space-y-2 pt-2 border-t border-slate-800">
+                            <label class="flex items-center gap-2 text-slate-300 cursor-pointer">
+                                <input type="checkbox" checked class="rounded border-slate-800 bg-slate-950 text-brand-500 focus:ring-0">
+                                <span>Acoustic Echo Cancellation (AEC)</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-slate-300 cursor-pointer">
+                                <input type="checkbox" checked class="rounded border-slate-800 bg-slate-950 text-brand-500 focus:ring-0">
+                                <span>Active Noise Suppression (ANS)</span>
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW TAB 5: PBX DIRECTORY & CALL LOGS -->
-        <section id="view-contacts" class="tab-view hidden flex flex-col gap-6">
-            <div class="glass-panel rounded-2xl p-6 border border-slate-800">
-                <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-                    <div>
-                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-address-book text-brand-cyan"></i> Speed Dial & PBX Directory
-                        </h2>
-                        <p class="text-xs text-slate-400">Internal PBX extensions and speed dial entries</p>
-                    </div>
-                    
-                    <div class="flex items-center gap-3">
-                        <div class="relative">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-500 text-xs"></i>
-                            <input type="text" id="contact-search" oninput="app.renderContacts()" placeholder="Search contact or ext..." class="bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-4 py-2 text-xs text-white focus:outline-none focus:border-brand-500 w-48 sm:w-64">
-                        </div>
-                        <button onclick="app.openAddContactModal()" class="px-3.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold flex items-center gap-2 shadow-md">
-                            <i class="fa-solid fa-user-plus"></i> Add Contact
-                        </button>
-                    </div>
+        <!-- VIEW TAB 4: QUALITY & MOS TELEMETRY -->
+        <section id="view-telemetry" class="tab-view hidden flex flex-col gap-4">
+            <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-6">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-emerald-400"></i> ITU-T G.107 E-Model Voice Quality Metrics
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">Real-time estimation of Mean Opinion Score (MOS 1.0 - 4.5) dynamically computed from RTT latency, jitter, and packet loss.</p>
                 </div>
 
-                <!-- Contacts Grid -->
-                <div id="contacts-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-                    <!-- Populated dynamically -->
-                </div>
-
-                <!-- Call History Logs Table -->
-                <div class="border-t border-slate-800 pt-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Recent Call History & Local Recordings
-                        </h3>
-                        <div class="flex gap-2">
-                            <button onclick="app.exportCallHistoryCsv()" class="glass-btn px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 flex items-center gap-1.5">
-                                <i class="fa-solid fa-download"></i> CSV Export
-                            </button>
-                            <button onclick="app.clearCallLogs()" class="glass-btn px-3 py-1.5 rounded-xl text-xs font-medium text-rose-400 hover:text-rose-300 flex items-center gap-1.5">
-                                <i class="fa-solid fa-trash"></i> Clear Logs
-                            </button>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-950/90 border border-slate-800 rounded-2xl p-6 text-center flex flex-col justify-center items-center">
+                        <span class="text-xs text-slate-400 font-mono uppercase tracking-wider mb-2">MOS Score Rating</span>
+                        <span id="tel-mos-score" class="text-5xl font-extrabold font-mono text-emerald-400">4.41</span>
+                        <span class="mt-3 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30">HD Audio Voice</span>
                     </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-300 border-collapse">
-                            <thead>
-                                <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
-                                    <th class="py-3 px-4">Type</th>
-                                    <th class="py-3 px-4">Peer / Extension</th>
-                                    <th class="py-3 px-4">Start Time</th>
-                                    <th class="py-3 px-4">Duration</th>
-                                    <th class="py-3 px-4">Avg MOS</th>
-                                    <th class="py-3 px-4">Recording</th>
-                                    <th class="py-3 px-4 text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="call-logs-body" class="divide-y divide-slate-800/60 font-mono">
-                                <!-- Populated dynamically -->
-                            </tbody>
-                        </table>
+                    <div class="md:col-span-2 bg-slate-950/90 border border-slate-800 rounded-2xl p-6 space-y-4">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Simulate Network Quality Stress</h3>
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>Latency (RTT)</span>
+                                <span id="tel-val-rtt" class="font-mono">16 ms</span>
+                            </div>
+                            <input type="range" min="0" max="400" value="16" oninput="app.updateNetworkStress(this.value, null, null)" class="w-full accent-brand-500">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>Jitter</span>
+                                <span id="tel-val-jitter" class="font-mono">1.8 ms</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="1.8" step="0.5" oninput="app.updateNetworkStress(null, this.value, null)" class="w-full accent-brand-500">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>Packet Loss Rate</span>
+                                <span id="tel-val-loss" class="font-mono">0.0 %</span>
+                            </div>
+                            <input type="range" min="0" max="25" value="0" step="0.5" oninput="app.updateNetworkStress(null, null, this.value)" class="w-full accent-brand-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW TAB 5: DIRECTORY & LOGS -->
+        <section id="view-contacts" class="tab-view hidden flex flex-col gap-4">
+            <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-address-book text-brand-cyan"></i> Speed Dial & PBX Extensions
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div onclick="app.dialExtension('1001')" class="bg-slate-950 border border-slate-800 p-4 rounded-xl hover:border-brand-500 cursor-pointer transition flex items-center justify-between">
+                        <div>
+                            <div class="font-bold text-white text-sm">Alice Smith</div>
+                            <div class="text-xs text-slate-400 font-mono">Ext: 1001</div>
+                        </div>
+                        <button class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-phone"></i></button>
+                    </div>
+                    <div onclick="app.dialExtension('0774297590')" class="bg-slate-950 border border-slate-800 p-4 rounded-xl hover:border-brand-500 cursor-pointer transition flex items-center justify-between">
+                        <div>
+                            <div class="font-bold text-white text-sm">Josh Nyoni</div>
+                            <div class="text-xs text-slate-400 font-mono">Ext: 0774297590</div>
+                        </div>
+                        <button class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-phone"></i></button>
+                    </div>
+                    <div onclick="app.dialExtension('1002')" class="bg-slate-950 border border-slate-800 p-4 rounded-xl hover:border-brand-500 cursor-pointer transition flex items-center justify-between">
+                        <div>
+                            <div class="font-bold text-white text-sm">Bob Johnson</div>
+                            <div class="text-xs text-slate-400 font-mono">Ext: 1002</div>
+                        </div>
+                        <button class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-phone"></i></button>
                     </div>
                 </div>
             </div>
@@ -763,882 +641,522 @@
 
     </main>
 
-    <!-- CALL TRANSFER MODAL (REFER) -->
-    <div id="transfer-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-sm rounded-2xl p-6 border border-slate-700 flex flex-col gap-4 shadow-2xl">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 class="text-base font-bold text-white"><i class="fa-solid fa-arrow-right-arrow-left text-brand-cyan mr-2"></i>SIP Call Transfer (REFER)</h3>
-                <button onclick="app.closeTransferModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    <!-- INCOMING CALL RINGING MODAL -->
+    <div id="modal-incoming-call" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="glass-panel border border-slate-800 p-6 rounded-2xl max-w-sm w-full text-center space-y-5 shadow-2xl">
+            <div class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl border border-emerald-500/40">
+                <i class="fa-solid fa-phone-volume animate-bounce"></i>
             </div>
             <div>
-                <label class="block text-xs text-slate-400 mb-1">Target Extension / SIP URI</label>
-                <input type="text" id="transfer-target-input" placeholder="e.g. 1002" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-white focus:outline-none focus:border-brand-500">
+                <div class="text-xs uppercase tracking-wider text-slate-400 font-mono">Incoming SIP Voice Call</div>
+                <div id="modal-caller-ext" class="text-2xl font-bold font-mono text-white mt-1">1001</div>
             </div>
-            <div class="flex justify-end gap-2 pt-2">
-                <button onclick="app.closeTransferModal()" class="glass-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-300">Cancel</button>
-                <button onclick="app.executeCallTransfer()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold">Execute REFER</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- INCOMING CALL MODAL -->
-    <div id="incoming-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-sm rounded-3xl p-6 border border-slate-700 text-center flex flex-col items-center gap-5 shadow-2xl">
-            <div class="w-20 h-20 rounded-full bg-brand-500/20 border-2 border-brand-cyan flex items-center justify-center text-brand-cyan text-3xl pulse-ring-danger">
-                <i class="fa-solid fa-phone-incoming"></i>
-            </div>
-            <div>
-                <span class="text-xs font-bold text-brand-cyan uppercase tracking-widest">Incoming SIP INVITE...</span>
-                <h3 id="incoming-caller-id" class="text-2xl font-extrabold text-white mt-1">1002</h3>
-                <p id="incoming-caller-sub" class="text-xs text-slate-400 mt-0.5">sip:1002@asterisk.local</p>
-            </div>
-            
-            <div class="flex items-center gap-4 w-full pt-2">
-                <button onclick="app.declineIncomingCall()" class="flex-1 py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button onclick="app.rejectIncomingCall()" class="py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-xs">
                     <i class="fa-solid fa-phone-slash"></i> Decline
                 </button>
-                <button onclick="app.acceptIncomingCall()" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 pulse-call">
-                    <i class="fa-solid fa-phone"></i> Answer
+                <button onclick="app.acceptIncomingCall()" class="py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-xs">
+                    <i class="fa-solid fa-phone"></i> Accept
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- ADD CONTACT MODAL -->
-    <div id="contact-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 border border-slate-700 flex flex-col gap-4">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 class="text-base font-bold text-white"><i class="fa-solid fa-user-plus text-emerald-400 mr-2"></i>Add PBX Speed Dial</h3>
-                <button onclick="app.closeContactModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Contact Name</label>
-                    <input type="text" id="new-contact-name" placeholder="Sarah Connor" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Extension / SIP Number</label>
-                    <input type="text" id="new-contact-ext" placeholder="1005" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Role / Department</label>
-                    <input type="text" id="new-contact-role" placeholder="Telecom Engineer" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                </div>
-            </div>
-            <div class="flex justify-end gap-2 pt-2">
-                <button onclick="app.closeContactModal()" class="glass-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-300">Cancel</button>
-                <button onclick="app.saveContact()" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-semibold">Save Contact</button>
+    <!-- CALL TRANSFER MODAL -->
+    <div id="modal-transfer-call" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="glass-panel border border-slate-800 p-6 rounded-2xl max-w-sm w-full text-center space-y-4 shadow-2xl">
+            <h3 class="text-sm font-bold text-white flex items-center justify-center gap-2">
+                <i class="fa-solid fa-arrow-right-arrow-left text-brand-cyan"></i> SIP REFER Call Transfer
+            </h3>
+            <input type="text" id="transfer-target-input" placeholder="Enter target ext..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono text-center text-sm focus:outline-none focus:border-brand-500">
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="app.closeTransferModal()" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs">Cancel</button>
+                <button onclick="app.executeTransfer()" class="py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs">Transfer</button>
             </div>
         </div>
     </div>
 
-    <!-- NOTIFICATION TOAST -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-        <div class="glass-panel px-4 py-3 rounded-xl border border-slate-700 text-xs text-white shadow-2xl flex items-center gap-2.5">
-            <i id="toast-icon" class="fa-solid fa-circle-info text-brand-cyan"></i>
-            <span id="toast-msg">Notification Message</span>
-        </div>
-    </div>
+    <!-- AUDIO STREAM ELEMENT -->
+    <audio id="remote-audio" autoplay></audio>
 
-    <!-- JAVASCRIPT NATIVE SIP / WEBSOCKETS / WEBAUDIO / WEBRTC ENGINE -->
+    <!-- NEXUS VOIP CORE ENGINE -->
     <script>
-        /**
-         * NEXUS VoIP & Native SIP over WebSockets Communication Engine
-         * MD5 Digest Auth, SDP Generator, SIP Packet Parser, Janus Gateway Protocol, Web Audio API DSP
-         */
-
-        // Dual-Tone Multi-Frequency (DTMF) Frequencies
-        const DTMF_FREQS = {
-            '1': [697, 1209], '2': [697, 1336], '3': [697, 1477],
-            '4': [770, 1209], '5': [770, 1336], '6': [770, 1477],
-            '7': [852, 1209], '8': [852, 1336], '9': [852, 1477],
-            '*': [941, 1209], '0': [941, 1336], '#': [941, 1477]
-        };
-
-        // Standalone MD5 Implementation for SIP Digest Authentication
-        function md5(string) {
-            function rotateLeft(lValue, iShiftBits) {
-                return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
-            }
-            function addUnsigned(lX, lY) {
-                var lX4, lY4, lX8, lY8, lResult;
-                lX8 = (lX & 0x80000000); lY8 = (lY & 0x80000000);
-                lX4 = (lX & 0x40000000); lY4 = (lY & 0x40000000);
-                lResult = (lX & 0x3FFFFFFF) + (lY & 0x3FFFFFFF);
-                if (lX4 & lY4) return (lResult ^ 0x80000000 ^ lX8 ^ lY8);
-                if (lX4 | lY4) {
-                    if (lResult & 0x40000000) return (lResult ^ 0xC0000000 ^ lX8 ^ lY8);
-                    else return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
-                } else return (lResult ^ lX8 ^ lY8);
-            }
-            function F(x, y, z) { return (x & y) | ((~x) & z); }
-            function G(x, y, z) { return (x & z) | (y & (~z)); }
-            function H(x, y, z) { return (x ^ y ^ z); }
-            function I(x, y, z) { return (y ^ (x | (~z))); }
-
-            function FF(a, b, c, d, x, s, ac) {
-                a = addUnsigned(a, addUnsigned(addUnsigned(F(b, c, d), x), ac));
-                return addUnsigned(rotateLeft(a, s), b);
-            }
-            function GG(a, b, c, d, x, s, ac) {
-                a = addUnsigned(a, addUnsigned(addUnsigned(G(b, c, d), x), ac));
-                return addUnsigned(rotateLeft(a, s), b);
-            }
-            function HH(a, b, c, d, x, s, ac) {
-                a = addUnsigned(a, addUnsigned(addUnsigned(H(b, c, d), x), ac));
-                return addUnsigned(rotateLeft(a, s), b);
-            }
-            function II(a, b, c, d, x, s, ac) {
-                a = addUnsigned(a, addUnsigned(addUnsigned(I(b, c, d), x), ac));
-                return addUnsigned(rotateLeft(a, s), b);
-            }
-
-            function convertToWordArray(str) {
-                var lWordCount;
-                var lMessageLength = str.length;
-                var lNumberOfWords_temp1 = lMessageLength + 8;
-                var lNumberOfWords_temp2 = (lNumberOfWords_temp1 - (lNumberOfWords_temp1 % 64)) / 64;
-                var lNumberOfWords = (lNumberOfWords_temp2 + 1) * 16;
-                var lWordArray = Array(lNumberOfWords - 1);
-                var lBytePosition = 0; var lByteCount = 0;
-                while (lByteCount < lMessageLength) {
-                    lWordCount = (lByteCount - (lByteCount % 4)) / 4;
-                    lBytePosition = (lByteCount % 4) * 8;
-                    lWordArray[lWordCount] = (lWordArray[lWordCount] | (str.charCodeAt(lByteCount) << lBytePosition));
-                    lByteCount++;
-                }
-                lWordCount = (lByteCount - (lByteCount % 4)) / 4;
-                lBytePosition = (lByteCount % 4) * 8;
-                lWordArray[lWordCount] = lWordArray[lWordCount] | (0x80 << lBytePosition);
-                lWordArray[lNumberOfWords - 2] = lMessageLength << 3;
-                lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
-                return lWordArray;
-            }
-
-            function wordToHex(lValue) {
-                var WordToHexValue = "", WordToHexValue_temp = "", lByte, lCount;
-                for (lCount = 0; lCount <= 3; lCount++) {
-                    lByte = (lValue >>> (lCount * 8)) & 255;
-                    WordToHexValue_temp = "0" + lByte.toString(16);
-                    WordToHexValue = WordToHexValue + WordToHexValue_temp.substr(WordToHexValue_temp.length - 2, 2);
-                }
-                return WordToHexValue;
-            }
-
-            var x = Array();
-            var k, AA, BB, CC, DD, a, b, c, d;
-            var S11 = 7, S12 = 12, S13 = 17, S14 = 22;
-            var S21 = 5, S22 = 9, S23 = 14, S24 = 20;
-            var S31 = 4, S32 = 11, S33 = 16, S34 = 23;
-            var S41 = 6, S42 = 10, S43 = 15, S44 = 21;
-
-            x = convertToWordArray(string);
-            a = 0x67452301; b = 0xEFCDAB89; c = 0x98BADCFE; d = 0x10325476;
-
-            for (k = 0; k < x.length; k += 16) {
-                AA = a; BB = b; CC = c; DD = d;
-                a = FF(a, b, c, d, x[k + 0], S11, 0xD76AA478);
-                d = FF(d, a, b, c, x[k + 1], S12, 0xE8C7B756);
-                c = FF(c, d, a, b, x[k + 2], S13, 0x242070DB);
-                b = FF(b, c, d, a, x[k + 3], S14, 0xC1BDCEEE);
-                a = FF(a, b, c, d, x[k + 4], S11, 0xF57C0FAF);
-                d = FF(d, a, b, c, x[k + 5], S12, 0x4787C62A);
-                c = FF(c, d, a, b, x[k + 6], S13, 0xA8304613);
-                b = FF(b, c, d, a, x[k + 7], S14, 0xFD469501);
-                a = FF(a, b, c, d, x[k + 8], S11, 0x698098D8);
-                d = FF(d, a, b, c, x[k + 9], S12, 0x8B44F7AF);
-                c = FF(c, d, a, b, x[k + 10], S13, 0xFFFF5BB1);
-                b = FF(b, c, d, a, x[k + 11], S14, 0x895CD7BE);
-                a = FF(a, b, c, d, x[k + 12], S11, 0x6B901122);
-                d = FF(d, a, b, c, x[k + 13], S12, 0xFD987193);
-                c = FF(c, d, a, b, x[k + 14], S13, 0xA679438E);
-                b = FF(b, c, d, a, x[k + 15], S14, 0x49B40821);
-
-                a = GG(a, b, c, d, x[k + 1], S21, 0xF61E2562);
-                d = GG(d, a, b, c, x[k + 6], S22, 0xC040B340);
-                c = GG(c, d, a, b, x[k + 11], S23, 0x265E5A51);
-                b = GG(b, c, d, a, x[k + 0], S24, 0xE9B6C7AA);
-                a = GG(a, b, c, d, x[k + 5], S21, 0xD62F105D);
-                d = GG(d, a, b, c, x[k + 10], S22, 0x2441453);
-                c = GG(c, d, a, b, x[k + 15], S23, 0xD8A1E681);
-                b = GG(b, c, d, a, x[k + 4], S24, 0xE7D3FBC8);
-                a = GG(a, b, c, d, x[k + 9], S21, 0x21E1CDE6);
-                d = GG(d, a, b, c, x[k + 14], S22, 0xC33707D6);
-                c = GG(c, d, a, b, x[k + 3], S23, 0xF4D50D87);
-                b = GG(b, c, d, a, x[k + 8], S24, 0x455A14ED);
-                a = GG(a, b, c, d, x[k + 13], S21, 0xA9E3E905);
-                d = GG(d, a, b, c, x[k + 2], S22, 0xFCEFA3F8);
-                c = GG(c, d, a, b, x[k + 7], S23, 0x676F02D9);
-                b = GG(b, c, d, a, x[k + 12], S24, 0x8D2A4C8A);
-
-                a = HH(a, b, c, d, x[k + 5], S31, 0xFFFA3942);
-                d = HH(d, a, b, c, x[k + 8], S32, 0x8771F681);
-                c = HH(c, d, a, b, x[k + 11], S33, 0x6D9D6122);
-                b = HH(b, c, d, a, x[k + 14], S34, 0xFDE5380C);
-                a = HH(a, b, c, d, x[k + 1], S31, 0xA4BEEA44);
-                d = HH(d, a, b, c, x[k + 4], S32, 0x4BDECFA9);
-                c = HH(c, d, a, b, x[k + 7], S33, 0xF6BB4B60);
-                b = HH(b, c, d, a, x[k + 10], S34, 0xBEBFBC70);
-                a = HH(a, b, c, d, x[k + 13], S31, 0x289B7EC6);
-                d = HH(d, a, b, c, x[k + 0], S32, 0xEAA127FA);
-                c = HH(c, d, a, b, x[k + 3], S33, 0xD4EF3085);
-                b = HH(b, c, d, a, x[k + 6], S34, 0x4881D05);
-                a = HH(a, b, c, d, x[k + 9], S31, 0xD9D4D039);
-                d = HH(d, a, b, c, x[k + 12], S32, 0xE6DB99E5);
-                c = HH(c, d, a, b, x[k + 15], S33, 0x1FA27CF8);
-                b = HH(b, c, d, a, x[k + 2], S34, 0xC4AC5665);
-
-                a = II(a, b, c, d, x[k + 0], S41, 0xF4292244);
-                d = II(d, a, b, c, x[k + 7], S42, 0x432AFF97);
-                c = II(c, d, a, b, x[k + 14], S43, 0xAB9423A7);
-                b = II(b, c, d, a, x[k + 5], S44, 0xFC93A039);
-                a = II(a, b, c, d, x[k + 12], S41, 0x655B59C3);
-                d = II(d, a, b, c, x[k + 3], S42, 0x8F0CCC92);
-                c = II(c, d, a, b, x[k + 10], S43, 0xFFEFF47D);
-                b = II(b, c, d, a, x[k + 1], S44, 0x85845DD1);
-                a = II(a, b, c, d, x[k + 8], S41, 0x6FA87E4F);
-                d = II(d, a, b, c, x[k + 15], S42, 0xFE2CE6E0);
-                c = II(c, d, a, b, x[k + 6], S43, 0xA3014314);
-                b = II(b, c, d, a, x[k + 13], S44, 0x4E0811A1);
-                a = II(a, b, c, d, x[k + 4], S41, 0xF7537E82);
-                d = II(d, a, b, c, x[k + 11], S42, 0xBD3AF235);
-                c = II(c, d, a, b, x[k + 2], S43, 0x2AD7D2BB);
-                b = II(b, c, d, a, x[k + 9], S44, 0xEB86D391);
-
-                a = addUnsigned(a, AA); b = addUnsigned(b, BB);
-                c = addUnsigned(c, CC); d = addUnsigned(d, DD);
-            }
-
-            return (wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d)).toLowerCase();
-        }
-
-        // MAIN VOIP & NATIVE SIP ENGINE CLASS
-        class NexusVoIPApp {
+        class NexusVoIPEngine {
             constructor() {
-                // Connection Mode
-                this.transportMode = 'sip'; // 'sip', 'janus', 'loopback'
-                this.sipStatus = 'DISCONNECTED'; // DISCONNECTED, REGISTERING, REGISTERED, AUTH_FAILED, IN_CALL
-                
-                // SIP Session Parameters
                 this.ws = null;
-                this.cseq = 1;
-                this.callId = null;
-                this.localTag = Math.random().toString(36).substring(2, 10);
-                this.remoteTag = null;
-                this.sipBranch = 'z9hG4bK' + Math.random().toString(36).substring(2, 12);
-                this.activeCallSipUri = null;
-
-                // Application State
-                this.callState = 'IDLE'; // IDLE, RINGING, IN_CALL, HELD
-                this.activePeerId = null;
-                this.callStartTime = null;
-                this.timerInterval = null;
-
-                // Media & Audio DSP State
-                this.audioCtx = null;
+                this.pc = null;
                 this.localStream = null;
-                this.remoteStream = null;
+                this.registered = false;
+                this.callState = 'IDLE';
+                this.callTimerInterval = null;
+                this.callSeconds = 0;
+                this.pendingOffer = null;
+                this.autoScroll = true;
+                this.activeFilter = 'ALL';
+
+                // Web Audio API DSP
+                this.audioCtx = null;
                 this.analyser = null;
-                this.mediaRecorder = null;
-                this.recordedChunks = [];
-                this.holdOscillator = null;
-                this.ringbackOsc = null;
+                this.micStream = null;
 
-                // WebRTC Peer Connections
-                this.pc = null; // Main active PeerConnection
-                this.pcB = null; // Used for local loopback mode
-
-                // Configuration Parameters
-                this.config = {
-                    wssUrl: 'wss://asterisk.local:8089/ws',
-                    domain: 'asterisk.local',
-                    outboundProxy: '',
-                    username: '1001',
-                    authUser: '1001',
-                    password: 'supersecretpass',
-                    expires: 600
-                };
-
-                this.iceServers = [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' }
-                ];
-                this.selectedCodec = 'Opus/48000';
-                this.dspSettings = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
-
-                // Console Packet Logs
-                this.sipPacketLogs = [];
-                this.consoleFilter = 'ALL';
-                this.autoScrollConsole = true;
-
-                // Quality Telemetry
-                this.telemetry = { rtt: 16, jitter: 1.8, loss: 0.0, mos: 4.41 };
-                this.simImpairments = { latency: 0, jitter: 1.8, loss: 0 };
-                this.chart = null;
-
-                // Contacts & Call History
-                this.contacts = [
-                    { id: 1, name: 'Alice Smith', ext: '1001', role: 'Support Lead', status: 'Available', color: 'bg-emerald-500' },
-                    { id: 2, name: 'Bob Johnson', ext: '1002', role: 'DevOps Manager', status: 'Available', color: 'bg-emerald-500' },
-                    { id: 3, name: 'Main PBX IVR', ext: '4400', role: 'Auto Attendant', status: 'Busy', color: 'bg-amber-500' },
-                    { id: 4, name: 'Conference Room 1', ext: '8001', role: 'SIP Bridge', status: 'Offline', color: 'bg-slate-500' }
-                ];
-                this.callLogs = [];
-
-                // Audio Mute States
-                this.isMicMuted = false;
-                this.isSpeakerMuted = false;
-                this.isCallRecorded = false;
-                this.isOnHold = false;
+                // Metrics
+                this.rtt = 16;
+                this.jitter = 1.8;
+                this.loss = 0.0;
+                this.sipLogs = [];
             }
 
             init() {
-                // Update Local Ext Display
-                document.getElementById('local-ext-display').textContent = this.config.username;
+                this.initAudioDSP();
+                this.setupKeyListeners();
+                this.renderCanvasLoop();
 
-                // Setup Visualizer & Charts
-                this.initVisualizers();
-                this.initTelemetryChart();
+                // Auto-sync WSS URL based on current host protocol
+                const isHttps = window.location.protocol === 'https:';
+                const defaultWss = isHttps 
+                    ? `wss://${window.location.host}`
+                    : `ws://${window.location.hostname}:8089`;
 
-                // Populate UI Lists
-                this.renderContacts();
-                this.renderIceServers();
-                this.renderCallLogs();
-
-                // Start Telemetry Sampling Interval
-                setInterval(() => this.updateTelemetryMetrics(), 1000);
-
-                // Enumerate Audio Input/Output Devices
-                this.enumerateAudioDevices();
-            }
-
-            // --- WEBAUDIO & DTMF SOUND GENERATION ---
-            getAudioContext() {
-                if (!this.audioCtx) {
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    this.audioCtx = new AudioContext();
+                const wssInput = document.getElementById('cfg-wss-url');
+                if (wssInput && (!wssInput.value || wssInput.value.includes('localhost'))) {
+                    wssInput.value = defaultWss;
                 }
-                if (this.audioCtx.state === 'suspended') {
-                    this.audioCtx.resume();
-                }
-                return this.audioCtx;
+
+                const ext = document.getElementById('cfg-ext').value;
+                document.getElementById('local-ext-display').textContent = ext;
+                document.getElementById('cfg-auth-user').value = ext;
             }
 
-            playDTMFTone(key) {
-                const freqs = DTMF_FREQS[key];
-                if (!freqs) return;
+            switchTab(tabId) {
+                document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.tab-btn').forEach(el => {
+                    el.classList.remove('active', 'text-white', 'bg-slate-800/90', 'border-slate-700/60');
+                    el.classList.add('text-slate-400');
+                });
 
-                const ctx = this.getAudioContext();
-                const osc1 = ctx.createOscillator();
-                const osc2 = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc1.frequency.value = freqs[0];
-                osc2.frequency.value = freqs[1];
-
-                gain.gain.setValueAtTime(0.12, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
-
-                osc1.connect(gain); osc2.connect(gain);
-                gain.connect(ctx.destination);
-
-                osc1.start(); osc2.start();
-                osc1.stop(ctx.currentTime + 0.18);
-                osc2.stop(ctx.currentTime + 0.18);
-            }
-
-            playAudioTestTone() {
-                const ctx = this.getAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(440, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.3);
-
-                gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
-                osc.start();
-                osc.stop(ctx.currentTime + 0.4);
-                this.showToast('Audio test chime played');
-            }
-
-            // --- MEDIA CAPTURE ---
-            async requestAudioPermission() {
-                try {
-                    const constraints = {
-                        audio: {
-                            echoCancellation: this.dspSettings.echoCancellation,
-                            noiseSuppression: this.dspSettings.noiseSuppression,
-                            autoGainControl: this.dspSettings.autoGainControl
-                        }
-                    };
-                    this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
-                    
-                    document.getElementById('mic-status-icon').className = 'fa-solid fa-microphone text-emerald-400';
-                    document.getElementById('mic-status-text').textContent = 'Mic Active';
-                    this.showToast('Microphone hardware connected');
-
-                    const ctx = this.getAudioContext();
-                    const source = ctx.createMediaStreamSource(this.localStream);
-                    this.analyser = ctx.createAnalyser();
-                    this.analyser.fftSize = 256;
-                    source.connect(this.analyser);
-
-                } catch (err) {
-                    console.error('Mic Access Error:', err);
-                    document.getElementById('mic-status-icon').className = 'fa-solid fa-microphone-slash text-rose-500';
-                    document.getElementById('mic-status-text').textContent = 'Mic Blocked';
-                    this.showToast('Microphone access denied or missing', 'error');
+                document.getElementById(`view-${tabId}`).classList.remove('hidden');
+                const activeNav = document.getElementById(`tab-nav-${tabId}`);
+                if (activeNav) {
+                    activeNav.classList.add('active', 'text-white', 'bg-slate-800/90', 'border-slate-700/60');
+                    activeNav.classList.remove('text-slate-400');
                 }
             }
 
-            async enumerateAudioDevices() {
-                if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
-                try {
-                    const devices = await navigator.mediaDevices.enumerateDevices();
-                    console.log('Available Devices:', devices.length);
-                } catch (e) {}
+            setTransportMode(mode) {
+                ['sip', 'janus', 'loopback'].forEach(m => {
+                    const btn = document.getElementById(`mode-btn-${m}`);
+                    if (m === mode) {
+                        btn.className = 'px-3 py-1.5 rounded-lg font-semibold transition-all bg-brand-600 text-white shadow-sm';
+                    } else {
+                        btn.className = 'px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white';
+                    }
+                });
+
+                if (mode === 'loopback') {
+                    this.registered = true;
+                    this.updateRegState('Offline Test', 'text-emerald-400', 'bg-emerald-500');
+                }
             }
 
-            // --- NATIVE SIP OVER WEBSOCKETS ENGINE ---
             toggleSipRegistration() {
-                if (this.sipStatus === 'REGISTERED' || this.sipStatus === 'REGISTERING') {
-                    this.unregisterSip();
+                if (this.registered) {
+                    this.unregister();
                 } else {
-                    this.connectSipWebSocket();
+                    this.register();
                 }
             }
 
-            connectSipWebSocket() {
-                this.readConfigFromUi();
-                this.setSipStatus('REGISTERING', 'Connecting WSS...');
+            saveAndRegister() {
+                const ext = document.getElementById('cfg-ext').value.trim();
+                document.getElementById('local-ext-display').textContent = ext;
+                this.register();
+            }
+
+            register() {
+                const wssUrl = document.getElementById('cfg-wss-url').value.trim();
+                const ext = document.getElementById('cfg-ext').value.trim();
+                const domain = document.getElementById('cfg-domain').value.trim();
+
+                this.updateRegState('Connecting WSS...', 'text-amber-400', 'bg-amber-400');
 
                 try {
-                    // WebSocket protocol connection
-                    const protocol = this.transportMode === 'janus' ? 'janus-protocol' : 'sip';
-                    this.ws = new WebSocket(this.config.wssUrl, protocol);
+                    if (this.ws) { this.ws.close(); }
+                    this.ws = new WebSocket(wssUrl);
 
                     this.ws.onopen = () => {
-                        this.showToast(`WebSocket Connected to ${this.config.wssUrl}`);
-                        if (this.transportMode === 'janus') {
-                            this.initJanusSession();
-                        } else {
-                            this.sendSipRegister();
-                        }
+                        // Send JSON registration
+                        this.ws.send(JSON.stringify({ type: 'register', ext: ext }));
+                        
+                        // Also send raw SIP REGISTER for trace compatibility
+                        const sipRegisterMsg = 
+                            `REGISTER sip:${domain} SIP/2.0\r\n` +
+                            `Via: SIP/2.0/WSS ${domain};branch=z9hG4bK${Math.floor(Math.random()*1000000)}\r\n` +
+                            `From: <sip:${ext}@${domain}>;tag=${Math.floor(Math.random()*100000)}\r\n` +
+                            `To: <sip:${ext}@${domain}>\r\n` +
+                            `Call-ID: reg-${Date.now()}@${domain}\r\n` +
+                            `CSeq: 1 REGISTER\r\n` +
+                            `Contact: <sip:${ext}@${domain};transport=wss>\r\n` +
+                            `Expires: 600\r\n\r\n`;
+
+                        this.logSip('TX', sipRegisterMsg);
                     };
 
-                    this.ws.onmessage = (event) => {
-                        this.handleIncomingWsMessage(event.data);
-                    };
+                    this.ws.onmessage = (evt) => this.handleInboundWsMessage(evt.data);
 
-                    this.ws.onerror = (err) => {
-                        console.error('WS Error:', err);
-                        this.setSipStatus('DISCONNECTED', 'WS Connection Error');
-                        this.showToast('WebSocket Connection Failed', 'error');
+                    this.ws.onerror = () => {
+                        this.updateRegState('Config Error', 'text-rose-500', 'bg-rose-500');
                     };
 
                     this.ws.onclose = () => {
-                        this.setSipStatus('DISCONNECTED', 'Disconnected');
-                        this.showToast('WebSocket Connection Closed', 'warning');
+                        this.registered = false;
+                        this.updateRegState('Disconnected', 'text-amber-400', 'bg-amber-400');
+                        document.getElementById('sip-reg-btn-text').textContent = 'REGISTER SIP';
                     };
 
                 } catch (e) {
-                    this.setSipStatus('DISCONNECTED', 'Config Error');
-                    this.showToast('Invalid WebSocket URL', 'error');
+                    this.updateRegState('Config Error', 'text-rose-500', 'bg-rose-500');
                 }
             }
 
-            sendSipRegister(authHeader = null) {
-                this.cseq++;
-                this.callId = this.callId || (Math.random().toString(36).substring(2, 12) + '@' + this.config.domain);
-                const viaBranch = 'z9hG4bK' + Math.random().toString(36).substring(2, 12);
-
-                let sipMsg = `REGISTER sip:${this.config.domain} SIP/2.0\r\n`;
-                sipMsg += `Via: SIP/2.0/WSS ${this.config.domain};branch=${viaBranch};rport\r\n`;
-                sipMsg += `From: <sip:${this.config.username}@${this.config.domain}>;tag=${this.localTag}\r\n`;
-                sipMsg += `To: <sip:${this.config.username}@${this.config.domain}>\r\n`;
-                sipMsg += `Call-ID: ${this.callId}\r\n`;
-                sipMsg += `CSeq: ${this.cseq} REGISTER\r\n`;
-                sipMsg += `Contact: <sip:${this.config.username}@${this.config.domain};transport=wss>\r\n`;
-                sipMsg += `Max-Forwards: 70\r\n`;
-                sipMsg += `Expires: ${this.config.expires}\r\n`;
-                
-                if (authHeader) {
-                    sipMsg += `Authorization: ${authHeader}\r\n`;
-                }
-
-                sipMsg += `Content-Length: 0\r\n\r\n`;
-
-                this.sendSipMessage(sipMsg);
+            unregister() {
+                if (this.ws) { this.ws.close(); }
+                this.registered = false;
+                this.updateRegState('Disconnected', 'text-amber-400', 'bg-amber-400');
+                document.getElementById('sip-reg-btn-text').textContent = 'REGISTER SIP';
             }
 
-            unregisterSip() {
-                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                    this.cseq++;
-                    const viaBranch = 'z9hG4bK' + Math.random().toString(36).substring(2, 12);
-                    let sipMsg = `REGISTER sip:${this.config.domain} SIP/2.0\r\n`;
-                    sipMsg += `Via: SIP/2.0/WSS ${this.config.domain};branch=${viaBranch};rport\r\n`;
-                    sipMsg += `From: <sip:${this.config.username}@${this.config.domain}>;tag=${this.localTag}\r\n`;
-                    sipMsg += `To: <sip:${this.config.username}@${this.config.domain}>\r\n`;
-                    sipMsg += `Call-ID: ${this.callId}\r\n`;
-                    sipMsg += `CSeq: ${this.cseq} REGISTER\r\n`;
-                    sipMsg += `Contact: *\r\n`;
-                    sipMsg += `Expires: 0\r\n`;
-                    sipMsg += `Content-Length: 0\r\n\r\n`;
-
-                    this.sendSipMessage(sipMsg);
-                    setTimeout(() => {
-                        this.ws.close();
-                        this.setSipStatus('DISCONNECTED', 'Disconnected');
-                    }, 300);
-                } else {
-                    this.setSipStatus('DISCONNECTED', 'Disconnected');
-                }
+            updateRegState(text, textClass, dotClass) {
+                document.getElementById('sip-reg-status').className = `${textClass} font-semibold`;
+                document.getElementById('sip-reg-status').textContent = text;
+                document.getElementById('reg-status-dot').className = `inline-block w-1.5 h-1.5 rounded-full ${dotClass}`;
             }
 
-            handleIncomingWsMessage(data) {
-                // Log Packet
-                this.logSipPacket('RX', data);
+            async handleInboundWsMessage(raw) {
+                let msgObj = null;
+                try { msgObj = JSON.parse(raw); } catch (e) {}
 
-                if (this.transportMode === 'janus') {
-                    this.handleJanusMessage(data);
-                    return;
-                }
+                if (msgObj) {
+                    if (msgObj.type === 'registered') {
+                        this.registered = true;
+                        this.updateRegState('SIP Registered', 'text-emerald-400', 'bg-emerald-400');
+                        document.getElementById('sip-reg-btn-text').textContent = 'UNREGISTER';
+                        return;
+                    }
 
-                // SIP Parsing Logic
-                const firstLine = data.split('\r\n')[0] || '';
-                
-                // Handle 401 / 407 Digest Challenge
-                if (firstLine.includes('401 Unauthorized') || firstLine.includes('407 Proxy Authentication Required')) {
-                    this.handleSipAuthChallenge(data, firstLine);
-                } 
-                else if (firstLine.includes('200 OK')) {
-                    if (data.includes('CSeq:') && data.includes('REGISTER')) {
-                        this.setSipStatus('REGISTERED', 'SIP Registered');
-                        this.showToast(`SIP Digest Registration Successful (${this.config.username}@${this.config.domain})`);
-                    } else if (data.includes('CSeq:') && data.includes('INVITE')) {
-                        this.handleSipInvite200OK(data);
+                    if (msgObj.type === 'invite') {
+                        this.pendingOffer = msgObj;
+                        document.getElementById('modal-caller-ext').textContent = msgObj.from;
+                        document.getElementById('modal-incoming-call').classList.remove('hidden');
+                        this.logSip('RX', `INVITE sip:${msgObj.target} SIP/2.0\r\nFrom: <sip:${msgObj.from}>\r\n\r\n${msgObj.sdp}`);
+                        return;
+                    }
+
+                    if (msgObj.type === 'answer') {
+                        this.logSip('RX', `SIP/2.0 200 OK\r\n\r\n${msgObj.sdp}`);
+                        if (this.pc) {
+                            await this.pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: msgObj.sdp }));
+                            this.setCallState('CONNECTED');
+                        }
+                        return;
+                    }
+
+                    if (msgObj.type === 'ice-candidate' && this.pc && msgObj.candidate) {
+                        await this.pc.addIceCandidate(new RTCIceCandidate(msgObj.candidate));
+                        return;
+                    }
+
+                    if (msgObj.type === 'bye') {
+                        this.logSip('RX', `BYE sip:${msgObj.from} SIP/2.0\r\n\r\n`);
+                        this.hangupLocally();
+                        return;
                     }
                 }
-                else if (firstLine.startsWith('INVITE')) {
-                    this.handleIncomingSipInvite(data);
-                }
-                else if (firstLine.startsWith('BYE') || firstLine.startsWith('CANCEL')) {
-                    this.hangupCall(false);
-                    this.sendSipResponse('200 OK', data);
-                }
-            }
 
-            handleSipAuthChallenge(data, firstLine) {
-                this.showToast('SIP Digest Challenge Received (MD5)', 'warning');
-                
-                // Parse WWW-Authenticate Header
-                const authHeaderMatch = data.match(/(WWW-Authenticate|Proxy-Authenticate):\s*Digest\s+(.+)/i);
-                if (!authHeaderMatch) return;
+                if (typeof raw === 'string' && raw.includes('SIP/2.0')) {
+                    this.logSip('RX', raw);
 
-                const params = {};
-                authHeaderMatch[2].split(',').forEach(param => {
-                    const [k, v] = param.trim().split('=');
-                    if (k && v) params[k.toLowerCase()] = v.replace(/"/g, '');
-                });
-
-                const realm = params.realm || this.config.domain;
-                const nonce = params.nonce || '';
-                const uri = `sip:${this.config.domain}`;
-                const method = 'REGISTER';
-
-                // MD5 Digest Calculations
-                const HA1 = md5(`${this.config.authUser}:${realm}:${this.config.password}`);
-                const HA2 = md5(`${method}:${uri}`);
-                const response = md5(`${HA1}:${nonce}:${HA2}`);
-
-                const digestHeader = `Digest username="${this.config.authUser}", realm="${realm}", nonce="${nonce}", uri="${uri}", response="${response}", algorithm=MD5`;
-                
-                // Resend REGISTER with Digest Auth
-                this.sendSipRegister(digestHeader);
-            }
-
-            // --- JANUS WEBRTC GATEWAY CONNECTOR ---
-            initJanusSession() {
-                const req = { janus: 'create', transaction: 'trans_' + Date.now() };
-                this.logSipPacket('TX', JSON.stringify(req, null, 2));
-                this.ws.send(JSON.stringify(req));
-            }
-
-            handleJanusMessage(data) {
-                try {
-                    const msg = JSON.parse(data);
-                    if (msg.janus === 'success' && msg.data && msg.data.id) {
-                        this.janusSessionId = msg.data.id;
-                        this.setSipStatus('REGISTERED', 'Janus Attached');
-                        this.showToast('Janus Session Established');
+                    if (raw.includes('200 OK') && !this.registered) {
+                        this.registered = true;
+                        this.updateRegState('SIP Registered', 'text-emerald-400', 'bg-emerald-400');
+                        document.getElementById('sip-reg-btn-text').textContent = 'UNREGISTER';
                     }
-                } catch(e){}
-            }
-
-            // --- CALL INITIATION & SDP NEGOTIATION ---
-            async initiateCall(targetNumber = null) {
-                const target = targetNumber || document.getElementById('dial-display').value.trim();
-                if (!target) {
-                    this.showToast('Please enter an extension or SIP URI', 'warning');
-                    return;
-                }
-
-                if (!this.localStream) {
-                    await this.requestAudioPermission();
-                }
-
-                this.callState = 'RINGING';
-                this.activePeerId = target;
-                this.updateCallUI();
-                this.startRingbackTone();
-
-                if (this.transportMode === 'loopback') {
-                    setTimeout(() => {
-                        this.stopRingbackTone();
-                        this.establishLoopbackCall();
-                    }, 1000);
-                } else {
-                    // Send SIP INVITE with Local SDP
-                    this.sendSipInvite(target);
                 }
             }
 
-            async sendSipInvite(target) {
-                this.pc = new RTCPeerConnection({ iceServers: this.iceServers });
-                if (this.localStream) {
-                    this.localStream.getTracks().forEach(t => this.pc.addTrack(t, this.localStream));
+            async initiateCall() {
+                const target = document.getElementById('dial-display').value.trim();
+                const myExt = document.getElementById('cfg-ext').value.trim();
+                if (!target) return;
+
+                this.setCallState('RINGING');
+                const callId = `call-${Math.floor(Math.random() * 1000000)}`;
+                document.getElementById('active-sip-callid').textContent = `Call-ID: ${callId}`;
+
+                this.pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+
+                if (!this.micStream) {
+                    this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 }
+                this.micStream.getTracks().forEach(track => this.pc.addTrack(track, this.micStream));
 
-                const offer = await this.pc.createOffer({ offerToReceiveAudio: true });
-                await this.pc.setLocalDescription(offer);
+                this.pc.ontrack = (evt) => {
+                    document.getElementById('remote-audio').srcObject = evt.streams[0];
+                };
 
-                this.cseq++;
-                this.callId = Math.random().toString(36).substring(2, 12) + '@' + this.config.domain;
-                document.getElementById('active-sip-callid').textContent = `Call-ID: ${this.callId.slice(0, 14)}...`;
-
-                const viaBranch = 'z9hG4bK' + Math.random().toString(36).substring(2, 12);
-                let sipMsg = `INVITE sip:${target}@${this.config.domain} SIP/2.0\r\n`;
-                sipMsg += `Via: SIP/2.0/WSS ${this.config.domain};branch=${viaBranch};rport\r\n`;
-                sipMsg += `From: <sip:${this.config.username}@${this.config.domain}>;tag=${this.localTag}\r\n`;
-                sipMsg += `To: <sip:${target}@${this.config.domain}>\r\n`;
-                sipMsg += `Call-ID: ${this.callId}\r\n`;
-                sipMsg += `CSeq: ${this.cseq} INVITE\r\n`;
-                sipMsg += `Contact: <sip:${this.config.username}@${this.config.domain};transport=wss>\r\n`;
-                sipMsg += `Content-Type: application/sdp\r\n`;
-                sipMsg += `Content-Length: ${offer.sdp.length}\r\n\r\n`;
-                sipMsg += offer.sdp;
-
-                this.sendSipMessage(sipMsg);
-            }
-
-            async handleSipInvite200OK(data) {
-                this.stopRingbackTone();
-                const sdpBody = data.split('\r\n\r\n')[1];
-                if (sdpBody && this.pc) {
-                    await this.pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: sdpBody }));
-                }
-
-                // Send ACK
-                this.sendSipAck();
-
-                this.callState = 'IN_CALL';
-                this.callStartTime = new Date();
-                this.startCallTimer();
-                this.updateCallUI();
-                this.showToast(`SIP Call Connected with ${this.activePeerId}`);
-            }
-
-            sendSipAck() {
-                const viaBranch = 'z9hG4bK' + Math.random().toString(36).substring(2, 12);
-                let sipMsg = `ACK sip:${this.activePeerId}@${this.config.domain} SIP/2.0\r\n`;
-                sipMsg += `Via: SIP/2.0/WSS ${this.config.domain};branch=${viaBranch};rport\r\n`;
-                sipMsg += `From: <sip:${this.config.username}@${this.config.domain}>;tag=${this.localTag}\r\n`;
-                sipMsg += `To: <sip:${this.activePeerId}@${this.config.domain}>${this.remoteTag ? ';tag=' + this.remoteTag : ''}\r\n`;
-                sipMsg += `Call-ID: ${this.callId}\r\n`;
-                sipMsg += `CSeq: ${this.cseq} ACK\r\n`;
-                sipMsg += `Content-Length: 0\r\n\r\n`;
-
-                this.sendSipMessage(sipMsg);
-            }
-
-            async establishLoopbackCall() {
-                this.pc = new RTCPeerConnection({ iceServers: this.iceServers });
-                this.pcB = new RTCPeerConnection({ iceServers: this.iceServers });
-
-                if (this.localStream) {
-                    this.localStream.getTracks().forEach(track => this.pc.addTrack(track, this.localStream));
-                }
-
-                this.pc.onicecandidate = e => e.candidate && this.pcB.addIceCandidate(e.candidate);
-                this.pcB.onicecandidate = e => e.candidate && this.pc.addIceCandidate(e.candidate);
-
-                this.pcB.ontrack = e => { this.remoteStream = e.streams[0]; };
+                this.pc.onicecandidate = (evt) => {
+                    if (evt.candidate && this.ws) {
+                        this.ws.send(JSON.stringify({ type: 'ice-candidate', from: myExt, target: target, candidate: evt.candidate }));
+                    }
+                };
 
                 const offer = await this.pc.createOffer();
                 await this.pc.setLocalDescription(offer);
-                await this.pcB.setRemoteDescription(offer);
 
-                const answer = await this.pcB.createAnswer();
-                await this.pcB.setLocalDescription(answer);
-                await this.pc.setRemoteDescription(answer);
-
-                // Simulate loopback SIP INVITE/200 OK exchange in console
-                this.logSipPacket('TX', `INVITE sip:${this.activePeerId}@nexus.local SIP/2.0\r\nContent-Type: application/sdp\r\n\r\n${offer.sdp}`);
-                this.logSipPacket('RX', `SIP/2.0 200 OK\r\nContent-Type: application/sdp\r\n\r\n${answer.sdp}`);
-
-                this.callState = 'IN_CALL';
-                this.callStartTime = new Date();
-                this.startCallTimer();
-                this.updateCallUI();
-                this.showToast(`Loopback Test Call Active with ${this.activePeerId}`);
-            }
-
-            // --- CALL TRANSFER (REFER) ---
-            openTransferModal() {
-                document.getElementById('transfer-modal').classList.remove('hidden');
-            }
-
-            closeTransferModal() {
-                document.getElementById('transfer-modal').classList.add('hidden');
-            }
-
-            executeCallTransfer() {
-                const target = document.getElementById('transfer-target-input').value.trim();
-                if (!target) {
-                    this.showToast('Please enter a transfer target', 'warning');
-                    return;
-                }
-
-                this.cseq++;
-                const viaBranch = 'z9hG4bK' + Math.random().toString(36).substring(2, 12);
-                let sipMsg = `REFER sip:${this.activePeerId}@${this.config.domain} SIP/2.0\r\n`;
-                sipMsg += `Via: SIP/2.0/WSS ${this.config.domain};branch=${viaBranch};rport\r\n`;
-                sipMsg += `From: <sip:${this.config.username}@${this.config.domain}>;tag=${this.localTag}\r\n`;
-                sipMsg += `To: <sip:${this.activePeerId}@${this.config.domain}>\r\n`;
-                sipMsg += `Refer-To: <sip:${target}@${this.config.domain}>\r\n`;
-                sipMsg += `Call-ID: ${this.callId}\r\n`;
-                sipMsg += `CSeq: ${this.cseq} REFER\r\n`;
-                sipMsg += `Content-Length: 0\r\n\r\n`;
-
-                this.sendSipMessage(sipMsg);
-                this.closeTransferModal();
-                this.showToast(`SIP REFER Transfer sent to ${target}`);
-                
-                setTimeout(() => this.hangupCall(), 800);
-            }
-
-            hangupCall(sendBye = true) {
-                if (sendBye && this.ws && this.ws.readyState === WebSocket.OPEN && this.callId) {
-                    this.cseq++;
-                    const viaBranch = 'z9hG4bK' + Math.random().toString(36).substring(2, 12);
-                    let sipMsg = `BYE sip:${this.activePeerId || 'user'}@${this.config.domain} SIP/2.0\r\n`;
-                    sipMsg += `Via: SIP/2.0/WSS ${this.config.domain};branch=${viaBranch};rport\r\n`;
-                    sipMsg += `From: <sip:${this.config.username}@${this.config.domain}>;tag=${this.localTag}\r\n`;
-                    sipMsg += `To: <sip:${this.activePeerId}@${this.config.domain}>\r\n`;
-                    sipMsg += `Call-ID: ${this.callId}\r\n`;
-                    sipMsg += `CSeq: ${this.cseq} BYE\r\n`;
-                    sipMsg += `Content-Length: 0\r\n\r\n`;
-
-                    this.sendSipMessage(sipMsg);
-                }
-
-                this.stopRingbackTone();
-                this.stopCallTimer();
-                this.stopRecording();
-
-                if (this.pc) { this.pc.close(); this.pc = null; }
-                if (this.pcB) { this.pcB.close(); this.pcB = null; }
-
-                if (this.callState === 'IN_CALL' || this.callState === 'HELD') {
-                    this.recordCallLog('Outgoing', this.activePeerId || 'Unknown');
-                }
-
-                this.callState = 'IDLE';
-                this.isOnHold = false;
-                this.isMicMuted = false;
-                this.updateCallUI();
-                this.showToast('Call ended');
-            }
-
-            sendSipMessage(msg) {
-                this.logSipPacket('TX', msg);
                 if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                    this.ws.send(msg);
+                    this.ws.send(JSON.stringify({ type: 'invite', from: myExt, target: target, sdp: offer.sdp }));
                 }
+
+                this.logSip('TX', `INVITE sip:${target}@localhost SIP/2.0\r\nFrom: <sip:${myExt}@localhost>\r\nContent-Type: application/sdp\r\n\r\n${offer.sdp}`);
             }
 
-            // --- SIP PACKET INSPECTOR LOGGING ---
-            logSipPacket(direction, rawMsg) {
-                const entry = {
-                    id: Date.now() + Math.random(),
-                    timestamp: new Date().toISOString().slice(11, 23),
-                    dir: direction, // 'TX' or 'RX'
-                    raw: rawMsg
+            async acceptIncomingCall() {
+                document.getElementById('modal-incoming-call').classList.add('hidden');
+                if (!this.pendingOffer) return;
+
+                const myExt = document.getElementById('cfg-ext').value.trim();
+                const caller = this.pendingOffer.from;
+
+                this.pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+
+                if (!this.micStream) {
+                    this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                }
+                this.micStream.getTracks().forEach(track => this.pc.addTrack(track, this.micStream));
+
+                this.pc.ontrack = (evt) => {
+                    document.getElementById('remote-audio').srcObject = evt.streams[0];
                 };
 
-                this.sipPacketLogs.push(entry);
-                document.getElementById('console-packet-badge').textContent = this.sipPacketLogs.length;
+                this.pc.onicecandidate = (evt) => {
+                    if (evt.candidate && this.ws) {
+                        this.ws.send(JSON.stringify({ type: 'ice-candidate', from: myExt, target: caller, candidate: evt.candidate }));
+                    }
+                };
 
+                await this.pc.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp: this.pendingOffer.sdp }));
+                const answer = await this.pc.createAnswer();
+                await this.pc.setLocalDescription(answer);
+
+                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify({ type: 'answer', from: myExt, target: caller, sdp: answer.sdp }));
+                }
+
+                this.logSip('TX', `SIP/2.0 200 OK\r\nFrom: <sip:${caller}>\r\nTo: <sip:${myExt}>\r\n\r\n${answer.sdp}`);
+                this.setCallState('CONNECTED');
+            }
+
+            rejectIncomingCall() {
+                document.getElementById('modal-incoming-call').classList.add('hidden');
+                if (this.pendingOffer && this.ws) {
+                    const myExt = document.getElementById('cfg-ext').value.trim();
+                    this.ws.send(JSON.stringify({ type: 'bye', from: myExt, target: this.pendingOffer.from }));
+                }
+                this.pendingOffer = null;
+            }
+
+            hangupCall() {
+                const target = document.getElementById('dial-display').value.trim();
+                const myExt = document.getElementById('cfg-ext').value.trim();
+
+                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify({ type: 'bye', from: myExt, target: target }));
+                    this.logSip('TX', `BYE sip:${target}@localhost SIP/2.0\r\n\r\n`);
+                }
+                this.hangupLocally();
+            }
+
+            hangupLocally() {
+                if (this.pc) { this.pc.close(); this.pc = null; }
+                this.setCallState('IDLE');
+            }
+
+            setCallState(state) {
+                this.callState = state;
+                const badge = document.getElementById('call-state-badge');
+                const dot = document.getElementById('call-state-dot');
+                const text = document.getElementById('call-state-text');
+                const btnStart = document.getElementById('btn-start-call');
+                const btnEnd = document.getElementById('btn-end-call');
+                const toolbar = document.getElementById('incall-toolbar');
+
+                if (state === 'RINGING') {
+                    badge.className = 'px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-400 font-semibold border border-amber-800 flex items-center gap-1.5';
+                    dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-ping inline-block';
+                    text.textContent = 'RINGING';
+                } else if (state === 'CONNECTED') {
+                    badge.className = 'px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 font-semibold border border-emerald-800 flex items-center gap-1.5';
+                    dot.className = 'w-2 h-2 rounded-full bg-emerald-400 inline-block';
+                    text.textContent = 'CONNECTED';
+
+                    btnStart.disabled = true;
+                    btnStart.classList.add('opacity-50');
+                    btnEnd.disabled = false;
+                    btnEnd.classList.remove('opacity-50', 'cursor-not-allowed');
+                    toolbar.classList.remove('opacity-50', 'pointer-events-none');
+
+                    this.startTimer();
+                } else {
+                    badge.className = 'px-2.5 py-0.5 rounded-full bg-slate-900 text-slate-300 font-semibold border border-slate-800 flex items-center gap-1.5';
+                    dot.className = 'w-2 h-2 rounded-full bg-slate-500 inline-block';
+                    text.textContent = 'IDLE';
+
+                    btnStart.disabled = false;
+                    btnStart.classList.remove('opacity-50');
+                    btnEnd.disabled = true;
+                    btnEnd.classList.add('opacity-50', 'cursor-not-allowed');
+                    toolbar.classList.add('opacity-50', 'pointer-events-none');
+
+                    this.stopTimer();
+                }
+            }
+
+            startTimer() {
+                this.stopTimer();
+                this.callSeconds = 0;
+                this.callTimerInterval = setInterval(() => {
+                    this.callSeconds++;
+                    const m = String(Math.floor(this.callSeconds / 60)).padStart(2, '0');
+                    const s = String(this.callSeconds % 60).padStart(2, '0');
+                    document.getElementById('call-timer').textContent = `${m}:${s}`;
+                }, 1000);
+            }
+
+            stopTimer() {
+                if (this.callTimerInterval) clearInterval(this.callTimerInterval);
+                document.getElementById('call-timer').textContent = '00:00';
+            }
+
+            pressDialKey(key) {
+                document.getElementById('dial-display').value += key;
+                this.playDtmfTone(key);
+            }
+
+            clearDialpad() {
+                const display = document.getElementById('dial-display');
+                display.value = display.value.slice(0, -1);
+            }
+
+            dialExtension(ext) {
+                document.getElementById('dial-display').value = ext;
+                this.switchTab('softphone');
+            }
+
+            playDtmfTone(key) {
+                if (!this.audioCtx) return;
+                const freqs = {
+                    '1': [697, 1209], '2': [697, 1336], '3': [697, 1477],
+                    '4': [770, 1209], '5': [770, 1336], '6': [770, 1477],
+                    '7': [852, 1209], '8': [852, 1336], '9': [852, 1477],
+                    '*': [941, 1209], '0': [941, 1336], '#': [941, 1477]
+                }[key];
+
+                if (!freqs) return;
+                const o1 = this.audioCtx.createOscillator();
+                const o2 = this.audioCtx.createOscillator();
+                const g = this.audioCtx.createGain();
+
+                o1.frequency.value = freqs[0];
+                o2.frequency.value = freqs[1];
+                g.gain.value = 0.08;
+
+                o1.connect(g); o2.connect(g);
+                g.connect(this.audioCtx.destination);
+
+                o1.start(); o2.start();
+                setTimeout(() => { o1.stop(); o2.stop(); }, 140);
+            }
+
+            async initAudioDSP() {
+                try {
+                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    this.analyser = this.audioCtx.createAnalyser();
+                    this.analyser.fftSize = 64;
+
+                    this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const src = this.audioCtx.createMediaStreamSource(this.micStream);
+                    src.connect(this.analyser);
+                } catch (e) {}
+            }
+
+            renderCanvasLoop() {
+                const cOsc = document.getElementById('canvas-oscilloscope');
+                const cSpec = document.getElementById('canvas-spectrum');
+                if (!cOsc || !cSpec) return;
+
+                const ctxOsc = cOsc.getContext('2d');
+                const ctxSpec = cSpec.getContext('2d');
+
+                const draw = () => {
+                    requestAnimationFrame(draw);
+
+                    ctxOsc.fillStyle = '#050811';
+                    ctxOsc.fillRect(0, 0, cOsc.width, cOsc.height);
+                    ctxOsc.beginPath();
+                    ctxOsc.strokeStyle = '#00f2fe';
+                    ctxOsc.lineWidth = 1.5;
+                    ctxOsc.moveTo(0, cOsc.height / 2);
+                    ctxOsc.lineTo(cOsc.width, cOsc.height / 2);
+                    ctxOsc.stroke();
+
+                    ctxSpec.fillStyle = '#050811';
+                    ctxSpec.fillRect(0, 0, cSpec.width, cSpec.height);
+
+                    if (this.analyser) {
+                        const data = new Uint8Array(this.analyser.frequencyBinCount);
+                        this.analyser.getByteFrequencyData(data);
+
+                        let sum = 0;
+                        const barW = cSpec.width / data.length;
+                        for (let i = 0; i < data.length; i++) {
+                            sum += data[i];
+                            const barH = (data[i] / 255) * cSpec.height;
+                            ctxSpec.fillStyle = '#a855f7';
+                            ctxSpec.fillRect(i * barW, cSpec.height - barH, barW - 1, barH);
+                        }
+
+                        const avg = sum / data.length;
+                        const pct = Math.min(100, (avg / 128) * 100);
+                        document.getElementById('vu-meter-bar').style.width = pct + '%';
+                        document.getElementById('vu-meter-db').textContent = avg > 0 ? `-${(100 - pct).toFixed(1)} dB` : '-INF dB';
+                    }
+                };
+                draw();
+            }
+
+            playAudioTestTone() {
+                if (!this.audioCtx) return;
+                const osc = this.audioCtx.createOscillator();
+                const g = this.audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 440;
+                g.gain.value = 0.1;
+                osc.connect(g);
+                g.connect(this.audioCtx.destination);
+                osc.start();
+                setTimeout(() => osc.stop(), 500);
+            }
+
+            logSip(dir, text) {
+                this.sipLogs.push({ dir, text, time: new Date().toLocaleTimeString() });
+                document.getElementById('console-packet-badge').textContent = this.sipLogs.length;
                 this.renderConsoleLogs();
             }
 
-            renderConsoleLogs() {
-                const box = document.getElementById('sip-terminal-box');
-                const search = document.getElementById('console-search-input').value.toLowerCase();
-                
-                const filtered = this.sipPacketLogs.filter(p => {
-                    if (this.consoleFilter === 'TX' && p.dir !== 'TX') return false;
-                    if (this.consoleFilter === 'RX' && p.dir !== 'RX') return false;
-                    if (this.consoleFilter === 'REGISTER' && !p.raw.includes('REGISTER')) return false;
-                    if (this.consoleFilter === 'INVITE' && !p.raw.includes('INVITE')) return false;
-                    if (this.consoleFilter === 'ACK/BYE' && !p.raw.includes('ACK') && !p.raw.includes('BYE')) return false;
-                    if (this.consoleFilter === 'ERR' && !p.raw.match(/SIP\/2\.0 (4|5)\d\d/)) return false;
-                    if (search && !p.raw.toLowerCase().includes(search)) return false;
-                    return true;
-                });
-
-                box.innerHTML = filtered.map(p => {
-                    const dirBadge = p.dir === 'TX' 
-                        ? `<span class="px-1.5 py-0.5 rounded bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30 font-bold">TX ➔</span>`
-                        : `<span class="px-1.5 py-0.5 rounded bg-brand-purple/20 text-brand-purple border border-brand-purple/30 font-bold">RX ⬅</span>`;
-
-                    let colorClass = 'text-slate-300';
-                    if (p.raw.includes('INVITE')) colorClass = 'text-cyan-400 font-bold';
-                    else if (p.raw.includes('REGISTER')) colorClass = 'text-purple-400 font-bold';
-                    else if (p.raw.includes('200 OK')) colorClass = 'text-emerald-400 font-bold';
-                    else if (p.raw.match(/SIP\/2\.0 (4|5)\d\d/)) colorClass = 'text-rose-400 font-bold';
-
-                    return `
-                        <div class="border-b border-slate-900 pb-2">
-                            <div class="flex items-center gap-2 mb-1 text-[11px] text-slate-500">
-                                ${dirBadge}
-                                <span class="font-mono">${p.timestamp}</span>
-                            </div>
-                            <pre class="${colorClass} whitespace-pre-wrap">${this.escapeHtml(p.raw)}</pre>
-                        </div>
-                    `;
-                }).join('');
-
-                if (this.autoScrollConsole) {
-                    box.scrollTop = box.scrollHeight;
-                }
-            }
-
-            escapeHtml(str) {
-                return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            }
-
             setConsoleFilter(filter) {
-                this.consoleFilter = filter;
-                document.querySelectorAll('.console-filter').forEach(el => {
-                    el.classList.remove('bg-brand-600', 'text-white', 'font-bold');
-                    el.classList.add('bg-slate-900', 'text-slate-400');
+                this.activeFilter = filter;
+                document.querySelectorAll('.console-filter').forEach(btn => {
+                    btn.classList.remove('bg-brand-600', 'text-white', 'font-bold');
+                    btn.classList.add('bg-slate-900', 'text-slate-400');
                 });
                 const activeBtn = document.getElementById(`filter-btn-${filter}`);
                 if (activeBtn) {
@@ -1648,668 +1166,117 @@
                 this.renderConsoleLogs();
             }
 
+            renderConsoleLogs() {
+                const box = document.getElementById('sip-terminal-box');
+                const query = document.getElementById('console-search-input').value.toLowerCase();
+                box.innerHTML = '';
+
+                const filtered = this.sipLogs.filter(item => {
+                    if (this.activeFilter === 'TX' && item.dir !== 'TX') return false;
+                    if (this.activeFilter === 'RX' && item.dir !== 'RX') return false;
+                    if (this.activeFilter === 'REGISTER' && !item.text.includes('REGISTER')) return false;
+                    if (this.activeFilter === 'INVITE' && !item.text.includes('INVITE')) return false;
+                    if (this.activeFilter === 'ACK/BYE' && !item.text.includes('ACK') && !item.text.includes('BYE')) return false;
+                    if (query && !item.text.toLowerCase().includes(query)) return false;
+                    return true;
+                });
+
+                filtered.forEach(item => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'border-b border-slate-900/80 pb-2 space-y-1';
+                    const badge = item.dir === 'TX' 
+                        ? '<span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[10px]">TX &rarr;</span>'
+                        : '<span class="px-1.5 py-0.5 rounded bg-purple-950 text-purple-400 border border-purple-800 font-bold text-[10px]">RX &larr;</span>';
+
+                    wrap.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            ${badge}
+                            <span class="text-slate-500 text-[10px]">${item.time}</span>
+                        </div>
+                        <pre class="text-slate-300 whitespace-pre-wrap text-[11px] font-mono">${item.text}</pre>
+                    `;
+                    box.appendChild(wrap);
+                });
+
+                if (this.autoScroll) box.scrollTop = box.scrollHeight;
+            }
+
             clearConsole() {
-                this.sipPacketLogs = [];
+                this.sipLogs = [];
                 document.getElementById('console-packet-badge').textContent = '0';
                 this.renderConsoleLogs();
-                this.showToast('Console logs cleared');
             }
 
             toggleConsoleScroll() {
-                this.autoScrollConsole = !this.autoScrollConsole;
-                document.getElementById('btn-toggle-scroll').innerHTML = this.autoScrollConsole 
-                    ? `<i class="fa-solid fa-arrow-down-long"></i> Auto-Scroll: ON`
-                    : `<i class="fa-solid fa-pause"></i> Auto-Scroll: OFF`;
+                this.autoScroll = !this.autoScroll;
+                document.getElementById('btn-toggle-scroll').textContent = `Auto-Scroll: ${this.autoScroll ? 'ON' : 'OFF'}`;
             }
 
             exportSipLogs() {
-                if (this.sipPacketLogs.length === 0) {
-                    this.showToast('No SIP packets logged to export', 'warning');
-                    return;
-                }
-                const content = this.sipPacketLogs.map(p => `[${p.timestamp}] ${p.dir}:\n${p.raw}\n========================================\n`).join('\n');
-                const blob = new Blob([content], { type: 'text/plain' });
+                const blob = new Blob([JSON.stringify(this.sipLogs, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url;
-                a.download = `SIP_Traffic_Log_${Date.now()}.log`;
+                a.href = url; a.download = 'sip-signaling-trace.json';
                 a.click();
             }
 
-            // --- IN-CALL TOOLBAR ACTIONS ---
-            toggleMuteMic() {
-                if (!this.localStream) return;
-                this.isMicMuted = !this.isMicMuted;
-                this.localStream.getAudioTracks().forEach(t => t.enabled = !this.isMicMuted);
+            updateNetworkStress(rtt, jitter, loss) {
+                if (rtt !== null) { this.rtt = rtt; document.getElementById('tel-val-rtt').textContent = rtt + ' ms'; document.getElementById('hud-rtt').innerHTML = `${rtt} <span class="text-xs text-slate-500">ms</span>`; }
+                if (jitter !== null) { this.jitter = jitter; document.getElementById('tel-val-jitter').textContent = jitter + ' ms'; document.getElementById('hud-jitter').innerHTML = `${jitter} <span class="text-xs text-slate-500">ms</span>`; }
+                if (loss !== null) { this.loss = loss; document.getElementById('tel-val-loss').textContent = loss + ' %'; document.getElementById('hud-loss').innerHTML = `${loss} <span class="text-xs text-slate-500">%</span>`; }
 
-                const icon = document.getElementById('icon-mute-mic');
-                const text = document.getElementById('text-mute-mic');
-                icon.className = this.isMicMuted ? 'fa-solid fa-microphone-slash text-rose-400' : 'fa-solid fa-microphone text-slate-400';
-                text.textContent = this.isMicMuted ? 'Muted' : 'Mute';
-                this.showToast(this.isMicMuted ? 'Microphone Muted' : 'Microphone Unmuted');
+                let R = 94.2 - (this.rtt * 0.05) - (this.jitter * 0.1) - (this.loss * 2.5);
+                let mos = 1 + (0.035 * R) + (R * (R - 60) * (100 - R) * 0.000007);
+                mos = Math.max(1.0, Math.min(4.5, mos));
+
+                document.getElementById('hud-mos').textContent = mos.toFixed(2);
+                document.getElementById('tel-mos-score').textContent = mos.toFixed(2);
             }
 
-            toggleHoldCall() {
-                if (this.callState !== 'IN_CALL' && this.callState !== 'HELD') return;
-                this.isOnHold = !this.isOnHold;
-                this.callState = this.isOnHold ? 'HELD' : 'IN_CALL';
-
-                const icon = document.getElementById('icon-hold-call');
-                const text = document.getElementById('text-hold-call');
-                icon.className = this.isOnHold ? 'fa-solid fa-play text-amber-400' : 'fa-solid fa-pause text-slate-400';
-                text.textContent = this.isOnHold ? 'Resume' : 'Hold';
-
-                if (this.isOnHold) this.startHoldMusic();
-                else this.stopHoldMusic();
-
-                this.updateCallStateBadge();
+            openTransferModal() { document.getElementById('modal-transfer-call').classList.remove('hidden'); }
+            closeTransferModal() { document.getElementById('modal-transfer-call').classList.add('hidden'); }
+            executeTransfer() {
+                const target = document.getElementById('transfer-target-input').value.trim();
+                if (target && this.ws) {
+                    const myExt = document.getElementById('cfg-ext').value.trim();
+                    this.logSip('TX', `REFER sip:${target}@localhost SIP/2.0\r\nRefer-To: <sip:${target}@localhost>\r\nFrom: <sip:${myExt}@localhost>\r\n\r\n`);
+                }
+                this.closeTransferModal();
             }
 
-            toggleRecordCall() {
-                if (this.isCallRecorded) this.stopRecording();
-                else this.startRecording();
-            }
-
-            startRecording() {
-                if (!this.localStream) return;
-                try {
-                    this.recordedChunks = [];
-                    this.mediaRecorder = new MediaRecorder(this.localStream);
-                    this.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) this.recordedChunks.push(e.data); };
-                    this.mediaRecorder.start();
-                    this.isCallRecorded = true;
-                    document.getElementById('icon-record-call').className = 'fa-solid fa-square text-rose-500 animate-pulse';
-                    document.getElementById('text-record-call').textContent = 'Rec...';
-                    this.showToast('Audio recording started');
-                } catch (e) {
-                    this.showToast('Recording not supported', 'error');
+            applyPreset(preset) {
+                if (preset === 'render') {
+                    const isHttps = window.location.protocol === 'https:';
+                    document.getElementById('cfg-wss-url').value = isHttps 
+                        ? `wss://${window.location.host}` 
+                        : 'wss://starbridge-global-softphone.onrender.com';
+                    document.getElementById('cfg-domain').value = window.location.host || 'starbridge-global-softphone.onrender.com';
+                } else if (preset === 'asterisk') {
+                    document.getElementById('cfg-wss-url').value = 'ws://127.0.0.1:8089';
+                    document.getElementById('cfg-domain').value = 'localhost';
+                } else if (preset === 'freeswitch') {
+                    document.getElementById('cfg-wss-url').value = 'ws://127.0.0.1:8089';
+                    document.getElementById('cfg-domain').value = 'freeswitch.local';
                 }
             }
 
-            stopRecording() {
-                if (this.mediaRecorder && this.isCallRecorded) {
-                    this.mediaRecorder.stop();
-                    this.isCallRecorded = false;
-                    document.getElementById('icon-record-call').className = 'fa-solid fa-circle text-rose-500';
-                    document.getElementById('text-record-call').textContent = 'Record';
-                    this.showToast('Call recording saved');
-                }
-            }
-
-            toggleMuteSpeaker() {
-                this.isSpeakerMuted = !this.isSpeakerMuted;
-                const icon = document.getElementById('icon-mute-speaker');
-                icon.className = this.isSpeakerMuted ? 'fa-solid fa-volume-xmark text-rose-400' : 'fa-solid fa-volume-high text-slate-400';
-                this.showToast(this.isSpeakerMuted ? 'Speaker muted' : 'Speaker unmuted');
-            }
-
-            // --- AUDIO TONE & HOLD MUSIC SYNTHESIS ---
-            startRingbackTone() {
-                const ctx = this.getAudioContext();
-                this.ringbackOsc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                this.ringbackOsc.frequency.setValueAtTime(440, ctx.currentTime);
-                gain.gain.setValueAtTime(0.04, ctx.currentTime);
-                this.ringbackOsc.connect(gain); gain.connect(ctx.destination);
-                this.ringbackOsc.start();
-            }
-
-            stopRingbackTone() {
-                if (this.ringbackOsc) {
-                    try { this.ringbackOsc.stop(); } catch(e){}
-                    this.ringbackOsc = null;
-                }
-            }
-
-            startHoldMusic() {
-                const ctx = this.getAudioContext();
-                this.holdOscillator = ctx.createOscillator();
-                const gain = ctx.createGain();
-                this.holdOscillator.type = 'sine';
-                this.holdOscillator.frequency.setValueAtTime(329.63, ctx.currentTime);
-                gain.gain.setValueAtTime(0.04, ctx.currentTime);
-                this.holdOscillator.connect(gain); gain.connect(ctx.destination);
-                this.holdOscillator.start();
-            }
-
-            stopHoldMusic() {
-                if (this.holdOscillator) {
-                    try { this.holdOscillator.stop(); } catch(e){}
-                    this.holdOscillator = null;
-                }
-            }
-
-            // --- CALL TIMER ---
-            startCallTimer() {
-                let seconds = 0;
-                const timerEl = document.getElementById('call-timer');
-                this.timerInterval = setInterval(() => {
-                    seconds++;
-                    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-                    const s = String(seconds % 60).padStart(2, '0');
-                    timerEl.textContent = `${m}:${s}`;
-                }, 1000);
-            }
-
-            stopCallTimer() {
-                if (this.timerInterval) {
-                    clearInterval(this.timerInterval);
-                    this.timerInterval = null;
-                }
-                document.getElementById('call-timer').textContent = '00:00';
-            }
-
-            // --- DIALPAD HELPERS ---
-            pressDialKey(key) {
-                this.playDTMFTone(key);
-                const display = document.getElementById('dial-display');
-                display.value += key;
-                this.updateContactMatch(display.value);
-            }
-
-            clearDialpad() {
-                const display = document.getElementById('dial-display');
-                display.value = display.value.slice(0, -1);
-                this.updateContactMatch(display.value);
-            }
-
-            updateContactMatch(val) {
-                const nameEl = document.getElementById('dial-contact-name');
-                const matched = this.contacts.find(c => c.ext === val);
-                nameEl.textContent = matched ? `Matched: ${matched.name} (${matched.role})` : '';
-            }
-
-            // --- UI STATE MANAGEMENT ---
-            setTransportMode(mode) {
-                this.transportMode = mode;
-                document.getElementById('mode-btn-sip').className = mode === 'sip' 
-                    ? 'px-3 py-1.5 rounded-lg font-semibold transition-all bg-brand-600 text-white shadow-sm' 
-                    : 'px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white';
-                
-                document.getElementById('mode-btn-janus').className = mode === 'janus' 
-                    ? 'px-3 py-1.5 rounded-lg font-semibold transition-all bg-brand-600 text-white shadow-sm' 
-                    : 'px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white';
-
-                document.getElementById('mode-btn-loopback').className = mode === 'loopback' 
-                    ? 'px-3 py-1.5 rounded-lg font-semibold transition-all bg-brand-600 text-white shadow-sm' 
-                    : 'px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white';
-
-                this.showToast(`Switched mode to ${mode.toUpperCase()}`);
-            }
-
-            setSipStatus(status, text) {
-                this.sipStatus = status;
-                const textEl = document.getElementById('sip-reg-status');
-                const dotEl = document.getElementById('reg-status-dot');
-                const btnText = document.getElementById('sip-reg-btn-text');
-
-                textEl.textContent = text;
-                if (status === 'REGISTERED') {
-                    textEl.className = 'text-emerald-400 font-semibold';
-                    dotEl.className = 'inline-block w-1.5 h-1.5 rounded-full bg-emerald-400';
-                    btnText.textContent = 'UNREGISTER';
-                } else if (status === 'REGISTERING') {
-                    textEl.className = 'text-amber-400 font-semibold';
-                    dotEl.className = 'inline-block w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping';
-                    btnText.textContent = 'CANCEL';
-                } else {
-                    textEl.className = 'text-rose-400 font-semibold';
-                    dotEl.className = 'inline-block w-1.5 h-1.5 rounded-full bg-rose-500';
-                    btnText.textContent = 'REGISTER SIP';
-                }
-            }
-
-            updateCallUI() {
-                const btnCall = document.getElementById('btn-start-call');
-                const btnHangup = document.getElementById('btn-end-call');
-                const toolbar = document.getElementById('incall-toolbar');
-
-                if (this.callState === 'IDLE') {
-                    btnCall.disabled = false;
-                    btnCall.classList.remove('opacity-50', 'cursor-not-allowed');
-                    btnHangup.disabled = true;
-                    btnHangup.classList.add('opacity-50', 'cursor-not-allowed');
-                    toolbar.classList.add('opacity-50', 'pointer-events-none');
-                } else {
-                    btnCall.disabled = true;
-                    btnCall.classList.add('opacity-50', 'cursor-not-allowed');
-                    btnHangup.disabled = false;
-                    btnHangup.classList.remove('opacity-50', 'cursor-not-allowed');
-                    toolbar.classList.remove('opacity-50', 'pointer-events-none');
-                }
-
-                this.updateCallStateBadge();
-            }
-
-            updateCallStateBadge() {
-                const badgeText = document.getElementById('call-state-text');
-                const badgeDot = document.getElementById('call-state-dot');
-
-                badgeText.textContent = this.callState;
-                if (this.callState === 'IDLE') {
-                    badgeDot.className = 'w-2 h-2 rounded-full bg-slate-500 inline-block';
-                } else if (this.callState === 'RINGING') {
-                    badgeDot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-ping inline-block';
-                } else if (this.callState === 'IN_CALL') {
-                    badgeDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block';
-                } else if (this.callState === 'HELD') {
-                    badgeDot.className = 'w-2 h-2 rounded-full bg-rose-400 inline-block';
-                }
-            }
-
-            // --- PBX PRESETS & CONFIG SAVING ---
-            readConfigFromUi() {
-                this.config.wssUrl = document.getElementById('cfg-wss-url').value.trim();
-                this.config.domain = document.getElementById('cfg-sip-domain').value.trim();
-                this.config.username = document.getElementById('cfg-sip-user').value.trim();
-                this.config.authUser = document.getElementById('cfg-auth-user').value.trim();
-                this.config.password = document.getElementById('cfg-sip-pass').value;
-                this.config.expires = parseInt(document.getElementById('cfg-expires').value) || 600;
-
-                document.getElementById('local-ext-display').textContent = this.config.username;
-            }
-
-            saveAndRegisterSip() {
-                this.readConfigFromUi();
-                this.showToast('PBX Configuration saved');
-                this.connectSipWebSocket();
-            }
-
-            applyPbxPreset() {
-                const val = document.getElementById('preset-select').value;
-                if (val === 'asterisk') {
-                    document.getElementById('cfg-wss-url').value = 'wss://asterisk.local:8089/ws';
-                    document.getElementById('cfg-sip-domain').value = 'asterisk.local';
-                } else if (val === 'freeswitch') {
-                    document.getElementById('cfg-wss-url').value = 'wss://freeswitch.local:7443';
-                    document.getElementById('cfg-sip-domain').value = 'freeswitch.local';
-                } else if (val === 'janus') {
-                    document.getElementById('cfg-wss-url').value = 'wss://janus.conf.meetecho.com/ws';
-                    document.getElementById('cfg-sip-domain').value = 'janus.local';
-                } else if (val === 'echo') {
-                    document.getElementById('cfg-wss-url').value = 'wss://echo.websocket.org';
-                    document.getElementById('cfg-sip-domain').value = 'echo.local';
-                }
-                this.showToast(`Applied preset: ${val.toUpperCase()}`);
-            }
-
-            // --- TELEMETRY ENGINE & MOS ---
-            updateSimMetrics() {
-                this.simImpairments.latency = parseFloat(document.getElementById('sim-latency').value);
-                this.simImpairments.jitter = parseFloat(document.getElementById('sim-jitter').value);
-                this.simImpairments.loss = parseFloat(document.getElementById('sim-loss').value);
-
-                document.getElementById('sim-latency-val').textContent = `${this.simImpairments.latency} ms`;
-                document.getElementById('sim-jitter-val').textContent = `${this.simImpairments.jitter} ms`;
-                document.getElementById('sim-loss-val').textContent = `${this.simImpairments.loss.toFixed(1)} %`;
-            }
-
-            calculateMOS(rtt, jitter, loss) {
-                const effectiveDelay = (rtt / 2) + (jitter * 2) + 10;
-                let Id = effectiveDelay > 160 ? 0.024 * effectiveDelay + 0.11 * (effectiveDelay - 177) : 0.024 * effectiveDelay;
-                const Ie = 2.5 * loss;
-                let R = 94.2 - Id - Ie;
-                if (R < 0) return 1.0;
-                if (R > 100) return 4.5;
-                const mos = 1 + (0.035 * R) + (0.000007 * R * (R - 60) * (100 - R));
-                return Math.min(4.5, Math.max(1.0, mos));
-            }
-
-            updateTelemetryMetrics() {
-                const baseRtt = this.callState === 'IN_CALL' ? 14 + Math.random() * 5 : 6 + Math.random() * 3;
-                const baseJitter = 1.2 + Math.random() * 1.0;
-
-                const currentRtt = Math.round(baseRtt + this.simImpairments.latency);
-                const currentJitter = parseFloat((baseJitter + this.simImpairments.jitter).toFixed(1));
-                const currentLoss = parseFloat(this.simImpairments.loss.toFixed(1));
-                const mosScore = this.calculateMOS(currentRtt, currentJitter, currentLoss);
-
-                this.telemetry.rtt = currentRtt;
-                this.telemetry.jitter = currentJitter;
-                this.telemetry.loss = currentLoss;
-                this.telemetry.mos = parseFloat(mosScore.toFixed(2));
-
-                // Update HUD
-                document.getElementById('hud-rtt').innerHTML = `${currentRtt} <span class="text-xs text-slate-500">ms</span>`;
-                document.getElementById('hud-jitter').innerHTML = `${currentJitter} <span class="text-xs text-slate-500">ms</span>`;
-                document.getElementById('hud-loss').innerHTML = `${currentLoss.toFixed(1)} <span class="text-xs text-slate-500">%</span>`;
-                
-                const hudMos = document.getElementById('hud-mos');
-                hudMos.textContent = this.telemetry.mos.toFixed(2);
-                hudMos.className = `text-xl font-bold font-mono ${this.telemetry.mos >= 4.0 ? 'text-emerald-400' : 'text-amber-400'}`;
-
-                // Gauge Arc Offset
-                document.getElementById('telemetry-mos-val').textContent = this.telemetry.mos.toFixed(2);
-                const arcFraction = (this.telemetry.mos - 1.0) / 3.5;
-                const dashOffset = 251.2 * (1 - arcFraction);
-                document.getElementById('mos-gauge-arc').setAttribute('stroke-dashoffset', dashOffset.toFixed(1));
-
-                this.pushChartData(currentRtt, currentJitter);
-            }
-
-            initTelemetryChart() {
-                const ctx = document.getElementById('telemetryChart').getContext('2d');
-                this.chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: Array(20).fill(''),
-                        datasets: [
-                            { label: 'RTT Latency (ms)', data: Array(20).fill(16), borderColor: '#00f2fe', borderWidth: 2, tension: 0.3, pointRadius: 0 },
-                            { label: 'Jitter (ms)', data: Array(20).fill(2), borderColor: '#a855f7', borderWidth: 2, tension: 0.3, pointRadius: 0 }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } } },
-                        scales: {
-                            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' } },
-                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' }, beginAtZero: true }
-                        }
+            setupKeyListeners() {
+                window.addEventListener('keydown', (e) => {
+                    if (document.activeElement.tagName === 'INPUT') return;
+                    if (['0','1','2','3','4','5','6','7','8','9','*','#'].includes(e.key)) {
+                        this.pressDialKey(e.key);
+                    } else if (e.key === 'Backspace') {
+                        this.clearDialpad();
+                    } else if (e.key === 'Enter') {
+                        this.initiateCall();
                     }
                 });
-            }
-
-            pushChartData(rtt, jitter) {
-                if (!this.chart) return;
-                this.chart.data.datasets[0].data.push(rtt);
-                this.chart.data.datasets[0].data.shift();
-                this.chart.data.datasets[1].data.push(jitter);
-                this.chart.data.datasets[1].data.shift();
-                this.chart.update('none');
-            }
-
-            // --- CANVAS VISUALIZERS ---
-            initVisualizers() {
-                const oscCanvas = document.getElementById('canvas-oscilloscope');
-                const specCanvas = document.getElementById('canvas-spectrum');
-                const oscCtx = oscCanvas.getContext('2d');
-                const specCtx = specCanvas.getContext('2d');
-
-                const resize = () => {
-                    oscCanvas.width = oscCanvas.clientWidth;
-                    oscCanvas.height = oscCanvas.clientHeight;
-                    specCanvas.width = specCanvas.clientWidth;
-                    specCanvas.height = specCanvas.clientHeight;
-                };
-                resize();
-                window.addEventListener('resize', resize);
-
-                const draw = () => {
-                    requestAnimationFrame(draw);
-
-                    oscCtx.fillStyle = 'rgba(3, 6, 13, 0.35)';
-                    oscCtx.fillRect(0, 0, oscCanvas.width, oscCanvas.height);
-
-                    if (this.analyser) {
-                        const bufferLength = this.analyser.frequencyBinCount;
-                        const timeData = new Uint8Array(bufferLength);
-                        this.analyser.getByteTimeDomainData(timeData);
-
-                        oscCtx.lineWidth = 2;
-                        oscCtx.strokeStyle = '#00f2fe';
-                        oscCtx.beginPath();
-
-                        const sliceWidth = oscCanvas.width / bufferLength;
-                        let x = 0; let sum = 0;
-
-                        for (let i = 0; i < bufferLength; i++) {
-                            const v = timeData[i] / 128.0;
-                            const y = (v * oscCanvas.height) / 2;
-                            if (i === 0) oscCtx.moveTo(x, y);
-                            else oscCtx.lineTo(x, y);
-                            x += sliceWidth;
-
-                            const val = (timeData[i] - 128) / 128.0;
-                            sum += val * val;
-                        }
-                        oscCtx.stroke();
-
-                        const rms = Math.sqrt(sum / bufferLength);
-                        const vuPercent = Math.min(100, Math.round(rms * 260));
-                        document.getElementById('vu-meter-bar').style.width = `${vuPercent}%`;
-                        const db = rms > 0 ? (20 * Math.log10(rms)).toFixed(1) : '-INF';
-                        document.getElementById('vu-meter-db').textContent = `${db} dB`;
-
-                    } else {
-                        oscCtx.lineWidth = 1.5;
-                        oscCtx.strokeStyle = 'rgba(0, 242, 254, 0.25)';
-                        oscCtx.beginPath();
-                        oscCtx.moveTo(0, oscCanvas.height / 2);
-                        oscCtx.lineTo(oscCanvas.width, oscCanvas.height / 2);
-                        oscCtx.stroke();
-                        document.getElementById('vu-meter-bar').style.width = '0%';
-                        document.getElementById('vu-meter-db').textContent = '-INF dB';
-                    }
-
-                    // Frequency Spectrum
-                    specCtx.fillStyle = 'rgba(3, 6, 13, 0.35)';
-                    specCtx.fillRect(0, 0, specCanvas.width, specCanvas.height);
-
-                    if (this.analyser) {
-                        const bufferLength = this.analyser.frequencyBinCount;
-                        const freqData = new Uint8Array(bufferLength);
-                        this.analyser.getByteFrequencyData(freqData);
-
-                        const barWidth = (specCanvas.width / bufferLength) * 2.5;
-                        let x = 0;
-
-                        for (let i = 0; i < bufferLength; i++) {
-                            const barHeight = (freqData[i] / 255) * specCanvas.height;
-                            const gradient = specCtx.createLinearGradient(0, specCanvas.height, 0, 0);
-                            gradient.addColorStop(0, '#a855f7');
-                            gradient.addColorStop(1, '#00f2fe');
-
-                            specCtx.fillStyle = gradient;
-                            specCtx.fillRect(x, specCanvas.height - barHeight, barWidth, barHeight);
-                            x += barWidth + 1;
-                        }
-                    }
-                };
-                draw();
-            }
-
-            // --- DIRECTORY & HISTORY ---
-            renderContacts() {
-                const grid = document.getElementById('contacts-grid');
-                const filter = document.getElementById('contact-search')?.value.toLowerCase() || '';
-                grid.innerHTML = '';
-
-                const filtered = this.contacts.filter(c => c.name.toLowerCase().includes(filter) || c.ext.includes(filter));
-
-                filtered.forEach(contact => {
-                    const card = document.createElement('div');
-                    card.className = 'glass-panel p-4 rounded-xl border border-slate-800 flex items-center justify-between hover:border-slate-700 transition-all';
-                    card.innerHTML = `
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-white relative">
-                                ${contact.name.charAt(0)}
-                                <span class="w-2.5 h-2.5 rounded-full ${contact.color} absolute bottom-0 right-0 border-2 border-slate-900"></span>
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-white">${contact.name}</h4>
-                                <p class="text-[11px] text-slate-400 font-mono">Ext: ${contact.ext}</p>
-                                <span class="text-[10px] text-slate-500">${contact.role}</span>
-                            </div>
-                        </div>
-                        <button onclick="app.dialContact('${contact.ext}')" class="p-2.5 rounded-xl bg-brand-600/20 hover:bg-brand-600 text-brand-cyan hover:text-white border border-brand-500/30 transition-all">
-                            <i class="fa-solid fa-phone text-xs"></i>
-                        </button>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-
-            dialContact(ext) {
-                this.switchTab('softphone');
-                document.getElementById('dial-display').value = ext;
-                this.updateContactMatch(ext);
-                this.initiateCall(ext);
-            }
-
-            openAddContactModal() { document.getElementById('contact-modal').classList.remove('hidden'); }
-            closeContactModal() { document.getElementById('contact-modal').classList.add('hidden'); }
-
-            saveContact() {
-                const name = document.getElementById('new-contact-name').value;
-                const ext = document.getElementById('new-contact-ext').value;
-                const role = document.getElementById('new-contact-role').value || 'User';
-
-                if (!name || !ext) return;
-
-                this.contacts.push({ id: Date.now(), name, ext, role, status: 'Available', color: 'bg-emerald-500' });
-                this.closeContactModal();
-                this.renderContacts();
-                this.showToast(`Saved speed dial contact ${name}`);
-            }
-
-            recordCallLog(direction, peer) {
-                let recUrl = null;
-                if (this.recordedChunks.length > 0) {
-                    const blob = new Blob(this.recordedChunks, { type: 'audio/webm' });
-                    recUrl = URL.createObjectURL(blob);
-                }
-
-                const log = {
-                    id: Date.now(),
-                    direction, peer,
-                    startTime: new Date().toLocaleTimeString(),
-                    duration: document.getElementById('call-timer').textContent,
-                    mos: this.telemetry.mos.toFixed(2),
-                    recording: recUrl
-                };
-
-                this.callLogs.unshift(log);
-                this.renderCallLogs();
-            }
-
-            renderCallLogs() {
-                const tbody = document.getElementById('call-logs-body');
-                tbody.innerHTML = '';
-
-                if (this.callLogs.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-500 italic">No call history logged yet</td></tr>`;
-                    return;
-                }
-
-                this.callLogs.forEach(log => {
-                    const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-slate-900/40 transition-colors';
-                    tr.innerHTML = `
-                        <td class="py-3 px-4">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${log.direction === 'Outgoing' ? 'bg-brand-500/20 text-brand-cyan' : 'bg-emerald-500/20 text-emerald-400'}">
-                                ${log.direction}
-                            </span>
-                        </td>
-                        <td class="py-3 px-4 text-white font-bold">${log.peer}</td>
-                        <td class="py-3 px-4 text-slate-400">${log.startTime}</td>
-                        <td class="py-3 px-4 text-slate-300">${log.duration}</td>
-                        <td class="py-3 px-4 font-bold ${log.mos >= 4.0 ? 'text-emerald-400' : 'text-amber-400'}">${log.mos}</td>
-                        <td class="py-3 px-4">
-                            ${log.recording ? `<audio controls src="${log.recording}" class="h-6 w-36 accent-brand-500"></audio>` : '<span class="text-slate-600">None</span>'}
-                        </td>
-                        <td class="py-3 px-4 text-right">
-                            <button onclick="app.dialContact('${log.peer}')" class="p-1.5 rounded glass-btn text-brand-cyan hover:text-white" title="Redial">
-                                <i class="fa-solid fa-phone"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            clearCallLogs() {
-                this.callLogs = [];
-                this.renderCallLogs();
-                this.showToast('Call history cleared');
-            }
-
-            exportCallHistoryCsv() {
-                if (this.callLogs.length === 0) return;
-                const csv = "Direction,Peer,StartTime,Duration,MOS\n" + this.callLogs.map(e => `${e.direction},${e.peer},${e.startTime},${e.duration},${e.mos}`).join("\n");
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = `PBX_Call_Logs_${Date.now()}.csv`;
-                link.click();
-            }
-
-            // --- SETTINGS HELPERS ---
-            renderIceServers() {
-                const list = document.getElementById('ice-servers-list');
-                list.innerHTML = '';
-                this.iceServers.forEach((srv, idx) => {
-                    const item = document.createElement('div');
-                    item.className = 'flex items-center justify-between p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs font-mono text-slate-300';
-                    item.innerHTML = `
-                        <span>${srv.urls}</span>
-                        <button onclick="app.removeIceServer(${idx})" class="text-slate-500 hover:text-rose-400"><i class="fa-solid fa-trash"></i></button>
-                    `;
-                    list.appendChild(item);
-                });
-            }
-
-            addIceServer() {
-                const input = document.getElementById('new-ice-url');
-                const val = input.value.trim();
-                if (val) {
-                    this.iceServers.push({ urls: val });
-                    input.value = '';
-                    this.renderIceServers();
-                    this.showToast('Added ICE STUN/TURN server');
-                }
-            }
-
-            removeIceServer(idx) {
-                this.iceServers.splice(idx, 1);
-                this.renderIceServers();
-                this.showToast('Removed ICE server');
-            }
-
-            updateCodecPreference() {
-                this.selectedCodec = document.getElementById('setting-codec').value;
-                document.getElementById('active-codec-badge').innerHTML = `<i class="fa-solid fa-microchip mr-1 text-brand-cyan"></i>${this.selectedCodec}`;
-                this.showToast(`Codec preferred: ${this.selectedCodec}`);
-            }
-
-            updateDspSettings() {
-                this.dspSettings.echoCancellation = document.getElementById('dsp-aec').checked;
-                this.dspSettings.noiseSuppression = document.getElementById('dsp-ans').checked;
-                this.showToast('Audio DSP options updated');
-            }
-
-            // --- NAVIGATION ---
-            switchTab(tabId) {
-                document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
-                document.querySelectorAll('.tab-btn').forEach(el => {
-                    el.classList.remove('active', 'text-white', 'bg-slate-800/90', 'border', 'border-slate-700/60');
-                    el.classList.add('text-slate-400');
-                });
-
-                document.getElementById(`view-${tabId}`).classList.remove('hidden');
-                const activeBtn = document.getElementById(`tab-nav-${tabId}`);
-                activeBtn.classList.add('active', 'text-white', 'bg-slate-800/90', 'border', 'border-slate-700/60');
-                activeBtn.classList.remove('text-slate-400');
-            }
-
-            showToast(msg, type = 'info') {
-                const toast = document.getElementById('toast');
-                const toastMsg = document.getElementById('toast-msg');
-                const toastIcon = document.getElementById('toast-icon');
-
-                toastMsg.textContent = msg;
-                if (type === 'error') toastIcon.className = 'fa-solid fa-circle-exclamation text-rose-500';
-                else if (type === 'warning') toastIcon.className = 'fa-solid fa-triangle-exclamation text-amber-400';
-                else toastIcon.className = 'fa-solid fa-circle-info text-brand-cyan';
-
-                toast.classList.remove('translate-y-20', 'opacity-0');
-                setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3200);
             }
         }
 
         let app;
         window.addEventListener('DOMContentLoaded', () => {
-            app = new NexusVoIPApp();
+            app = new NexusVoIPEngine();
             app.init();
         });
     </script>

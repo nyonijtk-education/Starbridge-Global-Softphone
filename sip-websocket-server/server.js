@@ -1,5 +1,5 @@
 /**
- * Render-Compatible Cloud WebRTC/SIP Router & Static Host
+ * Production WebRTC/SIP Router & Static Host with Keep-Alive
  */
 const http = require('http');
 const fs = require('fs');
@@ -8,14 +8,13 @@ const { WebSocketServer } = require('ws');
 
 const PORT = process.env.PORT || 8089;
 
-// 1. Create HTTP Server to serve index.html
+// 1. Static File HTTP Server
 const server = http.createServer((req, res) => {
   let filePath = req.url === '/' ? '/index.html' : req.url;
   let fullPath = path.join(__dirname, filePath);
 
   fs.readFile(fullPath, (err, data) => {
     if (err) {
-      // Fallback to index.html for single-page routing
       fs.readFile(path.join(__dirname, 'index.html'), (errIdx, idxData) => {
         if (errIdx) {
           res.writeHead(500);
@@ -38,44 +37,63 @@ const server = http.createServer((req, res) => {
   });
 });
 
-// 2. Attach WebSocket Server to the same HTTP Server
+// 2. WebSocket Signaling Proxy
 const wss = new WebSocketServer({ server });
-const clients = new Map(); // ext -> ws socket
+const clients = new Map(); // ext string -> ws socket
+
+// Keep-Alive Ping Interval (Prevents Render 55s timeout)
+const pingInterval = setInterval(() => {
+  wss.clients.forEach((ws) => {
+    if (ws.isAlive === false) return ws.terminate();
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, 30000);
 
 wss.on('connection', (ws, req) => {
   let registeredExt = null;
-  console.log(`[+] Client connected from ${req.socket.remoteAddress}`);
+  ws.isAlive = true;
+
+  ws.on('pong', () => { ws.isAlive = true; });
 
   ws.on('message', (data) => {
     const rawSip = data.toString();
     const firstLine = rawSip.split('\r\n')[0] || '';
 
-    // A. JSON Message Router (WebRTC Multi-tab signaling)
+    // A. JSON Protocol Handling (WebRTC Direct Signaling)
     try {
       const msg = JSON.parse(rawSip);
+
       if (msg.type === 'register') {
         registeredExt = String(msg.ext);
         clients.set(registeredExt, ws);
-        console.log(`✅ [REGISTRATION] Extension ${registeredExt} is ONLINE`);
+        console.log(`✅ [REGISTER] Ext ${registeredExt} registered`);
         ws.send(JSON.stringify({ type: 'registered', ext: registeredExt }));
         return;
       }
-      if (['invite', 'answer', 'ice-candidate', 'bye'].includes(msg.type)) {
-        const targetWs = clients.get(String(msg.target));
+
+      if (['invite', 'answer', 'ice-candidate', 'bye', 'cancel'].includes(msg.type)) {
+        const targetExt = String(msg.target);
+        const targetWs = clients.get(targetExt);
+
         if (targetWs && targetWs.readyState === 1) {
+          console.log(`📲 [RELAY] ${msg.type.toUpperCase()} from ${msg.from} -> ${targetExt}`);
           targetWs.send(JSON.stringify(msg));
+        } else {
+          console.log(`⚠️ [DROPPED] Target ${targetExt} not reachable`);
+          ws.send(JSON.stringify({ type: 'error', reason: `Extension ${targetExt} is offline` }));
         }
         return;
       }
     } catch (e) {}
 
-    // B. Standard SIP Packet Routing Fallback
+    // B. Standard SIP Header Fallback
     if (firstLine.startsWith('REGISTER')) {
       const fromMatch = rawSip.match(/From:\s*<sip:([^@>]+)/i) || rawSip.match(/From:\s*sip:([^@>]+)/i);
       const ext = fromMatch ? fromMatch[1] : '1001';
-      registeredExt = ext;
-      clients.set(ext, ws);
-      console.log(`✅ [SIP REGISTER] Extension ${ext} ONLINE`);
+      registeredExt = String(ext);
+      clients.set(registeredExt, ws);
+      console.log(`✅ [SIP REGISTER] Ext ${registeredExt} registered`);
 
       const res = `SIP/2.0 200 OK\r\nVia: SIP/2.0/WSS localhost\r\nFrom: <sip:${ext}@localhost>\r\nTo: <sip:${ext}@localhost>;tag=reg123\r\nCSeq: 1 REGISTER\r\nContent-Length: 0\r\n\r\n`;
       ws.send(res);
@@ -83,7 +101,7 @@ wss.on('connection', (ws, req) => {
     }
 
     const toMatch = rawSip.match(/To:\s*<sip:([^@>]+)/i) || rawSip.match(/^(?:INVITE|BYE|CANCEL|ACK)\s+sip:([^@>]+)/i);
-    const toExt = toMatch ? toMatch[1] : null;
+    const toExt = toMatch ? String(toMatch[1]) : null;
 
     if (toExt && clients.has(toExt)) {
       clients.get(toExt).send(rawSip);
@@ -95,12 +113,16 @@ wss.on('connection', (ws, req) => {
   });
 
   ws.on('close', () => {
-    if (registeredExt) clients.delete(registeredExt);
+    // ONLY delete if this specific socket is the active registered one
+    if (registeredExt && clients.get(registeredExt) === ws) {
+      clients.delete(registeredExt);
+      console.log(`[-] Ext ${registeredExt} disconnected`);
+    }
   });
 });
 
+wss.on('close', () => clearInterval(pingInterval));
+
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`===================================================`);
   console.log(`🚀 NexusVoIP Server listening on port ${PORT}`);
-  console.log(`===================================================`);
 });
