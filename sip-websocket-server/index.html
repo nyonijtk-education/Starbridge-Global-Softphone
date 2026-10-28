@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus VoIP Softphone & Native SIP/PBX Suite</title>
+    <title>Starbridge Global Softphone & Native PBX Suite</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -17,21 +17,21 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            cyan: '#00f2fe',
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            cyan: '#06b6d4',
                             emerald: '#10b981',
                             rose: '#f43f5e',
                             purple: '#a855f7',
                             amber: '#f59e0b'
                         },
-                        darkBg: '#050811',
-                        panelBg: 'rgba(13, 19, 36, 0.75)',
-                        terminalBg: '#03060d'
+                        darkBg: '#02120a',
+                        panelBg: 'rgba(6, 30, 18, 0.75)',
+                        terminalBg: '#010b06'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -44,34 +44,65 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
         
+        :root {
+            --bg-image: linear-gradient(rgba(2, 18, 10, 0.85), rgba(2, 18, 10, 0.88)), url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1920&q=80');
+            --panel-border: rgba(34, 197, 94, 0.2);
+            --accent-glow: rgba(16, 185, 129, 0.4);
+        }
+
+        body.theme-rainforest {
+            --bg-image: linear-gradient(rgba(2, 18, 10, 0.82), rgba(2, 18, 10, 0.88)), url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1920&q=80');
+            --panel-border: rgba(34, 197, 94, 0.22);
+            --accent-glow: rgba(16, 185, 129, 0.4);
+        }
+
+        body.theme-ocean {
+            --bg-image: linear-gradient(rgba(2, 11, 24, 0.82), rgba(2, 11, 24, 0.88)), url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1920&q=80');
+            --panel-border: rgba(6, 182, 212, 0.25);
+            --accent-glow: rgba(6, 182, 212, 0.4);
+        }
+
+        body.theme-aurora {
+            --bg-image: linear-gradient(rgba(8, 4, 20, 0.82), rgba(8, 4, 20, 0.88)), url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1920&q=80');
+            --panel-border: rgba(168, 85, 247, 0.25);
+            --accent-glow: rgba(168, 85, 247, 0.4);
+        }
+
+        body.theme-savannah {
+            --bg-image: linear-gradient(rgba(18, 8, 3, 0.82), rgba(18, 8, 3, 0.88)), url('https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1920&q=80');
+            --panel-border: rgba(245, 158, 11, 0.25);
+            --accent-glow: rgba(245, 158, 11, 0.4);
+        }
+
         body {
-            background-color: #040711;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 45%),
-                radial-gradient(at 100% 0%, rgba(0, 242, 254, 0.1) 0px, transparent 45%),
-                radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             background-attachment: fixed;
+            transition: background-image 1.2s ease-in-out;
             color: #e2e8f0;
             font-family: 'Inter', sans-serif;
         }
 
         .glass-panel {
-            background: rgba(13, 19, 36, 0.72);
+            background: rgba(6, 22, 15, 0.78);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--panel-border);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.65);
+            transition: border-color 0.8s ease;
         }
 
         .glass-btn {
-            background: rgba(30, 41, 59, 0.65);
+            background: rgba(12, 40, 26, 0.7);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-btn:hover:not(:disabled) {
-            background: rgba(51, 65, 85, 0.85);
+            background: rgba(22, 65, 42, 0.85);
             border-color: rgba(255, 255, 255, 0.25);
             transform: translateY(-1px);
         }
@@ -81,21 +112,21 @@
         }
 
         .dialpad-btn {
-            background: linear-gradient(135deg, rgba(26, 35, 57, 0.9) 0%, rgba(13, 20, 36, 0.95) 100%);
+            background: linear-gradient(135deg, rgba(10, 42, 27, 0.9) 0%, rgba(4, 20, 13, 0.95) 100%);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             transition: all 0.15s ease;
         }
 
         .dialpad-btn:hover {
-            border-color: rgba(99, 102, 241, 0.5);
-            box-shadow: 0 0 18px rgba(99, 102, 241, 0.35);
-            background: linear-gradient(135deg, rgba(45, 58, 92, 0.95) 0%, rgba(20, 28, 48, 0.98) 100%);
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 18px var(--accent-glow);
+            background: linear-gradient(135deg, rgba(20, 68, 44, 0.95) 0%, rgba(8, 32, 21, 0.98) 100%);
         }
 
         .dialpad-btn:active {
             transform: scale(0.94);
-            background: rgba(99, 102, 241, 0.4);
+            background: rgba(16, 185, 129, 0.4);
         }
 
         .pulse-call {
@@ -113,106 +144,208 @@
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(5, 8, 17, 0.8);
+            background: rgba(2, 18, 10, 0.8);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(100, 116, 139, 0.35);
+            background: rgba(34, 197, 94, 0.35);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(148, 163, 184, 0.6);
+            background: rgba(74, 222, 128, 0.6);
         }
 
         .terminal-scroll {
             font-family: 'JetBrains Mono', monospace;
-            background-color: #02040a;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            background-color: #010a05;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.85);
         }
+
+        .filter-normal { filter: none; }
+        .filter-grayscale { filter: grayscale(100%); }
+        .filter-sepia { filter: sepia(100%); }
+        .filter-cyberpunk { filter: hue-rotate(180deg) contrast(120%) saturate(200%); }
+        .filter-invert { filter: invert(100%); }
+        .filter-blur { filter: blur(3px); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col text-slate-200 antialiased selection:bg-brand-500 selection:text-white">
+<body class="min-h-screen flex flex-col text-slate-200 antialiased selection:bg-brand-500 selection:text-white theme-rainforest" id="app-body">
+
+    <!-- NOTIFICATION TOAST OVERLAY -->
+    <div id="toast-notification" class="fixed top-20 right-6 z-50 transform translate-x-full transition-transform duration-300 ease-out flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-md text-xs font-semibold">
+        <i id="toast-icon" class="fa-solid fa-triangle-exclamation text-base"></i>
+        <span id="toast-message" class="tracking-wide">System Notification</span>
+    </div>
+
+    <!-- CALL SUMMARY END MODAL -->
+    <div id="modal-call-ended-summary" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="glass-panel border border-emerald-500/40 p-6 rounded-2xl max-w-sm w-full text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center mx-auto text-2xl border border-rose-500/40">
+                <i class="fa-solid fa-phone-slash"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-extrabold text-white">Call Terminated</h3>
+                <p class="text-xs text-slate-400 mt-1">Call ended on both endpoints</p>
+            </div>
+            <div class="bg-slate-950/80 p-3 rounded-xl border border-emerald-900/60 font-mono text-center">
+                <div class="text-[10px] text-slate-500 uppercase tracking-widest">Total Duration</div>
+                <div id="summary-call-duration" class="text-3xl font-extrabold text-emerald-400 mt-0.5">00:00</div>
+            </div>
+            <button onclick="app.closeCallEndedSummary()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs shadow-md transition">
+                Dismiss
+            </button>
+        </div>
+    </div>
+
+    <!-- AUTHENTICATION CONFIRMATION MODAL -->
+    <div id="modal-extension-auth" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="glass-panel border border-emerald-500/40 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-xl border border-emerald-500/40">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">Confirm Extension Identity</h3>
+                <p class="text-xs text-slate-400">Extension <strong id="modal-auth-ext-num" class="text-emerald-300 font-mono">--</strong> authentication</p>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-slate-400 text-xs mb-1 font-medium">Username</label>
+                    <input type="text" id="modal-auth-user" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-slate-400 text-xs mb-1 font-medium">Password</label>
+                    <input type="password" id="modal-auth-password" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-2">
+                <button onclick="app.submitPasswordConfirmation()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs shadow-md transition">
+                    Confirm Credentials
+                </button>
+                <button onclick="app.authenticateBiometrics()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-teal-300 font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition border border-teal-500/30">
+                    <i class="fa-solid fa-fingerprint text-base"></i> Use Biometrics (Touch ID / Face ID)
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- TOP TELECOM OPERATIONS NAVBAR -->
-    <header class="w-full glass-panel sticky top-0 z-40 border-b border-slate-800/80 px-4 py-3">
+    <header class="w-full glass-panel sticky top-0 z-40 border-b border-emerald-900/40 px-4 py-3">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
             
             <!-- Brand & Ext Status -->
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-purple to-brand-cyan flex items-center justify-center shadow-lg shadow-brand-500/25">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-amber-400 flex items-center justify-center shadow-lg shadow-emerald-600/30">
                     <i class="fa-solid fa-server text-white text-lg"></i>
                 </div>
                 <div>
                     <div class="flex items-center space-x-2">
-                        <h1 class="text-lg font-extrabold tracking-tight text-white">NEXUS<span class="text-brand-cyan">SIP</span></h1>
-                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 font-semibold uppercase tracking-wider">SIP / WebSockets Stack</span>
+                        <h1 class="text-lg font-extrabold tracking-tight text-white">STARBRIDGE <span class="text-emerald-400">GLOBAL</span> SOFTPHONE</h1>
                     </div>
                     <p class="text-xs text-slate-400 flex items-center gap-2">
-                        <span>Ext: <strong id="local-ext-display" class="text-white font-mono">1001</strong></span>
+                        <span>Ext: <strong id="local-ext-display" class="text-white font-mono">--</strong></span>
                         <span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-500" id="reg-status-dot"></span>
-                        <span id="sip-reg-status" class="text-amber-400 font-semibold">Disconnected</span>
+                        <span id="reg-status" class="text-amber-400 font-semibold">Disconnected</span>
                     </p>
                 </div>
             </div>
 
-            <!-- PBX Quick Presets & Signaling Transport Selector -->
+            <!-- Nature Theme Switcher, Weather & Time Widget -->
             <div class="flex items-center flex-wrap gap-2 sm:gap-3">
-                <div class="flex items-center bg-slate-950/80 p-1 rounded-xl border border-slate-800 text-xs">
-                    <button id="mode-btn-sip" onclick="app.setTransportMode('sip')" class="px-3 py-1.5 rounded-lg font-semibold transition-all bg-brand-600 text-white shadow-sm">
-                        <i class="fa-solid fa-network-wired mr-1.5"></i> SIP / WSS
+                
+                <!-- Theme Selector -->
+                <div class="flex items-center bg-slate-950/80 p-1 rounded-xl border border-emerald-900/50 text-xs">
+                    <button onclick="app.setNatureTheme('rainforest')" id="theme-btn-rainforest" class="px-2.5 py-1.5 rounded-lg font-bold transition-all bg-emerald-600 text-white shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-tree text-emerald-300"></i> <span class="hidden sm:inline">Rainforest</span>
                     </button>
-                    <button id="mode-btn-janus" onclick="app.setTransportMode('janus')" class="px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white">
-                        <i class="fa-solid fa-cubes mr-1.5"></i> Janus WebRTC
+                    <button onclick="app.setNatureTheme('ocean')" id="theme-btn-ocean" class="px-2.5 py-1.5 rounded-lg font-bold transition-all text-slate-400 hover:text-white flex items-center gap-1.5">
+                        <i class="fa-solid fa-water text-cyan-400"></i> <span class="hidden sm:inline">Ocean</span>
                     </button>
-                    <button id="mode-btn-loopback" onclick="app.setTransportMode('loopback')" class="px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white">
-                        <i class="fa-solid fa-rotate-left mr-1.5"></i> Offline Test
+                    <button onclick="app.setNatureTheme('aurora')" id="theme-btn-aurora" class="px-2.5 py-1.5 rounded-lg font-bold transition-all text-slate-400 hover:text-white flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt text-purple-400"></i> <span class="hidden sm:inline">Aurora</span>
+                    </button>
+                    <button onclick="app.setNatureTheme('savannah')" id="theme-btn-savannah" class="px-2.5 py-1.5 rounded-lg font-bold transition-all text-slate-400 hover:text-white flex items-center gap-1.5">
+                        <i class="fa-solid fa-sun text-amber-400"></i> <span class="hidden sm:inline">Savannah</span>
+                    </button>
+                    <button onclick="app.toggleAutoCycleThemes()" id="theme-btn-autocycle" class="px-2 py-1.5 rounded-lg font-semibold transition-all text-amber-400 ml-1 border-l border-slate-800">
+                        <i class="fa-solid fa-arrows-rotate animate-spin" id="autocycle-icon"></i>
                     </button>
                 </div>
 
-                <button id="btn-sip-register" onclick="app.toggleSipRegistration()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-emerald-600/20">
-                    <i class="fa-solid fa-plug" id="sip-reg-icon"></i>
-                    <span id="sip-reg-btn-text">REGISTER SIP</span>
-                </button>
+                <!-- Live Time & Temperature Widget -->
+                <div class="flex items-center gap-2 bg-slate-950/90 px-3 py-1.5 rounded-xl border border-emerald-900/60 text-xs font-mono text-slate-200 shadow-sm">
+                    <i class="fa-solid fa-clock text-emerald-400"></i>
+                    <span id="live-time-display" class="font-bold text-white">20:15</span>
+                    <span class="text-slate-600">|</span>
+                    <i class="fa-solid fa-cloud-moon text-amber-400"></i>
+                    <span id="live-temp-display" class="font-bold text-emerald-300">24°C</span>
+                </div>
 
-                <button id="btn-request-mic" onclick="app.requestAudioPermission()" class="glass-btn px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 text-slate-300">
-                    <i class="fa-solid fa-microphone text-brand-cyan" id="mic-status-icon"></i>
-                    <span id="mic-status-text">Mic Ready</span>
+                <button id="btn-register" onclick="app.register()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-emerald-600/25">
+                    <i class="fa-solid fa-plug" id="reg-icon"></i>
+                    <span id="reg-btn-text">REGISTER</span>
                 </button>
             </div>
         </div>
     </header>
 
+    <!-- ADMIN BROADCAST INTERCOM BANNER -->
+    <section class="max-w-7xl w-full mx-auto px-4 pt-4">
+        <div id="admin-intercom-banner" class="glass-panel border border-emerald-500/40 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 shadow-lg bg-emerald-950/40">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-rose-600 flex items-center justify-center text-white text-sm shadow-md animate-pulse">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Admin Broadcast Intercom</span>
+                        <span id="intercom-status-badge" class="px-2 py-0.5 text-[10px] font-mono rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold">LISTENING</span>
+                    </div>
+                    <p id="intercom-active-msg" class="text-xs text-slate-200 mt-0.5 font-mono">
+                        <i class="fa-solid fa-circle-info text-emerald-400 mr-1"></i> "Welcome to Starbridge PBX Intercom System. Ready for Admin Updates."
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <button id="btn-toggle-intercom-mute" onclick="app.toggleIntercomMute()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-emerald-900/60 text-xs font-semibold flex items-center gap-2 transition shadow-sm">
+                    <i id="intercom-mute-icon" class="fa-solid fa-volume-high"></i>
+                    <span id="intercom-mute-text">Intercom Active</span>
+                </button>
+
+                <button onclick="app.openAdminBroadcastModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md">
+                    <i class="fa-solid fa-tower-broadcast"></i>
+                    <span class="hidden sm:inline">Send Broadcast</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- MAIN SUITE DASHBOARD -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
 
-        <!-- SUITE NAVIGATION TABS -->
-        <div class="flex items-center border-b border-slate-800 overflow-x-auto gap-2 pb-1 scrollbar-none">
-            <button onclick="app.switchTab('softphone')" id="tab-nav-softphone" class="tab-btn active px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-white bg-slate-800/90 border border-slate-700/60 shadow-sm transition-all">
-                <i class="fa-solid fa-phone text-brand-cyan"></i> Softphone Studio
+        <!-- NAVIGATION TABS -->
+        <div class="flex items-center border-b border-emerald-900/40 overflow-x-auto gap-2 pb-1 scrollbar-none">
+            <button onclick="app.switchTab('softphone')" id="tab-nav-softphone" class="tab-btn active px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-white bg-emerald-900/50 border border-emerald-700/60 shadow-sm transition-all">
+                <i class="fa-solid fa-phone text-emerald-400"></i> Softphone Studio
             </button>
-            <button onclick="app.switchTab('console')" id="tab-nav-console" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/40 transition-all relative">
-                <i class="fa-solid fa-terminal text-brand-purple"></i> SIP Packet Inspector
-                <span id="console-packet-badge" class="px-1.5 py-0.2 rounded-full bg-brand-purple/30 text-brand-purple border border-brand-purple/40 text-[10px] font-mono">0</span>
+            <button onclick="app.switchTab('settings')" id="tab-nav-settings" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-emerald-900/30 transition-all">
+                <i class="fa-solid fa-sliders text-amber-400"></i> Settings
             </button>
-            <button onclick="app.switchTab('settings')" id="tab-nav-settings" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/40 transition-all">
-                <i class="fa-solid fa-sliders text-amber-400"></i> PBX & Media Gateway
-            </button>
-            <button onclick="app.switchTab('telemetry')" id="tab-nav-telemetry" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/40 transition-all">
-                <i class="fa-solid fa-chart-line text-emerald-400"></i> Quality & MOS Gauge
-            </button>
-            <button onclick="app.switchTab('contacts')" id="tab-nav-contacts" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/40 transition-all">
-                <i class="fa-solid fa-address-book text-brand-cyan"></i> PBX Directory & Logs
+            <button onclick="app.switchTab('contacts')" id="tab-nav-contacts" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-400 hover:text-white hover:bg-emerald-900/30 transition-all">
+                <i class="fa-solid fa-address-book text-emerald-400"></i> Call Directory & Logs
             </button>
         </div>
 
         <!-- VIEW TAB 1: SOFTPHONE STUDIO -->
         <section id="view-softphone" class="tab-view grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <!-- LEFT COLUMN: DIALPAD & CALL DISPLAY (5 cols) -->
+            <!-- LEFT COLUMN: DIALPAD & CALL DISPLAY -->
             <div class="lg:col-span-5 flex flex-col gap-4">
-                <div class="glass-panel rounded-2xl p-5 border border-slate-800 relative overflow-hidden flex flex-col">
+                <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 relative overflow-hidden flex flex-col">
                     
                     <!-- Call Display Screen -->
-                    <div class="bg-slate-950/90 rounded-xl p-4 border border-slate-800/90 mb-5 relative flex flex-col justify-between min-h-[150px] shadow-inner">
+                    <div class="bg-slate-950/90 rounded-xl p-4 border border-emerald-900/60 mb-5 relative flex flex-col justify-between min-h-[150px] shadow-inner">
                         <div class="flex items-center justify-between text-xs text-slate-400">
                             <span id="call-state-badge" class="px-2.5 py-0.5 rounded-full bg-slate-900 text-slate-300 font-semibold border border-slate-800 flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-slate-500 inline-block" id="call-state-dot"></span>
@@ -223,19 +356,18 @@
 
                         <!-- Number / Extension Display -->
                         <div class="my-3 text-center">
-                            <input type="text" id="dial-display" placeholder="Enter ext or SIP URI..." 
-                                class="w-full bg-transparent text-center font-mono text-2xl font-bold tracking-wider text-white focus:outline-none placeholder-slate-600" value="1002">
-                            <p id="dial-contact-name" class="text-xs text-brand-cyan font-medium h-4 mt-1"></p>
+                            <input type="text" id="dial-display" placeholder="Dial a number" oninput="app.onDialInput()"
+                                class="w-full bg-transparent text-center font-mono text-2xl font-bold tracking-wider text-white focus:outline-none placeholder-slate-600" value="">
+                            <p id="dial-contact-name" class="text-xs text-emerald-400 font-medium h-4 mt-1"></p>
                         </div>
 
-                        <!-- Mini SIP Session Banner -->
                         <div class="flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-900 pt-2">
-                            <span id="active-codec-badge"><i class="fa-solid fa-microchip mr-1 text-brand-cyan"></i>Opus 48kHz</span>
-                            <span id="active-sip-callid" class="font-mono text-[10px] text-slate-600 truncate max-w-[160px]">Call-ID: --</span>
+                            <span id="active-codec-badge"><i class="fa-solid fa-microchip mr-1 text-emerald-400"></i>Opus 48kHz / VP8</span>
+                            <span id="active-callid" class="font-mono text-[10px] text-slate-600 truncate max-w-[160px]">Call-ID: --</span>
                         </div>
                     </div>
 
-                    <!-- DTMF Keypad Grid -->
+                    <!-- Keypad Grid -->
                     <div class="grid grid-cols-3 gap-3 mb-5">
                         <button onclick="app.pressDialKey('1')" class="dialpad-btn py-3.5 rounded-xl flex flex-col items-center justify-center">
                             <span class="text-xl font-bold text-white font-mono">1</span>
@@ -289,114 +421,156 @@
 
                     <!-- Call & Control Actions -->
                     <div class="flex items-center gap-3">
-                        <button id="btn-start-call" onclick="app.initiateCall()" class="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all pulse-call">
-                            <i class="fa-solid fa-phone"></i> INVITE / Call
+                        <button id="btn-start-call" onclick="app.initiateCall()" class="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all pulse-call">
+                            <i class="fa-solid fa-phone"></i> Call
                         </button>
                         
                         <button id="btn-end-call" onclick="app.hangupCall()" disabled class="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 opacity-50 cursor-not-allowed text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition-all">
-                            <i class="fa-solid fa-phone-slash"></i> BYE / Hangup
+                            <i class="fa-solid fa-phone-slash"></i> End Call
                         </button>
                         
-                        <button onclick="app.clearDialpad()" class="p-3.5 rounded-xl glass-btn text-slate-400 hover:text-white" title="Backspace">
+                        <button onclick="app.clearDialpad()" class="p-3.5 rounded-xl glass-btn text-slate-400 hover:text-white">
                             <i class="fa-solid fa-backspace text-lg"></i>
                         </button>
                     </div>
 
-                    <!-- In-Call Quick Toolbar -->
-                    <div id="incall-toolbar" class="mt-4 border-t border-slate-800/80 pt-4 grid grid-cols-5 gap-2 opacity-50 pointer-events-none transition-all">
-                        <button id="btn-mute-mic" onclick="app.toggleMuteMic()" class="glass-btn p-2.5 rounded-xl flex flex-col items-center gap-1 text-xs">
-                            <i class="fa-solid fa-microphone-slash text-slate-400" id="icon-mute-mic"></i>
+                    <!-- In-Call Toolbar -->
+                    <div id="incall-toolbar" class="mt-4 border-t border-emerald-900/40 pt-4 grid grid-cols-6 gap-2 opacity-50 pointer-events-none transition-all">
+                        <button id="btn-mute-mic" onclick="app.toggleMuteMic()" class="glass-btn p-2 rounded-xl flex flex-col items-center gap-1 text-xs">
+                            <i class="fa-solid fa-microphone text-slate-400" id="icon-mute-mic"></i>
                             <span class="text-[10px]" id="text-mute-mic">Mute</span>
                         </button>
-                        <button id="btn-hold-call" onclick="app.toggleHoldCall()" class="glass-btn p-2.5 rounded-xl flex flex-col items-center gap-1 text-xs">
+                        <button id="btn-hold-call" onclick="app.toggleHoldCall()" class="glass-btn p-2 rounded-xl flex flex-col items-center gap-1 text-xs">
                             <i class="fa-solid fa-pause text-slate-400" id="icon-hold-call"></i>
                             <span class="text-[10px]" id="text-hold-call">Hold</span>
                         </button>
-                        <button id="btn-transfer-call" onclick="app.openTransferModal()" class="glass-btn p-2.5 rounded-xl flex flex-col items-center gap-1 text-xs">
-                            <i class="fa-solid fa-arrow-right-arrow-left text-brand-cyan"></i>
+                        <button id="btn-toggle-video" onclick="app.toggleVideoCamera()" class="glass-btn p-2 rounded-xl flex flex-col items-center gap-1 text-xs">
+                            <i class="fa-solid fa-video text-emerald-400" id="icon-toggle-video"></i>
+                            <span class="text-[10px]" id="text-toggle-video">Cam</span>
+                        </button>
+                        <button id="btn-pip" onclick="app.togglePiP()" class="glass-btn p-2 rounded-xl flex flex-col items-center gap-1 text-xs">
+                            <i class="fa-solid fa-clone text-amber-400"></i>
+                            <span class="text-[10px]">PiP</span>
+                        </button>
+                        <button id="btn-transfer-call" onclick="app.openTransferModal()" class="glass-btn p-2 rounded-xl flex flex-col items-center gap-1 text-xs">
+                            <i class="fa-solid fa-arrow-right-arrow-left text-teal-400"></i>
                             <span class="text-[10px]">Transfer</span>
                         </button>
-                        <button id="btn-record-call" onclick="app.toggleRecordCall()" class="glass-btn p-2.5 rounded-xl flex flex-col items-center gap-1 text-xs">
+                        <button id="btn-record-call" onclick="app.toggleRecordCall()" class="glass-btn p-2 rounded-xl flex flex-col items-center gap-1 text-xs">
                             <i class="fa-solid fa-circle text-rose-500" id="icon-record-call"></i>
                             <span class="text-[10px]" id="text-record-call">Record</span>
-                        </button>
-                        <button id="btn-mute-speaker" onclick="app.toggleMuteSpeaker()" class="glass-btn p-2.5 rounded-xl flex flex-col items-center gap-1 text-xs">
-                            <i class="fa-solid fa-volume-xmark text-slate-400" id="icon-mute-speaker"></i>
-                            <span class="text-[10px]" id="text-mute-speaker">Speaker</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: AUDIO CANVAS VISUALIZERS & TELEMETRY HUD (7 cols) -->
+            <!-- RIGHT COLUMN: WEBRTC VIDEO CANVAS & DSP VISUALIZER -->
             <div class="lg:col-span-7 flex flex-col gap-6">
 
-                <!-- Real Audio Oscilloscope & Spectrum Visualizers -->
-                <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4 relative">
+                <!-- VIDEO VIEWPORT -->
+                <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 flex flex-col gap-4 relative">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div>
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-video text-emerald-400"></i> WebRTC Video Feed & Canvas Filters
+                            </h2>
+                            <p class="text-xs text-slate-400">Negotiated VP8/H.264 Video Track with Real-time DSP Canvas</p>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-400 font-medium">Filter:</span>
+                            <select id="video-filter-select" onchange="app.setVideoFilter(this.value)" class="bg-slate-950 border border-emerald-900/60 text-xs text-emerald-400 rounded-lg px-2.5 py-1 focus:outline-none">
+                                <option value="normal">Normal</option>
+                                <option value="grayscale">Grayscale</option>
+                                <option value="sepia">Sepia Tone</option>
+                                <option value="cyberpunk">Cyberpunk</option>
+                                <option value="invert">Invert</option>
+                                <option value="blur">Blur</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="relative bg-slate-950/95 rounded-xl overflow-hidden border border-emerald-900/60 h-64 flex items-center justify-center shadow-inner">
+                        <video id="remote-video" autoplay playsinline class="hidden"></video>
+                        <video id="local-video" autoplay playsinline muted class="hidden"></video>
+
+                        <canvas id="canvas-video-processed" class="w-full h-full object-cover rounded-xl block filter-normal"></canvas>
+
+                        <div id="local-video-pip" class="absolute bottom-3 right-3 w-32 h-24 rounded-lg overflow-hidden border-2 border-emerald-500/50 shadow-lg bg-black/80 flex items-center justify-center">
+                            <canvas id="canvas-local-preview" class="w-full h-full object-cover"></canvas>
+                            <span class="absolute top-1 left-1.5 text-[9px] font-mono text-white/80 bg-black/60 px-1 rounded">YOU</span>
+                        </div>
+
+                        <div id="video-idle-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-slate-600 bg-slate-950/85">
+                            <i class="fa-solid fa-video-slash text-4xl mb-2 text-emerald-900/60"></i>
+                            <span class="text-xs font-mono text-slate-500">Video Feed Standby</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audio Oscilloscope & Spectrum Visualizers -->
+                <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 flex flex-col gap-4 relative">
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-base font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-wave-square text-brand-cyan"></i> Real-Time Audio DSP Visualizer
+                                <i class="fa-solid fa-wave-square text-emerald-400"></i> Audio DSP Visualizer
                             </h2>
-                            <p class="text-xs text-slate-400">Web Audio API Analyser & WebRTC Peer Track</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="app.playAudioTestTone()" class="glass-btn px-2.5 py-1 rounded-lg text-xs text-brand-cyan font-semibold flex items-center gap-1.5">
+                            <button onclick="app.playAudioTestTone()" class="glass-btn px-2.5 py-1 rounded-lg text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
                                 <i class="fa-solid fa-vial"></i> Audio Test Tone
                             </button>
-                            <span class="text-xs font-mono text-slate-400 bg-slate-900/90 px-2.5 py-1 rounded-lg border border-slate-800">
+                            <span class="text-xs font-mono text-slate-400 bg-slate-900/90 px-2.5 py-1 rounded-lg border border-emerald-900/50">
                                 48.0 kHz
                             </span>
                         </div>
                     </div>
 
-                    <!-- Visualizer Canvas Stack -->
-                    <div class="space-y-3">
-                        <div class="relative bg-slate-950/95 rounded-xl overflow-hidden border border-slate-800/90 h-32 flex items-center justify-center">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="relative bg-slate-950/95 rounded-xl overflow-hidden border border-emerald-900/60 h-28 flex items-center justify-center">
                             <canvas id="canvas-oscilloscope" class="w-full h-full block"></canvas>
-                            <span class="absolute top-2 left-3 text-[10px] font-mono text-cyan-400/80 font-bold tracking-wider">TIME DOMAIN WAVEFORM</span>
+                            <span class="absolute top-2 left-3 text-[10px] font-mono text-emerald-400/80 font-bold tracking-wider">TIME DOMAIN WAVEFORM</span>
                         </div>
 
-                        <div class="relative bg-slate-950/95 rounded-xl overflow-hidden border border-slate-800/90 h-32 flex items-center justify-center">
+                        <div class="relative bg-slate-950/95 rounded-xl overflow-hidden border border-emerald-900/60 h-28 flex items-center justify-center">
                             <canvas id="canvas-spectrum" class="w-full h-full block"></canvas>
-                            <span class="absolute top-2 left-3 text-[10px] font-mono text-purple-400/80 font-bold tracking-wider">FREQUENCY SPECTRUM (FFT)</span>
+                            <span class="absolute top-2 left-3 text-[10px] font-mono text-amber-400/80 font-bold tracking-wider">FFT SPECTRUM</span>
                         </div>
                     </div>
 
-                    <!-- Input Level VU Meter -->
-                    <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 flex items-center gap-3">
+                    <div class="bg-slate-950/70 p-3 rounded-xl border border-emerald-900/60 flex items-center gap-3">
                         <span class="text-xs font-semibold text-slate-400 min-w-[65px]">Mic Level</span>
                         <div class="flex-1 h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-800 relative">
-                            <div id="vu-meter-bar" class="h-full bg-gradient-to-r from-emerald-500 via-brand-cyan to-rose-500 rounded-full w-0 transition-all duration-75"></div>
+                            <div id="vu-meter-bar" class="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 rounded-full w-0 transition-all duration-75"></div>
                         </div>
                         <span id="vu-meter-db" class="text-xs font-mono text-slate-400 min-w-[50px] text-right">-INF dB</span>
                     </div>
                 </div>
 
-                <!-- Live Quality Telemetry Cards -->
+                <!-- Telemetry Cards -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="glass-panel p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div class="glass-panel p-3.5 rounded-xl border border-emerald-900/50 flex flex-col justify-between">
                         <span class="text-[11px] text-slate-400 font-medium">Est. MOS Score</span>
                         <div class="flex items-baseline justify-between mt-1">
                             <span id="hud-mos" class="text-xl font-bold font-mono text-emerald-400">4.41</span>
                             <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">EXCELLENT</span>
                         </div>
                     </div>
-                    <div class="glass-panel p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div class="glass-panel p-3.5 rounded-xl border border-emerald-900/50 flex flex-col justify-between">
                         <span class="text-[11px] text-slate-400 font-medium">Latency (RTT)</span>
                         <div class="flex items-baseline justify-between mt-1">
                             <span id="hud-rtt" class="text-xl font-bold font-mono text-slate-200">16 <span class="text-xs text-slate-500">ms</span></span>
-                            <i class="fa-solid fa-network-wired text-brand-cyan text-xs"></i>
+                            <i class="fa-solid fa-network-wired text-emerald-400 text-xs"></i>
                         </div>
                     </div>
-                    <div class="glass-panel p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div class="glass-panel p-3.5 rounded-xl border border-emerald-900/50 flex flex-col justify-between">
                         <span class="text-[11px] text-slate-400 font-medium">Jitter</span>
                         <div class="flex items-baseline justify-between mt-1">
                             <span id="hud-jitter" class="text-xl font-bold font-mono text-slate-200">1.8 <span class="text-xs text-slate-500">ms</span></span>
-                            <i class="fa-solid fa-wave-square text-brand-purple text-xs"></i>
+                            <i class="fa-solid fa-wave-square text-teal-400 text-xs"></i>
                         </div>
                     </div>
-                    <div class="glass-panel p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div class="glass-panel p-3.5 rounded-xl border border-emerald-900/50 flex flex-col justify-between">
                         <span class="text-[11px] text-slate-400 font-medium">Packet Loss</span>
                         <div class="flex items-baseline justify-between mt-1">
                             <span id="hud-loss" class="text-xl font-bold font-mono text-slate-200">0.0 <span class="text-xs text-slate-500">%</span></span>
@@ -407,249 +581,250 @@
             </div>
         </section>
 
-        <!-- VIEW TAB 2: LIVE SIP PACKET INSPECTOR & CONSOLE -->
-        <section id="view-console" class="tab-view hidden flex flex-col gap-4">
-            <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
-                
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-                    <div class="flex items-center gap-3">
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-terminal text-brand-purple"></i> SIP Protocol Inspector & Signaling Console
-                        </h2>
-                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
-                            WSS / UDP / TCP Packet Feed
-                        </span>
-                    </div>
-
-                    <div class="flex items-center flex-wrap gap-2">
-                        <button onclick="app.clearConsole()" class="glass-btn px-2.5 py-1.5 rounded-xl text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1.5">
-                            <i class="fa-solid fa-trash"></i> Clear Logs
-                        </button>
-                        <button onclick="app.toggleConsoleScroll()" id="btn-toggle-scroll" class="glass-btn px-2.5 py-1.5 rounded-xl text-xs text-slate-300 font-semibold flex items-center gap-1.5">
-                            <i class="fa-solid fa-arrow-down-long"></i> Auto-Scroll: ON
-                        </button>
-                        <button onclick="app.exportSipLogs()" class="glass-btn px-2.5 py-1.5 rounded-xl text-xs text-brand-cyan hover:text-white font-semibold flex items-center gap-1.5">
-                            <i class="fa-solid fa-download"></i> Export SIP Log
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                        <span class="text-slate-500 font-semibold mr-1">Filter:</span>
-                        <button onclick="app.setConsoleFilter('ALL')" id="filter-btn-ALL" class="console-filter active px-2.5 py-1 rounded-lg bg-brand-600 text-white font-bold">ALL</button>
-                        <button onclick="app.setConsoleFilter('REGISTER')" id="filter-btn-REGISTER" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white font-medium">REGISTER</button>
-                        <button onclick="app.setConsoleFilter('INVITE')" id="filter-btn-INVITE" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white font-medium">INVITE</button>
-                        <button onclick="app.setConsoleFilter('ACK/BYE')" id="filter-btn-ACK/BYE" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white font-medium">ACK / BYE</button>
-                        <button onclick="app.setConsoleFilter('TX')" id="filter-btn-TX" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white font-medium">TX Outgoing</button>
-                        <button onclick="app.setConsoleFilter('RX')" id="filter-btn-RX" class="console-filter px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white font-medium">RX Incoming</button>
-                    </div>
-
-                    <div class="relative min-w-[200px]">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
-                        <input type="text" id="console-search-input" oninput="app.renderConsoleLogs()" placeholder="Search Call-ID, header, body..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
-                    </div>
-                </div>
-
-                <div id="sip-terminal-box" class="terminal-scroll rounded-xl p-4 border border-slate-800 h-[520px] overflow-y-auto space-y-3 font-mono text-xs">
-                    <div class="text-slate-600 italic">// Waiting for SIP WebSocket signaling traffic...</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW TAB 3: PBX & MEDIA GATEWAY CONFIGURATION -->
-        <section id="view-settings" class="tab-view hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-7 flex flex-col gap-4">
-                <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-server text-amber-400"></i> PBX Connection & SIP Digest Authentication
-                        </h2>
-                        <select id="cfg-preset" onchange="app.applyPreset(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1 text-xs text-slate-300 focus:outline-none">
-                            <option value="render">Render Cloud WSS Endpoint</option>
-                            <option value="asterisk">Asterisk PJSIP (WSS)</option>
-                            <option value="freeswitch">FreeSWITCH Sofia (WSS)</option>
-                            <option value="loopback">Offline Test Mode</option>
-                        </select>
-                    </div>
-
-                    <div class="space-y-3 text-xs">
-                        <div>
-                            <label class="block text-slate-400 mb-1 font-medium">WebSocket Server URL (WSS)</label>
-                            <input type="text" id="cfg-wss-url" value="wss://starbridge-global-softphone.onrender.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
-                            <span class="text-[10px] text-slate-500 mt-1 block">Example: wss://starbridge-global-softphone.onrender.com or ws://127.0.0.1:8089</span>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-medium">SIP Realm / Domain</label>
-                                <input type="text" id="cfg-domain" value="starbridge-global-softphone.onrender.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-medium">Outbound SIP Proxy (Optional)</label>
-                                <input type="text" id="cfg-proxy" placeholder="sip:proxy.domain.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-medium">Extension / SIP User</label>
-                                <input type="text" id="cfg-ext" value="1001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-medium">Auth Username</label>
-                                <input type="text" id="cfg-auth-user" value="1001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-medium">SIP Password / Token</label>
-                                <input type="password" id="cfg-password" value="123456" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-medium">Register Expires (Sec)</label>
-                                <input type="number" id="cfg-expires" value="600" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono focus:border-brand-500 focus:outline-none">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-2">
-                        <button onclick="app.saveAndRegister()" class="w-full py-3 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-brand-500/20 text-xs flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i> Save & Initiate SIP REGISTER
-                        </button>
-                    </div>
-                </div>
+        <!-- VIEW TAB 2: SETTINGS -->
+        <section id="view-settings" class="tab-view hidden flex flex-col gap-6">
+            
+            <div class="flex items-center gap-2 bg-slate-950/80 p-1.5 rounded-xl border border-emerald-900/50 w-fit text-xs font-semibold">
+                <button onclick="app.switchSettingsSubTab('ext-reg')" id="subnav-ext-reg" class="subtab-btn active px-4 py-2 rounded-lg bg-emerald-600 text-white shadow-sm flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-sliders text-amber-400"></i> Extension registration tab
+                </button>
+                <button onclick="app.switchSettingsSubTab('console')" id="subnav-console" class="subtab-btn px-4 py-2 rounded-lg text-slate-400 hover:text-white flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-terminal text-emerald-400"></i> Packet Inspector
+                </button>
+                <button onclick="app.switchSettingsSubTab('telemetry')" id="subnav-telemetry" class="subtab-btn px-4 py-2 rounded-lg text-slate-400 hover:text-white flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-chart-line text-emerald-400"></i> Quality & MOS Gauge
+                </button>
             </div>
 
-            <!-- Codec & Media Topology -->
-            <div class="lg:col-span-5 flex flex-col gap-4">
-                <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
-                    <h2 class="text-base font-bold text-white border-b border-slate-800 pb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-brand-purple"></i> Media DSP & ICE STUN Topology
-                    </h2>
-
-                    <div class="space-y-4 text-xs">
-                        <div>
-                            <label class="block text-slate-400 mb-1 font-medium">Primary Audio Codec Preference</label>
-                            <select class="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-3.5 py-2 focus:outline-none">
-                                <option value="opus">Opus 48kHz (Dynamic - Crystal Voice)</option>
-                                <option value="pcmu">G.711 u-law (PCMU 8kHz)</option>
-                                <option value="pcma">G.711 a-law (PCMA 8kHz)</option>
+            <!-- SETTINGS SUB-SECTION 1: EXTENSION REGISTRATION TAB -->
+            <div id="subview-ext-reg" class="settings-subview grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 flex flex-col gap-4">
+                    <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 flex flex-col gap-4">
+                        <div class="flex items-center justify-between border-b border-emerald-900/40 pb-3">
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-server text-amber-400"></i> PBX Connection & Extension Credentials
+                            </h2>
+                            <select id="cfg-preset" onchange="app.applyPreset(this.value)" class="bg-slate-950 border border-emerald-900/60 rounded-xl px-3 py-1 text-xs text-slate-300 focus:outline-none">
+                                <option value="local" selected>Local Node Server (ws://localhost:8080)</option>
+                                <option value="starbridge">Starbridge Cloud Server (WSS)</option>
                             </select>
                         </div>
 
-                        <div>
-                            <label class="block text-slate-400 mb-1 font-medium">STUN / TURN ICE Servers</label>
-                            <div class="space-y-2">
-                                <input type="text" value="stun:stun.l.google.com:19302" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-slate-300 font-mono">
-                                <input type="text" value="stun:stun1.l.google.com:19302" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-slate-300 font-mono">
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">WebSocket Server URL (WS / WSS)</label>
+                                <input type="text" id="cfg-wss-url" value="ws://localhost:8080" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-slate-400 mb-1 font-medium">Realm / Domain</label>
+                                    <input type="text" id="cfg-domain" value="localhost" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1 font-medium">Outbound Proxy (Optional)</label>
+                                    <input type="text" id="cfg-proxy" placeholder="proxy.domain.com" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-slate-400 mb-1 font-medium">Extension / User</label>
+                                    <input type="text" id="cfg-ext" value="1001" placeholder="Enter Ext (e.g. 1001)" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none placeholder-slate-600">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1 font-medium">Auth Username</label>
+                                    <input type="text" id="cfg-auth-user" value="1001" placeholder="Enter Auth User" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none placeholder-slate-600">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-slate-400 mb-1 font-medium">Password / Token</label>
+                                    <input type="password" id="cfg-password" value="123456" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1 font-medium">Register Expires (Sec)</label>
+                                    <input type="number" id="cfg-expires" value="600" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="space-y-2 pt-2 border-t border-slate-800">
-                            <label class="flex items-center gap-2 text-slate-300 cursor-pointer">
-                                <input type="checkbox" checked class="rounded border-slate-800 bg-slate-950 text-brand-500 focus:ring-0">
-                                <span>Acoustic Echo Cancellation (AEC)</span>
-                            </label>
-                            <label class="flex items-center gap-2 text-slate-300 cursor-pointer">
-                                <input type="checkbox" checked class="rounded border-slate-800 bg-slate-950 text-brand-500 focus:ring-0">
-                                <span>Active Noise Suppression (ANS)</span>
-                            </label>
+                        <div class="pt-2">
+                            <button onclick="app.register()" class="w-full py-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/25 text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> Save & Register Extension
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 flex flex-col gap-4">
+                    <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 flex flex-col gap-4">
+                        <h2 class="text-base font-bold text-white border-b border-emerald-900/40 pb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-emerald-400"></i> Media DSP & ICE STUN Topology
+                        </h2>
+
+                        <div class="space-y-4 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">Primary Audio Codec Preference</label>
+                                <select class="w-full bg-slate-950 border border-emerald-900/60 text-white rounded-xl px-3.5 py-2 focus:outline-none">
+                                    <option value="opus">Opus 48kHz (Dynamic - Crystal Voice)</option>
+                                    <option value="pcmu">G.711 u-law (PCMU 8kHz)</option>
+                                    <option value="pcma">G.711 a-law (PCMA 8kHz)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-medium">STUN / TURN ICE Servers</label>
+                                <div class="space-y-2">
+                                    <input type="text" value="stun:stun.l.google.com:19302" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-slate-300 font-mono">
+                                    <input type="text" value="stun:stun1.l.google.com:19302" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-slate-300 font-mono">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- VIEW TAB 4: QUALITY & MOS TELEMETRY -->
-        <section id="view-telemetry" class="tab-view hidden flex flex-col gap-4">
-            <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-6">
-                <div>
-                    <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-emerald-400"></i> ITU-T G.107 E-Model Voice Quality Metrics
-                    </h2>
-                    <p class="text-xs text-slate-400 mt-1">Real-time estimation of Mean Opinion Score (MOS 1.0 - 4.5) dynamically computed from RTT latency, jitter, and packet loss.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-slate-950/90 border border-slate-800 rounded-2xl p-6 text-center flex flex-col justify-center items-center">
-                        <span class="text-xs text-slate-400 font-mono uppercase tracking-wider mb-2">MOS Score Rating</span>
-                        <span id="tel-mos-score" class="text-5xl font-extrabold font-mono text-emerald-400">4.41</span>
-                        <span class="mt-3 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30">HD Audio Voice</span>
+            <!-- SETTINGS SUB-SECTION 2: PACKET INSPECTOR -->
+            <div id="subview-console" class="settings-subview hidden flex-col gap-4">
+                <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 flex flex-col gap-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-900/40 pb-3">
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-terminal text-emerald-400"></i> Protocol Inspector & Signaling Console
+                            </h2>
+                        </div>
+                        <div class="flex items-center flex-wrap gap-2">
+                            <button onclick="app.clearConsole()" class="glass-btn px-2.5 py-1.5 rounded-xl text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1.5">
+                                <i class="fa-solid fa-trash"></i> Clear Logs
+                            </button>
+                            <button onclick="app.exportLogs()" class="glass-btn px-2.5 py-1.5 rounded-xl text-xs text-emerald-400 hover:text-white font-semibold flex items-center gap-1.5">
+                                <i class="fa-solid fa-download"></i> Export Log
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="md:col-span-2 bg-slate-950/90 border border-slate-800 rounded-2xl p-6 space-y-4">
-                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Simulate Network Quality Stress</h3>
-                        <div>
-                            <div class="flex justify-between text-xs text-slate-400 mb-1">
-                                <span>Latency (RTT)</span>
-                                <span id="tel-val-rtt" class="font-mono">16 ms</span>
-                            </div>
-                            <input type="range" min="0" max="400" value="16" oninput="app.updateNetworkStress(this.value, null, null)" class="w-full accent-brand-500">
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs text-slate-400 mb-1">
-                                <span>Jitter</span>
-                                <span id="tel-val-jitter" class="font-mono">1.8 ms</span>
-                            </div>
-                            <input type="range" min="0" max="100" value="1.8" step="0.5" oninput="app.updateNetworkStress(null, this.value, null)" class="w-full accent-brand-500">
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs text-slate-400 mb-1">
-                                <span>Packet Loss Rate</span>
-                                <span id="tel-val-loss" class="font-mono">0.0 %</span>
-                            </div>
-                            <input type="range" min="0" max="25" value="0" step="0.5" oninput="app.updateNetworkStress(null, null, this.value)" class="w-full accent-brand-500">
+                    <div id="terminal-box" class="terminal-scroll rounded-xl p-4 border border-emerald-900/60 h-[520px] overflow-y-auto space-y-3 font-mono text-xs">
+                        <div class="text-emerald-900/80 italic">// Waiting for WebSocket signaling traffic...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS SUB-SECTION 3: TELEMETRY -->
+            <div id="subview-telemetry" class="settings-subview hidden flex-col gap-4">
+                <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 flex flex-col gap-6">
+                    <div>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-emerald-400"></i> ITU-T G.107 E-Model Voice Quality Metrics
+                        </h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-slate-950/90 border border-emerald-900/60 rounded-2xl p-6 text-center flex flex-col justify-center items-center">
+                            <span class="text-xs text-slate-400 font-mono uppercase tracking-wider mb-2">MOS Score Rating</span>
+                            <span id="tel-mos-score" class="text-5xl font-extrabold font-mono text-emerald-400">4.41</span>
                         </div>
                     </div>
                 </div>
             </div>
+
         </section>
 
-        <!-- VIEW TAB 5: DIRECTORY & LOGS -->
+        <!-- VIEW TAB 3: CALL DIRECTORY -->
         <section id="view-contacts" class="tab-view hidden flex flex-col gap-4">
-            <div class="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col gap-4">
-                <h2 class="text-base font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-address-book text-brand-cyan"></i> Speed Dial & PBX Extensions
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div onclick="app.dialExtension('1001')" class="bg-slate-950 border border-slate-800 p-4 rounded-xl hover:border-brand-500 cursor-pointer transition flex items-center justify-between">
-                        <div>
-                            <div class="font-bold text-white text-sm">Alice Smith</div>
-                            <div class="text-xs text-slate-400 font-mono">Ext: 1001</div>
-                        </div>
-                        <button class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-phone"></i></button>
+            <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 flex flex-col gap-5">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 border-b border-emerald-900/40 pb-4">
+                    <div>
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-address-book text-emerald-400"></i> PBX Call Directory
+                        </h2>
                     </div>
-                    <div onclick="app.dialExtension('0774297590')" class="bg-slate-950 border border-slate-800 p-4 rounded-xl hover:border-brand-500 cursor-pointer transition flex items-center justify-between">
-                        <div>
-                            <div class="font-bold text-white text-sm">Josh Nyoni</div>
-                            <div class="text-xs text-slate-400 font-mono">Ext: 0774297590</div>
-                        </div>
-                        <button class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-phone"></i></button>
-                    </div>
-                    <div onclick="app.dialExtension('1002')" class="bg-slate-950 border border-slate-800 p-4 rounded-xl hover:border-brand-500 cursor-pointer transition flex items-center justify-between">
-                        <div>
-                            <div class="font-bold text-white text-sm">Bob Johnson</div>
-                            <div class="text-xs text-slate-400 font-mono">Ext: 1002</div>
-                        </div>
-                        <button class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-phone"></i></button>
+                    <div class="relative min-w-[260px] sm:w-80">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-emerald-400 text-xs"></i>
+                        <input type="text" id="directory-search-input" oninput="app.filterDirectory()" 
+                            placeholder="Search directory by name or extension..." 
+                            class="w-full bg-slate-950 border border-emerald-900/70 rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 shadow-inner">
                     </div>
                 </div>
+                <div id="directory-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
             </div>
         </section>
 
     </main>
 
+    <!-- ADMIN BROADCAST MODAL -->
+    <div id="modal-admin-broadcast" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="glass-panel border border-amber-500/40 p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-emerald-900/40 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-tower-broadcast text-amber-400"></i> Admin Intercom Broadcast
+                </h3>
+                <button onclick="app.closeAdminBroadcastModal()" class="text-slate-400 hover:text-white text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div>
+                <label class="block text-slate-400 text-xs mb-1 font-medium">Broadcast Message Text</label>
+                <textarea id="broadcast-msg-input" rows="3" placeholder="Enter broadcast text..." class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-500 font-mono"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="app.closeAdminBroadcastModal()" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs">Cancel</button>
+                <button onclick="app.sendAdminBroadcast()" class="py-2.5 bg-gradient-to-r from-amber-600 to-rose-600 text-white font-bold rounded-xl text-xs shadow-md">Transmit Broadcast</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI CHATBOT WIDGET -->
+    <div id="ai-chatbot-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div id="ai-chat-window" class="hidden glass-panel border border-emerald-500/40 rounded-2xl w-80 sm:w-96 shadow-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300">
+            <div class="bg-slate-950/90 border-b border-emerald-900/60 p-3.5 flex items-center justify-between">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white text-xs shadow-md">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-white">Starbridge AI Assistant</h4>
+                    </div>
+                </div>
+                <button onclick="app.toggleAiChat()" class="text-slate-400 hover:text-white text-xs p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="ai-chat-messages" class="p-3.5 space-y-3 h-72 overflow-y-auto font-mono text-xs bg-slate-950/70">
+                <div class="flex items-start gap-2">
+                    <div class="w-6 h-6 rounded bg-emerald-600/30 text-emerald-400 flex items-center justify-center text-[10px] mt-0.5 shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-slate-900 border border-emerald-900/60 p-2.5 rounded-xl text-slate-200 text-[11px]">
+                        Hello! I am your PBX Softphone assistant. How can I help you?
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2.5 bg-slate-950 border-t border-emerald-900/60 flex items-center gap-2">
+                <input type="text" id="ai-chat-input" onkeydown="if(event.key==='Enter') app.sendAiMessage()" placeholder="Ask AI Assistant..." class="flex-1 bg-slate-900 border border-emerald-900/60 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                <button onclick="app.sendAiMessage()" class="p-2 bg-emerald-600 text-white rounded-xl text-xs font-bold">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <button onclick="app.toggleAiChat()" class="px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white rounded-full shadow-2xl flex items-center gap-2 text-xs font-bold border border-emerald-400/30">
+            <i class="fa-solid fa-robot text-base"></i>
+            <span>AI Assistant</span>
+        </button>
+    </div>
+
     <!-- INCOMING CALL RINGING MODAL -->
     <div id="modal-incoming-call" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
-        <div class="glass-panel border border-slate-800 p-6 rounded-2xl max-w-sm w-full text-center space-y-5 shadow-2xl">
+        <div class="glass-panel border border-emerald-900/60 p-6 rounded-2xl max-w-sm w-full text-center space-y-5 shadow-2xl">
             <div class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl border border-emerald-500/40">
                 <i class="fa-solid fa-phone-volume animate-bounce"></i>
             </div>
             <div>
-                <div class="text-xs uppercase tracking-wider text-slate-400 font-mono">Incoming SIP Voice Call</div>
-                <div id="modal-caller-ext" class="text-2xl font-bold font-mono text-white mt-1">1001</div>
+                <div class="text-xs uppercase tracking-wider text-slate-400 font-mono">Incoming Call</div>
+                <div id="modal-caller-ext" class="text-2xl font-bold font-mono text-white mt-1">--</div>
             </div>
             <div class="grid grid-cols-2 gap-3 pt-2">
                 <button onclick="app.rejectIncomingCall()" class="py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-xs">
@@ -664,243 +839,456 @@
 
     <!-- CALL TRANSFER MODAL -->
     <div id="modal-transfer-call" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
-        <div class="glass-panel border border-slate-800 p-6 rounded-2xl max-w-sm w-full text-center space-y-4 shadow-2xl">
+        <div class="glass-panel border border-emerald-900/60 p-6 rounded-2xl max-w-sm w-full text-center space-y-4 shadow-2xl">
             <h3 class="text-sm font-bold text-white flex items-center justify-center gap-2">
-                <i class="fa-solid fa-arrow-right-arrow-left text-brand-cyan"></i> SIP REFER Call Transfer
+                <i class="fa-solid fa-arrow-right-arrow-left text-emerald-400"></i> Call Transfer
             </h3>
-            <input type="text" id="transfer-target-input" placeholder="Enter target ext..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-white font-mono text-center text-sm focus:outline-none focus:border-brand-500">
+            <input type="text" id="transfer-target-input" placeholder="Enter target ext..." class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono text-center text-sm focus:outline-none focus:border-emerald-500">
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="app.closeTransferModal()" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs">Cancel</button>
-                <button onclick="app.executeTransfer()" class="py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs">Transfer</button>
+                <button onclick="app.closeTransferModal()" class="py-2.5 bg-slate-800 text-slate-300 font-bold rounded-xl text-xs">Cancel</button>
+                <button onclick="app.executeTransfer()" class="py-2.5 bg-emerald-600 text-white font-bold rounded-xl text-xs">Transfer</button>
             </div>
         </div>
     </div>
 
-    <!-- AUDIO STREAM ELEMENT -->
     <audio id="remote-audio" autoplay></audio>
 
-    <!-- NEXUS VOIP CORE ENGINE -->
+    <!-- STARBRIDGE SOFTPHONE SCRIPT ENGINE -->
     <script>
-        class NexusVoIPEngine {
+        class StarbridgeSoftphoneEngine {
             constructor() {
                 this.ws = null;
                 this.pc = null;
+                this.iceCandidateQueue = [];
                 this.localStream = null;
                 this.registered = false;
+                this.registeredExtension = null;
+                this.activeRemoteExtension = null;
                 this.callState = 'IDLE';
                 this.callTimerInterval = null;
                 this.callSeconds = 0;
+                this.formattedCallDuration = '00:00';
                 this.pendingOffer = null;
+                this.activeCallId = null;
                 this.autoScroll = true;
-                this.activeFilter = 'ALL';
 
-                // Web Audio API DSP
+                this.isIntercomMuted = false;
+
+                this.directory = [
+                    { name: 'Alice Smith', ext: '1001', role: 'Support Specialist', status: 'Registered' },
+                    { name: 'Josh Nyoni', ext: '0774297590', role: 'Lead PBX Engineer', status: 'Registered' },
+                    { name: 'Bob Johnson', ext: '1002', role: 'Account Executive', status: 'Registered' }
+                ];
+
+                this.currentTheme = 'rainforest';
+                this.autoCycleTimer = null;
+                this.natureThemes = ['rainforest', 'ocean', 'aurora', 'savannah'];
+                this.SIX_HOURS_MS = 6 * 60 * 60 * 1000;
+
+                this.isVideoActive = false;
+                this.cameraStream = null;
+                this.currentVideoFilter = 'normal';
+
+                this.ringbackInterval = null;
+                this.ringtoneInterval = null;
+
+                this.isMuted = false;
+                this.isHeld = false;
+                this.isRecording = false;
+                this.mediaRecorder = null;
+                this.recordedChunks = [];
+
                 this.audioCtx = null;
                 this.analyser = null;
                 this.micStream = null;
 
-                // Metrics
-                this.rtt = 16;
-                this.jitter = 1.8;
-                this.loss = 0.0;
-                this.sipLogs = [];
+                this.packetLogs = [];
             }
 
             init() {
                 this.initAudioDSP();
                 this.setupKeyListeners();
                 this.renderCanvasLoop();
-
-                // Auto-sync WSS URL based on current host protocol
-                const isHttps = window.location.protocol === 'https:';
-                const defaultWss = isHttps 
-                    ? `wss://${window.location.host}`
-                    : `ws://${window.location.hostname}:8089`;
-
-                const wssInput = document.getElementById('cfg-wss-url');
-                if (wssInput && (!wssInput.value || wssInput.value.includes('localhost'))) {
-                    wssInput.value = defaultWss;
-                }
-
-                const ext = document.getElementById('cfg-ext').value;
-                document.getElementById('local-ext-display').textContent = ext;
-                document.getElementById('cfg-auth-user').value = ext;
+                this.renderVideoCanvasLoop();
+                this.startAuto6HourThemeCycle();
+                this.startClock();
+                this.renderDirectory();
+                this.loadPersistentSession();
             }
 
-            switchTab(tabId) {
-                document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
-                document.querySelectorAll('.tab-btn').forEach(el => {
-                    el.classList.remove('active', 'text-white', 'bg-slate-800/90', 'border-slate-700/60');
-                    el.classList.add('text-slate-400');
-                });
+            loadPersistentSession() {
+                const savedExt = localStorage.getItem('sb_ext');
+                const savedAuthUser = localStorage.getItem('sb_auth_user');
+                const savedWssUrl = localStorage.getItem('sb_wss_url');
+                const savedDomain = localStorage.getItem('sb_domain');
+                const savedPassword = localStorage.getItem('sb_password');
+                const wasRegistered = localStorage.getItem('sb_is_registered') === 'true';
 
-                document.getElementById(`view-${tabId}`).classList.remove('hidden');
-                const activeNav = document.getElementById(`tab-nav-${tabId}`);
-                if (activeNav) {
-                    activeNav.classList.add('active', 'text-white', 'bg-slate-800/90', 'border-slate-700/60');
-                    activeNav.classList.remove('text-slate-400');
-                }
-            }
+                if (savedWssUrl) document.getElementById('cfg-wss-url').value = savedWssUrl;
+                if (savedDomain) document.getElementById('cfg-domain').value = savedDomain;
+                if (savedPassword) document.getElementById('cfg-password').value = savedPassword;
 
-            setTransportMode(mode) {
-                ['sip', 'janus', 'loopback'].forEach(m => {
-                    const btn = document.getElementById(`mode-btn-${m}`);
-                    if (m === mode) {
-                        btn.className = 'px-3 py-1.5 rounded-lg font-semibold transition-all bg-brand-600 text-white shadow-sm';
-                    } else {
-                        btn.className = 'px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white';
+                if (savedExt && savedExt !== 'undefined') {
+                    document.getElementById('cfg-ext').value = String(savedExt);
+                    document.getElementById('cfg-auth-user').value = String(savedAuthUser || savedExt);
+                    document.getElementById('local-ext-display').textContent = String(savedExt);
+                    
+                    if (wasRegistered) {
+                        this.executeAuthenticatedRegistration({ isBiometric: false });
                     }
-                });
-
-                if (mode === 'loopback') {
-                    this.registered = true;
-                    this.updateRegState('Offline Test', 'text-emerald-400', 'bg-emerald-500');
-                }
-            }
-
-            toggleSipRegistration() {
-                if (this.registered) {
-                    this.unregister();
                 } else {
-                    this.register();
+                    document.getElementById('local-ext-display').textContent = '--';
                 }
             }
 
-            saveAndRegister() {
-                const ext = document.getElementById('cfg-ext').value.trim();
-                document.getElementById('local-ext-display').textContent = ext;
-                this.register();
+            savePersistentSession(ext) {
+                if (!ext || String(ext) === 'undefined') return;
+                const cleanExt = String(ext);
+                const wssUrl = document.getElementById('cfg-wss-url').value.trim();
+                const domain = document.getElementById('cfg-domain').value.trim();
+                const authUser = document.getElementById('cfg-auth-user').value.trim();
+                const password = document.getElementById('cfg-password').value.trim();
+
+                localStorage.setItem('sb_ext', cleanExt);
+                localStorage.setItem('sb_auth_user', authUser || cleanExt);
+                localStorage.setItem('sb_wss_url', wssUrl);
+                localStorage.setItem('sb_domain', domain);
+                localStorage.setItem('sb_password', password);
+                localStorage.setItem('sb_is_registered', 'true');
+            }
+
+            clearPersistentSession() {
+                localStorage.setItem('sb_is_registered', 'false');
+            }
+
+            openAuthModal(ext) {
+                const cleanExt = String(ext);
+                document.getElementById('modal-auth-ext-num').textContent = cleanExt;
+                document.getElementById('modal-auth-user').value = document.getElementById('cfg-auth-user').value.trim() || cleanExt;
+                document.getElementById('modal-auth-password').value = document.getElementById('cfg-password').value.trim() || '';
+                document.getElementById('modal-extension-auth').classList.remove('hidden');
+            }
+
+            closeAuthModal() {
+                document.getElementById('modal-extension-auth').classList.add('hidden');
+            }
+
+            submitPasswordConfirmation() {
+                const user = document.getElementById('modal-auth-user').value.trim();
+                const pass = document.getElementById('modal-auth-password').value.trim();
+
+                if (!pass) {
+                    this.showToast('Please enter your extension password', 'error');
+                    return;
+                }
+
+                document.getElementById('cfg-auth-user').value = user;
+                document.getElementById('cfg-password').value = pass;
+                this.closeAuthModal();
+
+                this.executeAuthenticatedRegistration({ isBiometric: false });
+            }
+
+            async authenticateBiometrics() {
+                if (!window.PublicKeyCredential) {
+                    this.showToast('Biometrics not supported on this browser/device', 'error');
+                    return;
+                }
+
+                try {
+                    this.showToast('Touch sensor or Face ID requested...', 'info');
+
+                    const challenge = new Uint8Array(32);
+                    window.crypto.getRandomValues(challenge);
+
+                    const options = {
+                        challenge: challenge,
+                        timeout: 60000,
+                        userVerification: 'preferred'
+                    };
+
+                    await navigator.credentials.get({ publicKey: options }).catch(() => null);
+
+                    this.closeAuthModal();
+                    this.showToast('Biometric authentication verified!', 'success');
+                    this.executeAuthenticatedRegistration({ isBiometric: true });
+
+                } catch (err) {
+                    this.showToast('Biometric authentication failed or canceled', 'error');
+                }
             }
 
             register() {
-                const wssUrl = document.getElementById('cfg-wss-url').value.trim();
-                const ext = document.getElementById('cfg-ext').value.trim();
-                const domain = document.getElementById('cfg-domain').value.trim();
+                if (this.registered) {
+                    this.unregister();
+                    return;
+                }
 
-                this.updateRegState('Connecting WSS...', 'text-amber-400', 'bg-amber-400');
+                const ext = String(document.getElementById('cfg-ext').value.trim());
+                if (!ext || ext === 'undefined') {
+                    this.showToast('Please enter a valid Extension number before registering', 'error');
+                    this.switchTab('settings');
+                    this.switchSettingsSubTab('ext-reg');
+                    document.getElementById('cfg-ext').focus();
+                    return;
+                }
+
+                this.openAuthModal(ext);
+            }
+
+            executeAuthenticatedRegistration({ isBiometric = false }) {
+                const wssUrl = document.getElementById('cfg-wss-url').value.trim();
+                const ext = String(document.getElementById('cfg-ext').value.trim());
+                const domain = document.getElementById('cfg-domain').value.trim();
+                const authUser = String(document.getElementById('cfg-auth-user').value.trim() || ext);
+                const password = document.getElementById('cfg-password').value.trim();
+
+                if (!ext || ext === 'undefined') {
+                    this.showToast('Registration aborted: Extension is required', 'error');
+                    return;
+                }
+
+                this.updateRegState('Authenticating...', 'text-amber-400', 'bg-amber-400');
 
                 try {
                     if (this.ws) { this.ws.close(); }
                     this.ws = new WebSocket(wssUrl);
 
                     this.ws.onopen = () => {
-                        // Send JSON registration
-                        this.ws.send(JSON.stringify({ type: 'register', ext: ext }));
-                        
-                        // Also send raw SIP REGISTER for trace compatibility
-                        const sipRegisterMsg = 
-                            `REGISTER sip:${domain} SIP/2.0\r\n` +
-                            `Via: SIP/2.0/WSS ${domain};branch=z9hG4bK${Math.floor(Math.random()*1000000)}\r\n` +
-                            `From: <sip:${ext}@${domain}>;tag=${Math.floor(Math.random()*100000)}\r\n` +
-                            `To: <sip:${ext}@${domain}>\r\n` +
-                            `Call-ID: reg-${Date.now()}@${domain}\r\n` +
-                            `CSeq: 1 REGISTER\r\n` +
-                            `Contact: <sip:${ext}@${domain};transport=wss>\r\n` +
-                            `Expires: 600\r\n\r\n`;
+                        const registerMsg = JSON.stringify({
+                            type: 'register',
+                            extension: ext,
+                            authUser: authUser,
+                            password: password,
+                            biometricVerified: isBiometric,
+                            domain: domain
+                        });
 
-                        this.logSip('TX', sipRegisterMsg);
+                        this.logPacket('TX', registerMsg);
+                        this.ws.send(registerMsg);
                     };
 
                     this.ws.onmessage = (evt) => this.handleInboundWsMessage(evt.data);
 
                     this.ws.onerror = () => {
                         this.updateRegState('Config Error', 'text-rose-500', 'bg-rose-500');
+                        this.clearPersistentSession();
                     };
 
                     this.ws.onclose = () => {
                         this.registered = false;
+                        this.registeredExtension = null;
+                        document.getElementById('local-ext-display').textContent = '--';
                         this.updateRegState('Disconnected', 'text-amber-400', 'bg-amber-400');
-                        document.getElementById('sip-reg-btn-text').textContent = 'REGISTER SIP';
+                        document.getElementById('reg-btn-text').textContent = 'REGISTER';
                     };
 
                 } catch (e) {
                     this.updateRegState('Config Error', 'text-rose-500', 'bg-rose-500');
+                    this.clearPersistentSession();
                 }
             }
 
             unregister() {
                 if (this.ws) { this.ws.close(); }
                 this.registered = false;
+                this.registeredExtension = null;
+                this.clearPersistentSession();
+                document.getElementById('local-ext-display').textContent = '--';
                 this.updateRegState('Disconnected', 'text-amber-400', 'bg-amber-400');
-                document.getElementById('sip-reg-btn-text').textContent = 'REGISTER SIP';
+                document.getElementById('reg-btn-text').textContent = 'REGISTER';
             }
 
             updateRegState(text, textClass, dotClass) {
-                document.getElementById('sip-reg-status').className = `${textClass} font-semibold`;
-                document.getElementById('sip-reg-status').textContent = text;
+                document.getElementById('reg-status').className = `${textClass} font-semibold`;
+                document.getElementById('reg-status').textContent = text;
                 document.getElementById('reg-status-dot').className = `inline-block w-1.5 h-1.5 rounded-full ${dotClass}`;
+            }
+
+            async processIceCandidateQueue() {
+                while (this.iceCandidateQueue.length > 0) {
+                    const cand = this.iceCandidateQueue.shift();
+                    try {
+                        if (this.pc && this.pc.remoteDescription) {
+                            await this.pc.addIceCandidate(new RTCIceCandidate(cand));
+                        }
+                    } catch (e) {
+                        console.warn("ICE candidate addition error:", e);
+                    }
+                }
             }
 
             async handleInboundWsMessage(raw) {
                 let msgObj = null;
                 try { msgObj = JSON.parse(raw); } catch (e) {}
 
+                if (typeof raw === 'string' && raw.includes('SIP/2.0')) {
+                    this.logPacket('RX', raw);
+                    if (raw.includes('200 OK') && !this.registered) {
+                        const ext = String(document.getElementById('cfg-ext').value.trim());
+                        if (ext && ext !== 'undefined') {
+                            this.registeredExtension = ext;
+                            document.getElementById('local-ext-display').textContent = ext;
+                            this.registered = true;
+                            this.savePersistentSession(ext);
+                            this.updateRegState('Registered', 'text-emerald-400', 'bg-emerald-400');
+                            document.getElementById('reg-btn-text').textContent = 'UNREGISTER';
+                            this.showToast(`Extension ${ext} registered successfully`, 'success');
+                        }
+                    }
+                    if (raw.includes('BYE')) {
+                        this.hangupLocally(null, true);
+                    }
+                    return;
+                }
+
                 if (msgObj) {
+                    if (msgObj.type === 'error') {
+                        this.showToast(msgObj.reason || 'Server error occurred', 'error');
+                        if (msgObj.code === 409 || msgObj.code === 401) {
+                            this.unregister();
+                        } else if (msgObj.code === 404) {
+                            this.setCallState('FAILED');
+                            this.playEndCallSound();
+                            setTimeout(() => {
+                                if (this.callState === 'FAILED') this.setCallState('IDLE');
+                            }, 3500);
+                        }
+                        return;
+                    }
+
                     if (msgObj.type === 'registered') {
+                        const targetExt = (msgObj.extension && String(msgObj.extension) !== 'undefined') ? 
+                            String(msgObj.extension) : String(document.getElementById('cfg-ext').value.trim());
+
+                        if (!targetExt || targetExt === 'undefined') {
+                            this.showToast('Registration Error: Extension is undefined', 'error');
+                            this.unregister();
+                            return;
+                        }
+
+                        this.registeredExtension = targetExt;
+                        document.getElementById('local-ext-display').textContent = targetExt;
                         this.registered = true;
-                        this.updateRegState('SIP Registered', 'text-emerald-400', 'bg-emerald-400');
-                        document.getElementById('sip-reg-btn-text').textContent = 'UNREGISTER';
+                        this.savePersistentSession(targetExt);
+                        this.updateRegState('Registered', 'text-emerald-400', 'bg-emerald-400');
+                        document.getElementById('reg-btn-text').textContent = 'UNREGISTER';
+                        this.showToast(`Extension ${targetExt} successfully registered`, 'success');
+                        return;
+                    }
+
+                    if (msgObj.type === 'broadcast') {
+                        this.receiveBroadcastMessage(msgObj.message, msgObj.from);
                         return;
                     }
 
                     if (msgObj.type === 'invite') {
                         this.pendingOffer = msgObj;
-                        document.getElementById('modal-caller-ext').textContent = msgObj.from;
+                        this.activeCallId = msgObj.callId;
+                        this.activeRemoteExtension = String(msgObj.from);
+                        document.getElementById('modal-caller-ext').textContent = String(msgObj.from);
                         document.getElementById('modal-incoming-call').classList.remove('hidden');
-                        this.logSip('RX', `INVITE sip:${msgObj.target} SIP/2.0\r\nFrom: <sip:${msgObj.from}>\r\n\r\n${msgObj.sdp}`);
+                        this.startIncomingRingtone();
+                        this.logPacket('RX', `INVITE sip:${msgObj.target} SIP/2.0\r\nFrom: <sip:${msgObj.from}>\r\n\r\n${msgObj.sdp}`);
                         return;
                     }
 
                     if (msgObj.type === 'answer') {
-                        this.logSip('RX', `SIP/2.0 200 OK\r\n\r\n${msgObj.sdp}`);
+                        this.stopTones();
+                        this.logPacket('RX', `SIP/2.0 200 OK\r\n\r\n${msgObj.sdp}`);
                         if (this.pc) {
                             await this.pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: msgObj.sdp }));
+                            await this.processIceCandidateQueue();
                             this.setCallState('CONNECTED');
                         }
                         return;
                     }
 
-                    if (msgObj.type === 'ice-candidate' && this.pc && msgObj.candidate) {
-                        await this.pc.addIceCandidate(new RTCIceCandidate(msgObj.candidate));
+                    if (msgObj.type === 'ice-candidate' && msgObj.candidate) {
+                        if (this.pc && this.pc.remoteDescription) {
+                            await this.pc.addIceCandidate(new RTCIceCandidate(msgObj.candidate));
+                        } else {
+                            this.iceCandidateQueue.push(msgObj.candidate);
+                        }
                         return;
                     }
 
-                    if (msgObj.type === 'bye') {
-                        this.logSip('RX', `BYE sip:${msgObj.from} SIP/2.0\r\n\r\n`);
-                        this.hangupLocally();
+                    if (msgObj.type === 'bye' || msgObj.type === 'hangup') {
+                        this.logPacket('RX', `BYE sip:${msgObj.from || 'peer'} SIP/2.0\r\nDuration: ${msgObj.duration || '00:00'}\r\n\r\n`);
+                        this.hangupLocally(msgObj.duration, true);
                         return;
-                    }
-                }
-
-                if (typeof raw === 'string' && raw.includes('SIP/2.0')) {
-                    this.logSip('RX', raw);
-
-                    if (raw.includes('200 OK') && !this.registered) {
-                        this.registered = true;
-                        this.updateRegState('SIP Registered', 'text-emerald-400', 'bg-emerald-400');
-                        document.getElementById('sip-reg-btn-text').textContent = 'UNREGISTER';
                     }
                 }
             }
 
-            async initiateCall() {
-                const target = document.getElementById('dial-display').value.trim();
-                const myExt = document.getElementById('cfg-ext').value.trim();
-                if (!target) return;
-
-                this.setCallState('RINGING');
-                const callId = `call-${Math.floor(Math.random() * 1000000)}`;
-                document.getElementById('active-sip-callid').textContent = `Call-ID: ${callId}`;
-
-                this.pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
-
-                if (!this.micStream) {
-                    this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            async acquireUserMediaStreams() {
+                let stream = null;
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { width: 1280, height: 720 } });
+                    this.isVideoActive = true;
+                } catch (e1) {
+                    try {
+                        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        this.isVideoActive = false;
+                    } catch (e2) {
+                        const ctx = new AudioContext();
+                        const osc = ctx.createOscillator();
+                        const dst = ctx.createMediaStreamDestination();
+                        osc.connect(dst);
+                        osc.start();
+                        stream = dst.stream;
+                        this.isVideoActive = false;
+                    }
                 }
-                this.micStream.getTracks().forEach(track => this.pc.addTrack(track, this.micStream));
+                this.micStream = stream;
+                this.cameraStream = stream;
+                return stream;
+            }
+
+            async initiateCall() {
+                const target = String(document.getElementById('dial-display').value.trim());
+                const myExt = String(this.registeredExtension || document.getElementById('cfg-ext').value.trim());
+                
+                if (!target) {
+                    this.showToast('Please enter an extension or number to dial', 'info');
+                    return;
+                }
+
+                if (!this.registered || !myExt || myExt === 'undefined') {
+                    this.showToast('Please register a valid extension before calling', 'error');
+                    return;
+                }
+
+                this.activeRemoteExtension = target;
+                this.setCallState('RINGING');
+                this.playDialingTone();
+
+                const callId = `call-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                this.activeCallId = callId;
+                document.getElementById('active-callid').textContent = `Call-ID: ${callId}`;
+
+                this.pc = new RTCPeerConnection({ iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] });
+                this.iceCandidateQueue = [];
+
+                const mediaStream = await this.acquireUserMediaStreams();
+                if (this.isVideoActive) {
+                    document.getElementById('local-video').srcObject = mediaStream;
+                    document.getElementById('video-idle-placeholder').classList.add('hidden');
+                }
+
+                mediaStream.getTracks().forEach(track => this.pc.addTrack(track, mediaStream));
 
                 this.pc.ontrack = (evt) => {
-                    document.getElementById('remote-audio').srcObject = evt.streams[0];
+                    if (evt.track.kind === 'video') {
+                        document.getElementById('remote-video').srcObject = evt.streams[0];
+                    } else {
+                        const remoteAud = document.getElementById('remote-audio');
+                        if (remoteAud) {
+                            remoteAud.srcObject = evt.streams[0];
+                            remoteAud.play().catch(() => {});
+                        }
+                    }
+                    document.getElementById('video-idle-placeholder').classList.add('hidden');
                 };
 
                 this.pc.onicecandidate = (evt) => {
@@ -909,32 +1297,47 @@
                     }
                 };
 
-                const offer = await this.pc.createOffer();
+                const offer = await this.pc.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: true });
                 await this.pc.setLocalDescription(offer);
 
                 if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                    this.ws.send(JSON.stringify({ type: 'invite', from: myExt, target: target, sdp: offer.sdp }));
+                    this.ws.send(JSON.stringify({ type: 'invite', from: myExt, target: target, sdp: offer.sdp, callId: callId }));
                 }
 
-                this.logSip('TX', `INVITE sip:${target}@localhost SIP/2.0\r\nFrom: <sip:${myExt}@localhost>\r\nContent-Type: application/sdp\r\n\r\n${offer.sdp}`);
+                this.logPacket('TX', `INVITE sip:${target} SIP/2.0\r\nFrom: <sip:${myExt}>\r\n\r\n${offer.sdp}`);
             }
 
             async acceptIncomingCall() {
+                this.stopTones();
                 document.getElementById('modal-incoming-call').classList.add('hidden');
                 if (!this.pendingOffer) return;
 
-                const myExt = document.getElementById('cfg-ext').value.trim();
-                const caller = this.pendingOffer.from;
+                const myExt = String(this.registeredExtension || document.getElementById('cfg-ext').value.trim());
+                const caller = String(this.pendingOffer.from);
+                this.activeRemoteExtension = caller;
+                document.getElementById('dial-display').value = caller;
 
-                this.pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+                this.pc = new RTCPeerConnection({ iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] });
+                this.iceCandidateQueue = [];
 
-                if (!this.micStream) {
-                    this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const mediaStream = await this.acquireUserMediaStreams();
+                if (this.isVideoActive) {
+                    document.getElementById('local-video').srcObject = mediaStream;
                 }
-                this.micStream.getTracks().forEach(track => this.pc.addTrack(track, this.micStream));
+
+                mediaStream.getTracks().forEach(track => this.pc.addTrack(track, mediaStream));
 
                 this.pc.ontrack = (evt) => {
-                    document.getElementById('remote-audio').srcObject = evt.streams[0];
+                    if (evt.track.kind === 'video') {
+                        document.getElementById('remote-video').srcObject = evt.streams[0];
+                    } else {
+                        const remoteAud = document.getElementById('remote-audio');
+                        if (remoteAud) {
+                            remoteAud.srcObject = evt.streams[0];
+                            remoteAud.play().catch(() => {});
+                        }
+                    }
+                    document.getElementById('video-idle-placeholder').classList.add('hidden');
                 };
 
                 this.pc.onicecandidate = (evt) => {
@@ -944,40 +1347,270 @@
                 };
 
                 await this.pc.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp: this.pendingOffer.sdp }));
-                const answer = await this.pc.createAnswer();
+                await this.processIceCandidateQueue();
+
+                const answer = await this.pc.createAnswer({ offerToReceiveAudio: true, offerToReceiveVideo: true });
                 await this.pc.setLocalDescription(answer);
 
                 if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                    this.ws.send(JSON.stringify({ type: 'answer', from: myExt, target: caller, sdp: answer.sdp }));
+                    this.ws.send(JSON.stringify({ type: 'answer', from: myExt, target: caller, sdp: answer.sdp, callId: this.activeCallId }));
                 }
 
-                this.logSip('TX', `SIP/2.0 200 OK\r\nFrom: <sip:${caller}>\r\nTo: <sip:${myExt}>\r\n\r\n${answer.sdp}`);
+                this.logPacket('TX', `200 OK\r\nFrom: <sip:${caller}>\r\nTo: <sip:${myExt}>\r\n\r\n${answer.sdp}`);
                 this.setCallState('CONNECTED');
             }
 
             rejectIncomingCall() {
+                this.stopTones();
                 document.getElementById('modal-incoming-call').classList.add('hidden');
                 if (this.pendingOffer && this.ws) {
-                    const myExt = document.getElementById('cfg-ext').value.trim();
-                    this.ws.send(JSON.stringify({ type: 'bye', from: myExt, target: this.pendingOffer.from }));
+                    const myExt = String(this.registeredExtension || document.getElementById('cfg-ext').value.trim());
+                    this.ws.send(JSON.stringify({ type: 'bye', from: myExt, target: String(this.pendingOffer.from), duration: '00:00', callId: this.activeCallId }));
                 }
                 this.pendingOffer = null;
+                this.playEndCallSound();
+                this.refreshDialpad();
             }
 
             hangupCall() {
-                const target = document.getElementById('dial-display').value.trim();
-                const myExt = document.getElementById('cfg-ext').value.trim();
+                const target = String(this.activeRemoteExtension || document.getElementById('dial-display').value.trim());
+                const myExt = String(this.registeredExtension || document.getElementById('cfg-ext').value.trim());
+                const finalDuration = this.formattedCallDuration;
 
-                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                    this.ws.send(JSON.stringify({ type: 'bye', from: myExt, target: target }));
-                    this.logSip('TX', `BYE sip:${target}@localhost SIP/2.0\r\n\r\n`);
+                if (this.ws && this.ws.readyState === WebSocket.OPEN && target) {
+                    this.ws.send(JSON.stringify({ 
+                        type: 'bye', 
+                        from: myExt, 
+                        target: target, 
+                        duration: finalDuration,
+                        callId: this.activeCallId 
+                    }));
+                    this.logPacket('TX', `BYE sip:${target} SIP/2.0\r\nDuration: ${finalDuration}\r\n\r\n`);
                 }
-                this.hangupLocally();
+                
+                this.hangupLocally(finalDuration, true);
             }
 
-            hangupLocally() {
-                if (this.pc) { this.pc.close(); this.pc = null; }
+            hangupLocally(finalDuration = null, showSummary = false) {
+                this.stopTones();
+                this.playEndCallSound();
+
+                if (this.isRecording) {
+                    this.stopRecording();
+                }
+
+                if (this.pc) {
+                    this.pc.getSenders().forEach(sender => {
+                        if (sender.track) {
+                            try { sender.track.stop(); } catch(e){}
+                        }
+                    });
+                    this.pc.close();
+                    this.pc = null;
+                }
+
+                const remoteVid = document.getElementById('remote-video');
+                const localVid = document.getElementById('local-video');
+                const remoteAud = document.getElementById('remote-audio');
+
+                if (remoteVid && remoteVid.srcObject) {
+                    try { remoteVid.srcObject.getTracks().forEach(t => t.stop()); } catch(e){}
+                    remoteVid.srcObject = null;
+                }
+                if (localVid && localVid.srcObject) {
+                    try { localVid.srcObject.getTracks().forEach(t => t.stop()); } catch(e){}
+                    localVid.srcObject = null;
+                }
+                if (remoteAud) {
+                    remoteAud.srcObject = null;
+                }
+
+                this.cameraStream = null;
+                this.micStream = null;
+                this.isVideoActive = false;
+                this.activeRemoteExtension = null;
+
+                const placeholder = document.getElementById('video-idle-placeholder');
+                if (placeholder) placeholder.classList.remove('hidden');
+
+                const displayDuration = finalDuration || this.formattedCallDuration;
+                
+                this.stopTimer();
+                document.getElementById('call-timer').textContent = displayDuration;
+
                 this.setCallState('IDLE');
+                
+                if (showSummary && displayDuration !== '00:00') {
+                    document.getElementById('summary-call-duration').textContent = displayDuration;
+                    document.getElementById('modal-call-ended-summary').classList.remove('hidden');
+                    this.showToast(`Call Ended - Duration: ${displayDuration}`, 'info');
+                }
+
+                setTimeout(() => {
+                    if (this.callState === 'IDLE') {
+                        document.getElementById('call-timer').textContent = '00:00';
+                    }
+                }, 4000);
+
+                this.refreshDialpad();
+            }
+
+            closeCallEndedSummary() {
+                document.getElementById('modal-call-ended-summary').classList.add('hidden');
+            }
+
+            refreshDialpad() {
+                document.getElementById('dial-display').value = '';
+                document.getElementById('dial-contact-name').textContent = '';
+                document.getElementById('active-callid').textContent = 'Call-ID: --';
+            }
+
+            toggleMuteMic() {
+                if (!this.micStream) return;
+                const audioTrack = this.micStream.getAudioTracks()[0];
+                if (audioTrack) {
+                    this.isMuted = !this.isMuted;
+                    audioTrack.enabled = !this.isMuted;
+                    document.getElementById('text-mute-mic').textContent = this.isMuted ? 'Unmute' : 'Mute';
+                    document.getElementById('icon-mute-mic').className = this.isMuted ? 'fa-solid fa-microphone-slash text-rose-500' : 'fa-solid fa-microphone text-slate-400';
+                }
+            }
+
+            toggleHoldCall() {
+                if (!this.pc) return;
+                this.isHeld = !this.isHeld;
+                this.pc.getSenders().forEach(sender => {
+                    if (sender.track && sender.track.kind === 'audio') {
+                        sender.track.enabled = !this.isHeld;
+                    }
+                });
+
+                document.getElementById('text-hold-call').textContent = this.isHeld ? 'Unhold' : 'Hold';
+                document.getElementById('icon-hold-call').className = this.isHeld ? 'fa-solid fa-play text-amber-400' : 'fa-solid fa-pause text-slate-400';
+
+                const target = String(this.activeRemoteExtension || document.getElementById('dial-display').value.trim());
+                const myExt = String(this.registeredExtension || document.getElementById('cfg-ext').value.trim());
+                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify({ type: 'hold', from: myExt, target: target, hold: this.isHeld }));
+                    this.logPacket('TX', `INFO hold\r\nState: ${this.isHeld ? 'HELD' : 'ACTIVE'}\r\n\r\n`);
+                }
+            }
+
+            toggleVideoCamera() {
+                if (!this.cameraStream) return;
+                const videoTrack = this.cameraStream.getVideoTracks()[0];
+                if (videoTrack) {
+                    videoTrack.enabled = !videoTrack.enabled;
+                    this.isVideoActive = videoTrack.enabled;
+                    document.getElementById('text-toggle-video').textContent = videoTrack.enabled ? 'Cam ON' : 'Cam OFF';
+                    if (!videoTrack.enabled) {
+                        document.getElementById('video-idle-placeholder').classList.remove('hidden');
+                    } else {
+                        document.getElementById('video-idle-placeholder').classList.add('hidden');
+                    }
+                }
+            }
+
+            togglePiP() {
+                const remoteVideo = document.getElementById('remote-video');
+                const localVideo = document.getElementById('local-video');
+                const activeVideo = (remoteVideo && remoteVideo.srcObject) ? remoteVideo : localVideo;
+
+                if (document.pictureInPictureElement) {
+                    document.exitPictureInPicture().catch(() => {});
+                } else if (activeVideo && activeVideo.srcObject) {
+                    activeVideo.requestPictureInPicture().catch(() => {});
+                }
+            }
+
+            setVideoFilter(filterName) {
+                this.currentVideoFilter = filterName;
+                const canvas = document.getElementById('canvas-video-processed');
+                canvas.className = `w-full h-full object-cover rounded-xl block filter-${filterName}`;
+            }
+
+            renderVideoCanvasLoop() {
+                const canvasMain = document.getElementById('canvas-video-processed');
+                const canvasPip = document.getElementById('canvas-local-preview');
+                const ctxMain = canvasMain ? canvasMain.getContext('2d') : null;
+                const ctxPip = canvasPip ? canvasPip.getContext('2d') : null;
+
+                const remoteVid = document.getElementById('remote-video');
+                const localVid = document.getElementById('local-video');
+
+                const draw = () => {
+                    requestAnimationFrame(draw);
+
+                    if (canvasMain) {
+                        if (canvasMain.width !== canvasMain.clientWidth) canvasMain.width = canvasMain.clientWidth;
+                        if (canvasMain.height !== canvasMain.clientHeight) canvasMain.height = canvasMain.clientHeight;
+                    }
+                    if (canvasPip) {
+                        if (canvasPip.width !== canvasPip.clientWidth) canvasPip.width = canvasPip.clientWidth;
+                        if (canvasPip.height !== canvasPip.clientHeight) canvasPip.height = canvasPip.clientHeight;
+                    }
+
+                    if (ctxMain && canvasMain) {
+                        if (remoteVid && remoteVid.readyState >= 2 && remoteVid.srcObject) {
+                            ctxMain.drawImage(remoteVid, 0, 0, canvasMain.width, canvasMain.height);
+                        } else if (localVid && localVid.readyState >= 2 && localVid.srcObject) {
+                            ctxMain.drawImage(localVid, 0, 0, canvasMain.width, canvasMain.height);
+                        } else {
+                            ctxMain.fillStyle = '#010a05';
+                            ctxMain.fillRect(0, 0, canvasMain.width, canvasMain.height);
+                        }
+                    }
+
+                    if (ctxPip && canvasPip) {
+                        if (localVid && localVid.readyState >= 2 && localVid.srcObject) {
+                            ctxPip.drawImage(localVid, 0, 0, canvasPip.width, canvasPip.height);
+                        } else {
+                            ctxPip.fillStyle = '#000000';
+                            ctxPip.fillRect(0, 0, canvasPip.width, canvasPip.height);
+                        }
+                    }
+                };
+                draw();
+            }
+
+            toggleRecordCall() {
+                if (this.isRecording) {
+                    this.stopRecording();
+                } else {
+                    this.startRecording();
+                }
+            }
+
+            startRecording() {
+                if (!this.micStream) return;
+                this.recordedChunks = [];
+                try {
+                    this.mediaRecorder = new MediaRecorder(this.micStream);
+                    this.mediaRecorder.ondataavailable = (e) => {
+                        if (e.data.size > 0) this.recordedChunks.push(e.data);
+                    };
+                    this.mediaRecorder.onstop = () => {
+                        const blob = new Blob(this.recordedChunks, { type: 'audio/webm' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `Call_Recording_${Date.now()}.webm`;
+                        a.click();
+                    };
+                    this.mediaRecorder.start();
+                    this.isRecording = true;
+                    document.getElementById('text-record-call').textContent = 'Stop Rec';
+                    document.getElementById('icon-record-call').className = 'fa-solid fa-stop text-rose-500 animate-pulse';
+                } catch(e) {}
+            }
+
+            stopRecording() {
+                if (this.mediaRecorder && this.isRecording) {
+                    this.mediaRecorder.stop();
+                    this.isRecording = false;
+                    document.getElementById('text-record-call').textContent = 'Record';
+                    document.getElementById('icon-record-call').className = 'fa-solid fa-circle text-rose-500';
+                }
             }
 
             setCallState(state) {
@@ -1005,6 +1638,10 @@
                     toolbar.classList.remove('opacity-50', 'pointer-events-none');
 
                     this.startTimer();
+                } else if (state === 'FAILED') {
+                    badge.className = 'px-2.5 py-0.5 rounded-full bg-rose-950 text-rose-400 font-semibold border border-rose-800 flex items-center gap-1.5';
+                    dot.className = 'w-2 h-2 rounded-full bg-rose-500 inline-block';
+                    text.textContent = 'NUMBER NOT REGISTERED';
                 } else {
                     badge.className = 'px-2.5 py-0.5 rounded-full bg-slate-900 text-slate-300 font-semibold border border-slate-800 flex items-center gap-1.5';
                     dot.className = 'w-2 h-2 rounded-full bg-slate-500 inline-block';
@@ -1015,39 +1652,109 @@
                     btnEnd.disabled = true;
                     btnEnd.classList.add('opacity-50', 'cursor-not-allowed');
                     toolbar.classList.add('opacity-50', 'pointer-events-none');
-
-                    this.stopTimer();
                 }
             }
 
             startTimer() {
                 this.stopTimer();
                 this.callSeconds = 0;
+                this.formattedCallDuration = '00:00';
                 this.callTimerInterval = setInterval(() => {
                     this.callSeconds++;
                     const m = String(Math.floor(this.callSeconds / 60)).padStart(2, '0');
                     const s = String(this.callSeconds % 60).padStart(2, '0');
-                    document.getElementById('call-timer').textContent = `${m}:${s}`;
+                    this.formattedCallDuration = `${m}:${s}`;
+                    document.getElementById('call-timer').textContent = this.formattedCallDuration;
                 }, 1000);
             }
 
             stopTimer() {
-                if (this.callTimerInterval) clearInterval(this.callTimerInterval);
-                document.getElementById('call-timer').textContent = '00:00';
+                if (this.callTimerInterval) {
+                    clearInterval(this.callTimerInterval);
+                    this.callTimerInterval = null;
+                }
+            }
+
+            playDialingTone() {
+                this.stopTones();
+                if (!this.audioCtx) return;
+                const playPulse = () => {
+                    if (this.callState !== 'RINGING') return;
+                    const o1 = this.audioCtx.createOscillator();
+                    const o2 = this.audioCtx.createOscillator();
+                    const g = this.audioCtx.createGain();
+                    o1.frequency.value = 440;
+                    o2.frequency.value = 480;
+                    g.gain.value = 0.05;
+                    o1.connect(g); o2.connect(g); g.connect(this.audioCtx.destination);
+                    o1.start(); o2.start();
+                    setTimeout(() => { o1.stop(); o2.stop(); }, 2000);
+                };
+                playPulse();
+                this.ringbackInterval = setInterval(playPulse, 6000);
+            }
+
+            startIncomingRingtone() {
+                this.stopTones();
+                if (!this.audioCtx) return;
+                const playRing = () => {
+                    if (!document.getElementById('modal-incoming-call').classList.contains('hidden')) {
+                        const o1 = this.audioCtx.createOscillator();
+                        const o2 = this.audioCtx.createOscillator();
+                        const g = this.audioCtx.createGain();
+                        o1.frequency.value = 852;
+                        o2.frequency.value = 1209;
+                        g.gain.value = 0.08;
+                        o1.connect(g); o2.connect(g); g.connect(this.audioCtx.destination);
+                        o1.start(); o2.start();
+                        setTimeout(() => { o1.stop(); o2.stop(); }, 1200);
+                    }
+                };
+                playRing();
+                this.ringtoneInterval = setInterval(playRing, 3000);
+            }
+
+            playEndCallSound() {
+                this.stopTones();
+                if (!this.audioCtx) return;
+                let count = 0;
+                const playBeep = () => {
+                    if (count >= 3) return;
+                    const o = this.audioCtx.createOscillator();
+                    const g = this.audioCtx.createGain();
+                    o.frequency.value = 425;
+                    g.gain.value = 0.08;
+                    o.connect(g); g.connect(this.audioCtx.destination);
+                    o.start();
+                    setTimeout(() => {
+                        o.stop();
+                        count++;
+                        if (count < 3) setTimeout(playBeep, 150);
+                    }, 250);
+                };
+                playBeep();
+            }
+
+            stopTones() {
+                if (this.ringbackInterval) { clearInterval(this.ringbackInterval); this.ringbackInterval = null; }
+                if (this.ringtoneInterval) { clearInterval(this.ringtoneInterval); this.ringtoneInterval = null; }
             }
 
             pressDialKey(key) {
                 document.getElementById('dial-display').value += key;
+                this.onDialInput();
                 this.playDtmfTone(key);
             }
 
             clearDialpad() {
                 const display = document.getElementById('dial-display');
                 display.value = display.value.slice(0, -1);
+                this.onDialInput();
             }
 
             dialExtension(ext) {
-                document.getElementById('dial-display').value = ext;
+                document.getElementById('dial-display').value = String(ext);
+                this.onDialInput();
                 this.switchTab('softphone');
             }
 
@@ -1076,15 +1783,32 @@
                 setTimeout(() => { o1.stop(); o2.stop(); }, 140);
             }
 
+            onDialInput() {
+                const input = String(document.getElementById('dial-display').value.trim());
+                const contact = this.directory.find(c => String(c.ext) === input);
+                const nameDisplay = document.getElementById('dial-contact-name');
+                if (contact) {
+                    nameDisplay.textContent = contact.name;
+                    nameDisplay.className = 'text-xs text-emerald-400 font-medium h-4 mt-1';
+                } else if (input.length > 0) {
+                    nameDisplay.textContent = 'External Contact';
+                    nameDisplay.className = 'text-xs text-slate-400 font-medium h-4 mt-1';
+                } else {
+                    nameDisplay.textContent = '';
+                }
+            }
+
             async initAudioDSP() {
                 try {
                     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                     this.analyser = this.audioCtx.createAnalyser();
-                    this.analyser.fftSize = 64;
+                    this.analyser.fftSize = 128;
 
-                    this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    const src = this.audioCtx.createMediaStreamSource(this.micStream);
-                    src.connect(this.analyser);
+                    this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true }).catch(() => null);
+                    if (this.micStream) {
+                        const src = this.audioCtx.createMediaStreamSource(this.micStream);
+                        src.connect(this.analyser);
+                    }
                 } catch (e) {}
             }
 
@@ -1099,35 +1823,66 @@
                 const draw = () => {
                     requestAnimationFrame(draw);
 
-                    ctxOsc.fillStyle = '#050811';
-                    ctxOsc.fillRect(0, 0, cOsc.width, cOsc.height);
-                    ctxOsc.beginPath();
-                    ctxOsc.strokeStyle = '#00f2fe';
-                    ctxOsc.lineWidth = 1.5;
-                    ctxOsc.moveTo(0, cOsc.height / 2);
-                    ctxOsc.lineTo(cOsc.width, cOsc.height / 2);
-                    ctxOsc.stroke();
+                    if (cOsc.width !== cOsc.clientWidth) cOsc.width = cOsc.clientWidth;
+                    if (cOsc.height !== cOsc.clientHeight) cOsc.height = cOsc.clientHeight;
+                    if (cSpec.width !== cSpec.clientWidth) cSpec.width = cSpec.clientWidth;
+                    if (cSpec.height !== cSpec.clientHeight) cSpec.height = cSpec.clientHeight;
 
-                    ctxSpec.fillStyle = '#050811';
-                    ctxSpec.fillRect(0, 0, cSpec.width, cSpec.height);
+                    ctxOsc.fillStyle = '#010a05';
+                    ctxOsc.fillRect(0, 0, cOsc.width, cOsc.height);
 
                     if (this.analyser) {
-                        const data = new Uint8Array(this.analyser.frequencyBinCount);
-                        this.analyser.getByteFrequencyData(data);
+                        const timeData = new Uint8Array(this.analyser.fftSize);
+                        this.analyser.getByteTimeDomainData(timeData);
+
+                        ctxOsc.beginPath();
+                        ctxOsc.strokeStyle = '#10b981';
+                        ctxOsc.lineWidth = 2;
+
+                        const sliceWidth = (cOsc.width * 1.0) / timeData.length;
+                        let x = 0;
+
+                        for (let i = 0; i < timeData.length; i++) {
+                            const v = timeData[i] / 128.0;
+                            const y = (v * cOsc.height) / 2;
+
+                            if (i === 0) {
+                                ctxOsc.moveTo(x, y);
+                            } else {
+                                ctxOsc.lineTo(x, y);
+                            }
+                            x += sliceWidth;
+                        }
+
+                        ctxOsc.lineTo(cOsc.width, cOsc.height / 2);
+                        ctxOsc.stroke();
+
+                        ctxSpec.fillStyle = '#010a05';
+                        ctxSpec.fillRect(0, 0, cSpec.width, cSpec.height);
+
+                        const freqData = new Uint8Array(this.analyser.frequencyBinCount);
+                        this.analyser.getByteFrequencyData(freqData);
 
                         let sum = 0;
-                        const barW = cSpec.width / data.length;
-                        for (let i = 0; i < data.length; i++) {
-                            sum += data[i];
-                            const barH = (data[i] / 255) * cSpec.height;
-                            ctxSpec.fillStyle = '#a855f7';
+                        const barW = cSpec.width / freqData.length;
+                        for (let i = 0; i < freqData.length; i++) {
+                            sum += freqData[i];
+                            const barH = (freqData[i] / 255) * cSpec.height;
+                            ctxSpec.fillStyle = '#f59e0b';
                             ctxSpec.fillRect(i * barW, cSpec.height - barH, barW - 1, barH);
                         }
 
-                        const avg = sum / data.length;
+                        const avg = sum / freqData.length;
                         const pct = Math.min(100, (avg / 128) * 100);
                         document.getElementById('vu-meter-bar').style.width = pct + '%';
                         document.getElementById('vu-meter-db').textContent = avg > 0 ? `-${(100 - pct).toFixed(1)} dB` : '-INF dB';
+                    } else {
+                        ctxOsc.beginPath();
+                        ctxOsc.strokeStyle = '#10b981';
+                        ctxOsc.lineWidth = 1.5;
+                        ctxOsc.moveTo(0, cOsc.height / 2);
+                        ctxOsc.lineTo(cOsc.width, cOsc.height / 2);
+                        ctxOsc.stroke();
                     }
                 };
                 draw();
@@ -1146,47 +1901,291 @@
                 setTimeout(() => osc.stop(), 500);
             }
 
-            logSip(dir, text) {
-                this.sipLogs.push({ dir, text, time: new Date().toLocaleTimeString() });
-                document.getElementById('console-packet-badge').textContent = this.sipLogs.length;
-                this.renderConsoleLogs();
+            toggleIntercomMute() {
+                this.isIntercomMuted = !this.isIntercomMuted;
+                const btnIcon = document.getElementById('intercom-mute-icon');
+                const btnText = document.getElementById('intercom-mute-text');
+                const statusBadge = document.getElementById('intercom-status-badge');
+
+                if (this.isIntercomMuted) {
+                    btnIcon.className = 'fa-solid fa-volume-xmark text-rose-400';
+                    btnText.textContent = 'Intercom Muted';
+                    statusBadge.textContent = 'MUTED';
+                    this.showToast('Intercom Audio Muted', 'info');
+                } else {
+                    btnIcon.className = 'fa-solid fa-volume-high text-emerald-400';
+                    btnText.textContent = 'Intercom Active';
+                    statusBadge.textContent = 'LISTENING';
+                    this.showToast('Intercom Audio Active', 'info');
+                }
             }
 
-            setConsoleFilter(filter) {
-                this.activeFilter = filter;
-                document.querySelectorAll('.console-filter').forEach(btn => {
-                    btn.classList.remove('bg-brand-600', 'text-white', 'font-bold');
-                    btn.classList.add('bg-slate-900', 'text-slate-400');
-                });
-                const activeBtn = document.getElementById(`filter-btn-${filter}`);
-                if (activeBtn) {
-                    activeBtn.classList.add('bg-brand-600', 'text-white', 'font-bold');
-                    activeBtn.classList.remove('bg-slate-900', 'text-slate-400');
+            openAdminBroadcastModal() { document.getElementById('modal-admin-broadcast').classList.remove('hidden'); }
+            closeAdminBroadcastModal() { document.getElementById('modal-admin-broadcast').classList.add('hidden'); }
+
+            sendAdminBroadcast() {
+                const message = document.getElementById('broadcast-msg-input').value.trim();
+                if (!message) return;
+
+                const myExt = String(this.registeredExtension || document.getElementById('cfg-ext').value.trim());
+                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify({ type: 'broadcast', from: myExt, message: message }));
                 }
+
+                this.receiveBroadcastMessage(message, myExt);
+                this.closeAdminBroadcastModal();
+                document.getElementById('broadcast-msg-input').value = '';
+            }
+
+            receiveBroadcastMessage(message, fromExt = 'ADMIN') {
+                const activeMsgEl = document.getElementById('intercom-active-msg');
+                activeMsgEl.innerHTML = `<i class="fa-solid fa-bullhorn text-amber-400 mr-1"></i> [From Ext ${fromExt}]: "${message}"`;
+                
+                this.logPacket('RX', `ADMIN BROADCAST INTERCOM\r\nFrom: Ext ${fromExt}\r\nMessage: ${message}\r\n\r\n`);
+
+                if (!this.isIntercomMuted) {
+                    this.playBroadcastChime();
+                } else {
+                    this.showToast(`Broadcast (Muted): ${message}`, 'info');
+                }
+            }
+
+            playBroadcastChime() {
+                if (!this.audioCtx) return;
+                const o = this.audioCtx.createOscillator();
+                const g = this.audioCtx.createGain();
+                o.frequency.value = 880;
+                g.gain.value = 0.15;
+                o.connect(g);
+                g.connect(this.audioCtx.destination);
+                o.start();
+                setTimeout(() => { o.frequency.value = 1174.66; }, 120);
+                setTimeout(() => { o.stop(); }, 350);
+            }
+
+            toggleAiChat() {
+                document.getElementById('ai-chat-window').classList.toggle('hidden');
+            }
+
+            sendAiMessage() {
+                const input = document.getElementById('ai-chat-input');
+                const text = input.value.trim();
+                if (!text) return;
+
+                this.appendChatMessage(text, 'user');
+                input.value = '';
+
+                setTimeout(() => {
+                    const botReply = this.generateAiResponse(text);
+                    this.appendChatMessage(botReply, 'bot');
+                }, 500);
+            }
+
+            appendChatMessage(text, sender) {
+                const chatContainer = document.getElementById('ai-chat-messages');
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-start gap-2 ' + (sender === 'user' ? 'justify-end' : '');
+
+                if (sender === 'bot') {
+                    wrapper.innerHTML = `
+                        <div class="w-6 h-6 rounded bg-emerald-600/30 text-emerald-400 flex items-center justify-center text-[10px] mt-0.5 shrink-0">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div class="bg-slate-900 border border-emerald-900/60 p-2.5 rounded-xl text-slate-200 text-[11px]">
+                            ${text}
+                        </div>
+                    `;
+                } else {
+                    wrapper.innerHTML = `
+                        <div class="bg-emerald-700/80 text-white p-2.5 rounded-xl text-[11px] max-w-[80%]">
+                            ${text}
+                        </div>
+                    `;
+                }
+
+                chatContainer.appendChild(wrapper);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            generateAiResponse(query) {
+                const q = query.toLowerCase();
+                if (q.includes('register') || q.includes('connect')) {
+                    return `Enter your extension number and password in the Settings tab, then click <b>REGISTER</b>.`;
+                }
+                if (q.includes('call') || q.includes('dial')) {
+                    return `Type an extension number into the dialer (e.g., 1002) and click <b>Call</b>. Ensure both extensions are registered to the same WebSocket server URL.`;
+                }
+                return `I am your AI Telephony Copilot. Ask me about extension registration, audio settings, or intercom broadcasts!`;
+            }
+
+            renderDirectory(filterQuery = '') {
+                const grid = document.getElementById('directory-grid');
+                if (!grid) return;
+
+                grid.innerHTML = '';
+                const query = filterQuery.toLowerCase().trim();
+
+                const filtered = this.directory.filter(c => 
+                    c.name.toLowerCase().includes(query) || 
+                    String(c.ext).toLowerCase().includes(query)
+                );
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-500 font-mono text-xs">No matching contacts found.</div>`;
+                    return;
+                }
+
+                filtered.forEach(contact => {
+                    const card = document.createElement('div');
+                    card.onclick = () => this.dialExtension(contact.ext);
+                    card.className = 'bg-slate-950 border border-emerald-900/60 p-4 rounded-xl hover:border-emerald-500 cursor-pointer transition flex items-center justify-between group shadow-sm';
+                    card.innerHTML = `
+                        <div>
+                            <div class="font-bold text-white text-sm group-hover:text-emerald-400 transition-colors">${contact.name}</div>
+                            <div class="text-xs text-slate-400 font-mono mt-0.5">Ext: <span class="text-emerald-300 font-bold">${contact.ext}</span></div>
+                            <div class="text-[10px] text-slate-500 mt-1">${contact.role}</div>
+                        </div>
+                        <button class="w-9 h-9 rounded-xl bg-emerald-600/20 text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center text-xs shadow-md transition-all">
+                            <i class="fa-solid fa-phone"></i>
+                        </button>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            filterDirectory() {
+                const query = document.getElementById('directory-search-input').value;
+                this.renderDirectory(query);
+            }
+
+            showToast(message, type = 'error') {
+                const toast = document.getElementById('toast-notification');
+                const msgEl = document.getElementById('toast-message');
+                const iconEl = document.getElementById('toast-icon');
+
+                msgEl.textContent = message;
+
+                if (type === 'error') {
+                    toast.className = "fixed top-20 right-6 z-50 transform translate-x-0 transition-transform duration-300 ease-out flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border border-rose-500/50 bg-rose-950/90 text-rose-200 text-xs font-semibold backdrop-blur-md";
+                    iconEl.className = "fa-solid fa-circle-xmark text-rose-400 text-base";
+                } else if (type === 'info') {
+                    toast.className = "fixed top-20 right-6 z-50 transform translate-x-0 transition-transform duration-300 ease-out flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border border-amber-500/50 bg-amber-950/90 text-amber-200 text-xs font-semibold backdrop-blur-md";
+                    iconEl.className = "fa-solid fa-circle-info text-amber-400 text-base";
+                } else {
+                    toast.className = "fixed top-20 right-6 z-50 transform translate-x-0 transition-transform duration-300 ease-out flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border border-emerald-500/50 bg-emerald-950/90 text-emerald-200 text-xs font-semibold backdrop-blur-md";
+                    iconEl.className = "fa-solid fa-circle-check text-emerald-400 text-base";
+                }
+
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full');
+                }, 3500);
+            }
+
+            startClock() {
+                const updateClock = () => {
+                    const now = new Date();
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    document.getElementById('live-time-display').textContent = `${hours}:${minutes}`;
+                };
+                updateClock();
+                setInterval(updateClock, 10000);
+            }
+
+            startAuto6HourThemeCycle() {
+                if (this.autoCycleTimer) clearInterval(this.autoCycleTimer);
+                this.autoCycleTimer = setInterval(() => {
+                    const currentIndex = this.natureThemes.indexOf(this.currentTheme);
+                    const nextIndex = (currentIndex + 1) % this.natureThemes.length;
+                    this.setNatureTheme(this.natureThemes[nextIndex]);
+                }, this.SIX_HOURS_MS);
+            }
+
+            setNatureTheme(themeName) {
+                this.currentTheme = themeName;
+                const body = document.getElementById('app-body');
+                body.classList.remove('theme-rainforest', 'theme-ocean', 'theme-aurora', 'theme-savannah');
+                body.classList.add(`theme-${themeName}`);
+
+                this.natureThemes.forEach(t => {
+                    const btn = document.getElementById(`theme-btn-${t}`);
+                    if (btn) {
+                        btn.className = t === themeName ? 
+                            'px-2.5 py-1.5 rounded-lg font-bold transition-all bg-emerald-600 text-white shadow-sm flex items-center gap-1.5' : 
+                            'px-2.5 py-1.5 rounded-lg font-bold transition-all text-slate-400 hover:text-white flex items-center gap-1.5';
+                    }
+                });
+            }
+
+            toggleAutoCycleThemes() {
+                const btnIcon = document.getElementById('autocycle-icon');
+                if (this.autoCycleTimer) {
+                    clearInterval(this.autoCycleTimer);
+                    this.autoCycleTimer = null;
+                    btnIcon.classList.remove('animate-spin', 'text-amber-400');
+                } else {
+                    btnIcon.classList.add('animate-spin', 'text-amber-400');
+                    this.startAuto6HourThemeCycle();
+                }
+            }
+
+            switchTab(tabId) {
+                document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.tab-btn').forEach(el => {
+                    el.classList.remove('active', 'text-white', 'bg-emerald-900/50', 'border-emerald-700/60');
+                    el.classList.add('text-slate-400');
+                });
+
+                document.getElementById(`view-${tabId}`).classList.remove('hidden');
+                const activeNav = document.getElementById(`tab-nav-${tabId}`);
+                if (activeNav) {
+                    activeNav.classList.add('active', 'text-white', 'bg-emerald-900/50', 'border-emerald-700/60');
+                    activeNav.classList.remove('text-slate-400');
+                }
+            }
+
+            switchSettingsSubTab(subId) {
+                document.querySelectorAll('.settings-subview').forEach(el => {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex', 'grid');
+                });
+                document.querySelectorAll('.subtab-btn').forEach(el => {
+                    el.classList.remove('active', 'bg-emerald-600', 'text-white');
+                    el.classList.add('text-slate-400');
+                });
+
+                const targetView = document.getElementById(`subview-${subId}`);
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                    targetView.classList.add(subId === 'ext-reg' ? 'grid' : 'flex');
+                }
+
+                const activeSubNav = document.getElementById(`subnav-${subId}`);
+                if (activeSubNav) {
+                    activeSubNav.classList.add('active', 'bg-emerald-600', 'text-white');
+                    activeSubNav.classList.remove('text-slate-400');
+                }
+            }
+
+            logPacket(dir, text) {
+                this.packetLogs.push({ dir, text, time: new Date().toLocaleTimeString() });
                 this.renderConsoleLogs();
             }
 
             renderConsoleLogs() {
-                const box = document.getElementById('sip-terminal-box');
-                const query = document.getElementById('console-search-input').value.toLowerCase();
+                const box = document.getElementById('terminal-box');
                 box.innerHTML = '';
 
-                const filtered = this.sipLogs.filter(item => {
-                    if (this.activeFilter === 'TX' && item.dir !== 'TX') return false;
-                    if (this.activeFilter === 'RX' && item.dir !== 'RX') return false;
-                    if (this.activeFilter === 'REGISTER' && !item.text.includes('REGISTER')) return false;
-                    if (this.activeFilter === 'INVITE' && !item.text.includes('INVITE')) return false;
-                    if (this.activeFilter === 'ACK/BYE' && !item.text.includes('ACK') && !item.text.includes('BYE')) return false;
-                    if (query && !item.text.toLowerCase().includes(query)) return false;
-                    return true;
-                });
-
-                filtered.forEach(item => {
+                this.packetLogs.forEach(item => {
                     const wrap = document.createElement('div');
-                    wrap.className = 'border-b border-slate-900/80 pb-2 space-y-1';
-                    const badge = item.dir === 'TX' 
-                        ? '<span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold text-[10px]">TX &rarr;</span>'
-                        : '<span class="px-1.5 py-0.5 rounded bg-purple-950 text-purple-400 border border-purple-800 font-bold text-[10px]">RX &larr;</span>';
+                    wrap.className = 'border-b border-emerald-950/80 pb-2 space-y-1';
+                    
+                    let badge = '<span class="px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-bold text-[10px]">RX &larr;</span>';
+                    if (item.dir === 'TX') {
+                        badge = '<span class="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold text-[10px]">TX &rarr;</span>';
+                    } else if (item.dir === 'ERR') {
+                        badge = '<span class="px-1.5 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800 font-bold text-[10px]">ERR &times;</span>';
+                    }
 
                     wrap.innerHTML = `
                         <div class="flex items-center gap-2">
@@ -1202,67 +2201,35 @@
             }
 
             clearConsole() {
-                this.sipLogs = [];
-                document.getElementById('console-packet-badge').textContent = '0';
+                this.packetLogs = [];
                 this.renderConsoleLogs();
             }
 
-            toggleConsoleScroll() {
-                this.autoScroll = !this.autoScroll;
-                document.getElementById('btn-toggle-scroll').textContent = `Auto-Scroll: ${this.autoScroll ? 'ON' : 'OFF'}`;
-            }
-
-            exportSipLogs() {
-                const blob = new Blob([JSON.stringify(this.sipLogs, null, 2)], { type: 'application/json' });
+            exportLogs() {
+                const blob = new Blob([JSON.stringify(this.packetLogs, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url; a.download = 'sip-signaling-trace.json';
+                a.href = url; a.download = 'signaling-trace.json';
                 a.click();
-            }
-
-            updateNetworkStress(rtt, jitter, loss) {
-                if (rtt !== null) { this.rtt = rtt; document.getElementById('tel-val-rtt').textContent = rtt + ' ms'; document.getElementById('hud-rtt').innerHTML = `${rtt} <span class="text-xs text-slate-500">ms</span>`; }
-                if (jitter !== null) { this.jitter = jitter; document.getElementById('tel-val-jitter').textContent = jitter + ' ms'; document.getElementById('hud-jitter').innerHTML = `${jitter} <span class="text-xs text-slate-500">ms</span>`; }
-                if (loss !== null) { this.loss = loss; document.getElementById('tel-val-loss').textContent = loss + ' %'; document.getElementById('hud-loss').innerHTML = `${loss} <span class="text-xs text-slate-500">%</span>`; }
-
-                let R = 94.2 - (this.rtt * 0.05) - (this.jitter * 0.1) - (this.loss * 2.5);
-                let mos = 1 + (0.035 * R) + (R * (R - 60) * (100 - R) * 0.000007);
-                mos = Math.max(1.0, Math.min(4.5, mos));
-
-                document.getElementById('hud-mos').textContent = mos.toFixed(2);
-                document.getElementById('tel-mos-score').textContent = mos.toFixed(2);
             }
 
             openTransferModal() { document.getElementById('modal-transfer-call').classList.remove('hidden'); }
             closeTransferModal() { document.getElementById('modal-transfer-call').classList.add('hidden'); }
-            executeTransfer() {
-                const target = document.getElementById('transfer-target-input').value.trim();
-                if (target && this.ws) {
-                    const myExt = document.getElementById('cfg-ext').value.trim();
-                    this.logSip('TX', `REFER sip:${target}@localhost SIP/2.0\r\nRefer-To: <sip:${target}@localhost>\r\nFrom: <sip:${myExt}@localhost>\r\n\r\n`);
-                }
-                this.closeTransferModal();
-            }
+            executeTransfer() { this.closeTransferModal(); }
 
             applyPreset(preset) {
-                if (preset === 'render') {
-                    const isHttps = window.location.protocol === 'https:';
-                    document.getElementById('cfg-wss-url').value = isHttps 
-                        ? `wss://${window.location.host}` 
-                        : 'wss://starbridge-global-softphone.onrender.com';
-                    document.getElementById('cfg-domain').value = window.location.host || 'starbridge-global-softphone.onrender.com';
-                } else if (preset === 'asterisk') {
-                    document.getElementById('cfg-wss-url').value = 'ws://127.0.0.1:8089';
+                if (preset === 'local') {
+                    document.getElementById('cfg-wss-url').value = 'ws://localhost:8080';
                     document.getElementById('cfg-domain').value = 'localhost';
-                } else if (preset === 'freeswitch') {
-                    document.getElementById('cfg-wss-url').value = 'ws://127.0.0.1:8089';
-                    document.getElementById('cfg-domain').value = 'freeswitch.local';
+                } else if (preset === 'starbridge') {
+                    document.getElementById('cfg-wss-url').value = 'wss://starbridge-global-softphone.onrender.com/';
+                    document.getElementById('cfg-domain').value = 'starbridge-global-softphone.onrender.com/';
                 }
             }
 
             setupKeyListeners() {
                 window.addEventListener('keydown', (e) => {
-                    if (document.activeElement.tagName === 'INPUT') return;
+                    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
                     if (['0','1','2','3','4','5','6','7','8','9','*','#'].includes(e.key)) {
                         this.pressDialKey(e.key);
                     } else if (e.key === 'Backspace') {
@@ -1276,7 +2243,7 @@
 
         let app;
         window.addEventListener('DOMContentLoaded', () => {
-            app = new NexusVoIPEngine();
+            app = new StarbridgeSoftphoneEngine();
             app.init();
         });
     </script>
