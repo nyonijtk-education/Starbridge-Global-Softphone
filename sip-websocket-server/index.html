@@ -605,21 +605,21 @@
                                 <i class="fa-solid fa-server text-amber-400"></i> PBX Connection & Extension Credentials
                             </h2>
                             <select id="cfg-preset" onchange="app.applyPreset(this.value)" class="bg-slate-950 border border-emerald-900/60 rounded-xl px-3 py-1 text-xs text-slate-300 focus:outline-none">
-                                <option value="local" selected>Local Node Server (ws://localhost:8080)</option>
-                                <option value="starbridge">Starbridge Cloud Server (WSS)</option>
+                                <option value="starbridge" selected>Starbridge Cloud Server (WSS)</option>
+                                <option value="local">Local Node Server (ws://localhost:8080)</option>
                             </select>
                         </div>
 
                         <div class="space-y-3 text-xs">
                             <div>
                                 <label class="block text-slate-400 mb-1 font-medium">WebSocket Server URL (WS / WSS)</label>
-                                <input type="text" id="cfg-wss-url" value="ws://localhost:8080" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
+                                <input type="text" id="cfg-wss-url" value="wss://starbridge-global-softphone.onrender.com/" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-slate-400 mb-1 font-medium">Realm / Domain</label>
-                                    <input type="text" id="cfg-domain" value="localhost" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
+                                    <input type="text" id="cfg-domain" value="starbridge-global-softphone.onrender.com" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-slate-400 mb-1 font-medium">Outbound Proxy (Optional)</label>
@@ -661,7 +661,7 @@
                 <div class="lg:col-span-5 flex flex-col gap-4">
                     <div class="glass-panel rounded-2xl p-5 border border-emerald-900/50 flex flex-col gap-4">
                         <h2 class="text-base font-bold text-white border-b border-emerald-900/40 pb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-sliders text-emerald-400"></i> Media DSP & ICE STUN Topology
+                            <i class="fa-solid fa-sliders text-emerald-400"></i> Media DSP & ICE STUN/TURN Topology
                         </h2>
 
                         <div class="space-y-4 text-xs">
@@ -675,10 +675,10 @@
                             </div>
 
                             <div>
-                                <label class="block text-slate-400 mb-1 font-medium">STUN / TURN ICE Servers</label>
-                                <div class="space-y-2">
-                                    <input type="text" value="stun:stun.l.google.com:19302" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-slate-300 font-mono">
-                                    <input type="text" value="stun:stun1.l.google.com:19302" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-slate-300 font-mono">
+                                <label class="block text-slate-400 mb-1 font-medium">STUN / TURN ICE Relay Servers</label>
+                                <div class="space-y-2 font-mono text-[11px]">
+                                    <input type="text" value="stun:stun.l.google.com:19302" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-slate-300">
+                                    <input type="text" value="turn:openrelay.metered.ca:80 (Relay Active)" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-emerald-400 font-semibold">
                                 </div>
                             </div>
                         </div>
@@ -877,7 +877,7 @@
                 this.directory = [
                     { name: 'Alice Smith', ext: '1001', role: 'Support Specialist', status: 'Registered' },
                     { name: 'Josh Nyoni', ext: '0774297590', role: 'Lead PBX Engineer', status: 'Registered' },
-                    { name: 'Bob Johnson', ext: '1002', role: 'Account Executive', status: 'Registered' }
+                    { name: 'South Africa Office', ext: '02221001', role: 'Account Executive', status: 'Registered' }
                 ];
 
                 this.currentTheme = 'rainforest';
@@ -903,6 +903,28 @@
                 this.micStream = null;
 
                 this.packetLogs = [];
+
+                // ICE Servers with TURN Relays for NAT Traversal Across Regional Carriers
+                this.iceServers = [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' },
+                    {
+                        urls: 'turn:openrelay.metered.ca:80',
+                        username: 'openrelayproject',
+                        credential: 'openrelayproject'
+                    },
+                    {
+                        urls: 'turn:openrelay.metered.ca:443',
+                        username: 'openrelayproject',
+                        credential: 'openrelayproject'
+                    },
+                    {
+                        urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+                        username: 'openrelayproject',
+                        credential: 'openrelayproject'
+                    }
+                ];
             }
 
             init() {
@@ -1113,7 +1135,7 @@
                             await this.pc.addIceCandidate(new RTCIceCandidate(cand));
                         }
                     } catch (e) {
-                        console.warn("ICE candidate addition error:", e);
+                        console.warn("ICE candidate error:", e);
                     }
                 }
             }
@@ -1245,6 +1267,37 @@
                 return stream;
             }
 
+            setupPeerConnectionTrackListeners() {
+                const remoteVideo = document.getElementById('remote-video');
+                const remoteAudio = document.getElementById('remote-audio');
+
+                this.pc.ontrack = (evt) => {
+                    this.logPacket('INFO', `Received remote track: ${evt.track.kind}`);
+                    let stream = (evt.streams && evt.streams[0]) ? evt.streams[0] : new MediaStream([evt.track]);
+
+                    if (evt.track.kind === 'video') {
+                        if (remoteVideo) {
+                            remoteVideo.srcObject = stream;
+                            remoteVideo.play().catch(e => console.warn("Video play error:", e));
+                        }
+                    } else if (evt.track.kind === 'audio') {
+                        if (remoteAudio) {
+                            remoteAudio.srcObject = stream;
+                            remoteAudio.play().catch(e => console.warn("Audio play error:", e));
+                        }
+                    }
+                    document.getElementById('video-idle-placeholder').classList.add('hidden');
+                };
+
+                this.pc.oniceconnectionstatechange = () => {
+                    const state = this.pc.iceConnectionState;
+                    this.logPacket('INFO', `ICE Connection State: ${state}`);
+                    if (state === 'failed' || state === 'disconnected') {
+                        this.showToast('ICE Relay connection dropped or blocked by NAT', 'error');
+                    }
+                };
+            }
+
             async initiateCall() {
                 const target = String(document.getElementById('dial-display').value.trim());
                 const myExt = String(this.registeredExtension || document.getElementById('cfg-ext').value.trim());
@@ -1267,8 +1320,10 @@
                 this.activeCallId = callId;
                 document.getElementById('active-callid').textContent = `Call-ID: ${callId}`;
 
-                this.pc = new RTCPeerConnection({ iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] });
+                this.pc = new RTCPeerConnection({ iceServers: this.iceServers });
                 this.iceCandidateQueue = [];
+
+                this.setupPeerConnectionTrackListeners();
 
                 const mediaStream = await this.acquireUserMediaStreams();
                 if (this.isVideoActive) {
@@ -1277,19 +1332,6 @@
                 }
 
                 mediaStream.getTracks().forEach(track => this.pc.addTrack(track, mediaStream));
-
-                this.pc.ontrack = (evt) => {
-                    if (evt.track.kind === 'video') {
-                        document.getElementById('remote-video').srcObject = evt.streams[0];
-                    } else {
-                        const remoteAud = document.getElementById('remote-audio');
-                        if (remoteAud) {
-                            remoteAud.srcObject = evt.streams[0];
-                            remoteAud.play().catch(() => {});
-                        }
-                    }
-                    document.getElementById('video-idle-placeholder').classList.add('hidden');
-                };
 
                 this.pc.onicecandidate = (evt) => {
                     if (evt.candidate && this.ws) {
@@ -1317,8 +1359,10 @@
                 this.activeRemoteExtension = caller;
                 document.getElementById('dial-display').value = caller;
 
-                this.pc = new RTCPeerConnection({ iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] });
+                this.pc = new RTCPeerConnection({ iceServers: this.iceServers });
                 this.iceCandidateQueue = [];
+
+                this.setupPeerConnectionTrackListeners();
 
                 const mediaStream = await this.acquireUserMediaStreams();
                 if (this.isVideoActive) {
@@ -1326,19 +1370,6 @@
                 }
 
                 mediaStream.getTracks().forEach(track => this.pc.addTrack(track, mediaStream));
-
-                this.pc.ontrack = (evt) => {
-                    if (evt.track.kind === 'video') {
-                        document.getElementById('remote-video').srcObject = evt.streams[0];
-                    } else {
-                        const remoteAud = document.getElementById('remote-audio');
-                        if (remoteAud) {
-                            remoteAud.srcObject = evt.streams[0];
-                            remoteAud.play().catch(() => {});
-                        }
-                    }
-                    document.getElementById('video-idle-placeholder').classList.add('hidden');
-                };
 
                 this.pc.onicecandidate = (evt) => {
                     if (evt.candidate && this.ws) {
@@ -2013,7 +2044,7 @@
                     return `Enter your extension number and password in the Settings tab, then click <b>REGISTER</b>.`;
                 }
                 if (q.includes('call') || q.includes('dial')) {
-                    return `Type an extension number into the dialer (e.g., 1002) and click <b>Call</b>. Ensure both extensions are registered to the same WebSocket server URL.`;
+                    return `Type an extension number into the dialer (e.g., 02221001) and click <b>Call</b>.`;
                 }
                 return `I am your AI Telephony Copilot. Ask me about extension registration, audio settings, or intercom broadcasts!`;
             }
@@ -2185,6 +2216,8 @@
                         badge = '<span class="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold text-[10px]">TX &rarr;</span>';
                     } else if (item.dir === 'ERR') {
                         badge = '<span class="px-1.5 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800 font-bold text-[10px]">ERR &times;</span>';
+                    } else if (item.dir === 'INFO') {
+                        badge = '<span class="px-1.5 py-0.5 rounded bg-teal-950 text-teal-400 border border-teal-800 font-bold text-[10px]">INFO</span>';
                     }
 
                     wrap.innerHTML = `
