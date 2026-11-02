@@ -522,7 +522,7 @@
 
                     <!-- NATIVE VIDEO CONTAINER -->
                     <div id="video-viewport-container" class="relative bg-slate-950 rounded-2xl overflow-hidden border border-emerald-900/60 w-full ratio-portrait mx-auto flex items-center justify-center shadow-2xl transition-all duration-300">
-                        <video id="remote-video" autoplay playsinline class="w-full h-full object-cover rounded-2xl hidden filter-normal"></video>
+                        <video id="remote-video" autoplay playsinline muted class="w-full h-full object-cover rounded-2xl hidden filter-normal"></video>
                         <video id="local-video" autoplay playsinline muted class="w-full h-full object-cover rounded-2xl block filter-normal"></video>
 
                         <!-- LOCAL PREVIEW INSET PiP -->
@@ -935,10 +935,11 @@
 
                 this.packetLogs = [];
 
-                // Metered TURN Relay Configuration
+                // Metered TURN Relay Configuration (UDP, TCP & TLS Fallbacks)
                 this.iceServers = [
                     { urls: "stun:stun.l.google.com:19302" },
                     { urls: "stun:stun.relay.metered.ca:80" },
+                    { urls: "stun:starbridge.relay.metered.ca:80" },
                     {
                         urls: "turn:global.relay.metered.ca:80",
                         username: "e99bbae10c134c4008c5e6d6",
@@ -958,6 +959,21 @@
                         urls: "turns:global.relay.metered.ca:443?transport=tcp",
                         username: "e99bbae10c134c4008c5e6d6",
                         credential: "4veoWBcvBQostB58",
+                    },
+                    {
+                        urls: "turn:starbridge.relay.metered.ca:80",
+                        username: "e99bbae10c134c4008c5e6d6",
+                        credential: "4veoWBcvBQostB58",
+                    },
+                    {
+                        urls: "turn:starbridge.relay.metered.ca:443",
+                        username: "e99bbae10c134c4008c5e6d6",
+                        credential: "4veoWBcvBQostB58",
+                    },
+                    {
+                        urls: "turns:starbridge.relay.metered.ca:443?transport=tcp",
+                        username: "e99bbae10c134c4008c5e6d6",
+                        credential: "4veoWBcvBQostB58",
                     }
                 ];
             }
@@ -974,7 +990,6 @@
                 this.refreshLineUi();
             }
 
-            // BACKGROUND & LOCK SCREEN SERVICE WORKER ENGINE
             async initServiceWorker() {
                 if ('serviceWorker' in navigator && 'Notification' in window) {
                     try {
@@ -1027,7 +1042,7 @@
                             }
                         });
                     } catch (e) {
-                        console.warn("Service Worker Lock Screen registration deferred:", e);
+                        console.warn("Service Worker registration deferred:", e);
                     }
                 }
             }
@@ -1047,7 +1062,7 @@
                     try {
                         this.wakeLock = await navigator.wakeLock.request('screen');
                     } catch (err) {
-                        console.warn("Screen wake lock request failed:", err);
+                        console.warn("Screen wake lock failed:", err);
                     }
                 }
             }
@@ -1414,11 +1429,11 @@
                 while (this.iceCandidateQueue.length > 0) {
                     const cand = this.iceCandidateQueue.shift();
                     try {
-                        if (lineObj.pc && lineObj.pc.remoteDescription) {
+                        if (lineObj.pc && lineObj.pc.remoteDescription && lineObj.pc.remoteDescription.type) {
                             await lineObj.pc.addIceCandidate(new RTCIceCandidate(cand));
                         }
                     } catch (e) {
-                        console.warn("ICE candidate error:", e);
+                        console.warn("ICE candidate add error:", e);
                     }
                 }
             }
@@ -1450,9 +1465,7 @@
                 }
 
                 if (msgObj) {
-                    if (msgObj.type === 'pong') {
-                        return;
-                    }
+                    if (msgObj.type === 'pong') return;
 
                     if (msgObj.type === 'error') {
                         this.showToast(msgObj.reason || 'Server error occurred', 'error');
@@ -1494,7 +1507,21 @@
                     }
 
                     if (msgObj.type === 'invite') {
+                        if (msgObj.isIceRestart && currentLine.pc) {
+                            try {
+                                await currentLine.pc.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp: msgObj.sdp }));
+                                const answer = await currentLine.pc.createAnswer();
+                                await currentLine.pc.setLocalDescription(answer);
+                                const myExt = String(this.registeredExtension || document.getElementById('cfg-ext').value.trim());
+                                this.ws.send(JSON.stringify({ type: 'answer', from: myExt, target: msgObj.from, sdp: answer.sdp, callId: msgObj.callId }));
+                            } catch (e) {
+                                console.error("ICE Restart offer error:", e);
+                            }
+                            return;
+                        }
+
                         this.pendingOffer = msgObj;
+                        this.iceCandidateQueue = []; // Clean reset for new incoming call
                         currentLine.callId = msgObj.callId;
                         currentLine.remoteExt = String(msgObj.from);
                         document.getElementById('modal-caller-ext').textContent = String(msgObj.from);
@@ -1512,16 +1539,18 @@
                                 await currentLine.pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: msgObj.sdp }));
                                 await this.processIceCandidateQueue(currentLine);
                                 this.setCallState('CONNECTED');
-                            } else {
-                                console.warn(`Ignored answer: invalid signaling state (${currentLine.pc.signalingState})`);
                             }
                         }
                         return;
                     }
 
                     if (msgObj.type === 'ice-candidate' && msgObj.candidate) {
-                        if (currentLine.pc && currentLine.pc.remoteDescription) {
-                            await currentLine.pc.addIceCandidate(new RTCIceCandidate(msgObj.candidate));
+                        if (currentLine.pc && currentLine.pc.remoteDescription && currentLine.pc.remoteDescription.type) {
+                            try {
+                                await currentLine.pc.addIceCandidate(new RTCIceCandidate(msgObj.candidate));
+                            } catch (e) {
+                                console.warn("Candidate add warning:", e);
+                            }
                         } else {
                             this.iceCandidateQueue.push(msgObj.candidate);
                         }
@@ -1650,12 +1679,12 @@
                             remoteVideo.srcObject = stream;
                             remoteVideo.classList.remove('hidden');
                             localVideo.classList.add('hidden');
-                            remoteVideo.play().catch(e => console.warn("Video play error:", e));
+                            remoteVideo.play().catch(e => console.warn("Remote video play warning:", e));
                         }
                     } else if (evt.track.kind === 'audio') {
                         if (remoteAudio) {
                             remoteAudio.srcObject = stream;
-                            remoteAudio.play().catch(e => console.warn("Audio play error:", e));
+                            remoteAudio.play().catch(e => console.warn("Remote audio play warning:", e));
                         }
                     }
                     document.getElementById('video-idle-placeholder').classList.add('hidden');
@@ -1766,8 +1795,6 @@
                 };
 
                 currentLine.pc = new RTCPeerConnection(peerConnectionConfig);
-                this.iceCandidateQueue = [];
-
                 this.setupPeerConnectionTrackListeners(currentLine);
 
                 const mediaStream = await this.acquireUserMediaStreams();
