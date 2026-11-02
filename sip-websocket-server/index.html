@@ -707,9 +707,9 @@
                             <div>
                                 <label class="block text-slate-400 mb-1 font-medium">STUN / TURN ICE Relay Servers</label>
                                 <div class="space-y-2 font-mono text-[11px]">
-                                    <input type="text" value="stun:stun.l.google.com:19302" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-slate-300">
-                                    <input type="text" value="turn:openrelay.metered.ca:443" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-emerald-400 font-semibold">
-                                    <input type="text" value="turns:openrelay.metered.ca:443?transport=tcp" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-purple-400 font-semibold">
+                                    <input type="text" value="stun:stun.relay.metered.ca:80" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-slate-300">
+                                    <input type="text" value="turn:global.relay.metered.ca:443" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-emerald-400 font-semibold">
+                                    <input type="text" value="turns:global.relay.metered.ca:443?transport=tcp" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-purple-400 font-semibold">
                                 </div>
                             </div>
                         </div>
@@ -935,28 +935,29 @@
 
                 this.packetLogs = [];
 
-                // CLEAN STUN/TURN ICE RELAY topology configuration (No descriptive text appended to URLs)
+                // Metered TURN Relay Configuration
                 this.iceServers = [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' },
-                    { urls: 'stun:stun2.l.google.com:19302' },
-                    { urls: 'stun:stun3.l.google.com:19302' },
-                    { urls: 'stun:stun4.l.google.com:19302' },
-                    { urls: 'stun:stun.cloudflare.com:3478' },
+                    { urls: "stun:stun.l.google.com:19302" },
+                    { urls: "stun:stun.relay.metered.ca:80" },
                     {
-                        urls: 'turn:openrelay.metered.ca:80',
-                        username: 'openrelayproject',
-                        credential: 'openrelayproject'
+                        urls: "turn:global.relay.metered.ca:80",
+                        username: "e99bbae10c134c4008c5e6d6",
+                        credential: "4veoWBcvBQostB58",
                     },
                     {
-                        urls: 'turn:openrelay.metered.ca:443',
-                        username: 'openrelayproject',
-                        credential: 'openrelayproject'
+                        urls: "turn:global.relay.metered.ca:80?transport=tcp",
+                        username: "e99bbae10c134c4008c5e6d6",
+                        credential: "4veoWBcvBQostB58",
                     },
                     {
-                        urls: 'turns:openrelay.metered.ca:443?transport=tcp',
-                        username: 'openrelayproject',
-                        credential: 'openrelayproject'
+                        urls: "turn:global.relay.metered.ca:443",
+                        username: "e99bbae10c134c4008c5e6d6",
+                        credential: "4veoWBcvBQostB58",
+                    },
+                    {
+                        urls: "turns:global.relay.metered.ca:443?transport=tcp",
+                        username: "e99bbae10c134c4008c5e6d6",
+                        credential: "4veoWBcvBQostB58",
                     }
                 ];
             }
@@ -1219,7 +1220,6 @@
                     this.ws = new WebSocket(wssUrl);
 
                     this.ws.onopen = () => {
-                        // Start 15s application-level keepalive heartbeat ping
                         if (this.pingInterval) clearInterval(this.pingInterval);
                         this.pingInterval = setInterval(() => {
                             if (this.ws && this.ws.readyState === WebSocket.OPEN) {
@@ -1255,7 +1255,6 @@
                         this.updateRegState('Disconnected', 'text-amber-400', 'bg-amber-400');
                         document.getElementById('reg-btn-text').textContent = 'REGISTER';
 
-                        // Auto-reconnect fallback if disconnected unexpectedly
                         setTimeout(() => {
                             if (localStorage.getItem('sb_is_registered') === 'true' && !this.registered) {
                                 this.executeAuthenticatedRegistration({ isBiometric: false });
@@ -1452,7 +1451,7 @@
 
                 if (msgObj) {
                     if (msgObj.type === 'pong') {
-                        return; // Silent keepalive heartbeat response
+                        return;
                     }
 
                     if (msgObj.type === 'error') {
@@ -1567,7 +1566,6 @@
 
             async acquireUserMediaStreams() {
                 let stream = null;
-                // Attempt 1: Full Video + High Quality Audio
                 try {
                     stream = await navigator.mediaDevices.getUserMedia({
                         audio: {
@@ -1583,7 +1581,6 @@
                     });
                     this.isVideoActive = true;
                 } catch (e1) {
-                    // Attempt 2: Audio-Only Fallback Chain
                     try {
                         stream = await navigator.mediaDevices.getUserMedia({
                             audio: {
@@ -1626,7 +1623,6 @@
                 const localVideo = document.getElementById('local-video');
                 const remoteAudio = document.getElementById('remote-audio');
 
-                // Peer Connection State Change Diagnostics & Auto-Recovery
                 lineObj.pc.onconnectionstatechange = () => {
                     const connState = lineObj.pc.connectionState;
                     this.logPacket('INFO', `Peer Connection State: ${connState}`);
@@ -1636,7 +1632,6 @@
                     }
                 };
 
-                // ICE Candidate Connection State Listener
                 lineObj.pc.oniceconnectionstatechange = () => {
                     const state = lineObj.pc.iceConnectionState;
                     this.logPacket('INFO', `ICE Connection State: ${state}`);
@@ -1645,7 +1640,6 @@
                     }
                 };
 
-                // Remote Media Stream Handling
                 lineObj.pc.ontrack = (evt) => {
                     this.logPacket('INFO', `Received remote track: ${evt.track.kind}`);
                     let stream = (evt.streams && evt.streams[0]) ? evt.streams[0] : new MediaStream([evt.track]);
@@ -2139,16 +2133,19 @@
                 const currentLine = this.lines[this.activeLine];
                 this.stopTimer();
                 currentLine.callSeconds = 0;
+                
                 currentLine.timerInterval = setInterval(() => {
-                    currentLine.callSeconds++;
-                    const timerStr = this.formatTimerString(currentLine.callSeconds);
-                    document.getElementById('call-timer').textContent = timerStr;
+                    if (currentLine.state === 'CONNECTED') {
+                        currentLine.callSeconds++;
+                        const timerStr = this.formatTimerString(currentLine.callSeconds);
+                        document.getElementById('call-timer').textContent = timerStr;
+                    }
                 }, 1000);
             }
 
             stopTimer() {
                 const currentLine = this.lines[this.activeLine];
-                if (currentLine.timerInterval) {
+                if (currentLine && currentLine.timerInterval) {
                     clearInterval(currentLine.timerInterval);
                     currentLine.timerInterval = null;
                 }
@@ -2174,11 +2171,9 @@
                 this.ringbackInterval = setInterval(playPulse, 6000);
             }
 
-            // HAPTIC VIBRATION + LOCK SCREEN AUDIO RINGTONE ENGINE
             startIncomingRingtone(callerExt = 'Unknown') {
                 this.stopTones();
 
-                // 1. Hardware Haptic Vibration (Mobile Browsers)
                 if ('vibrate' in navigator) {
                     navigator.vibrate([1000, 500, 1000, 500, 1000, 500]);
                     this.vibrationInterval = setInterval(() => {
@@ -2188,7 +2183,6 @@
                     }, 4500);
                 }
 
-                // 2. High-Quality Looping Audio Ringtone
                 try {
                     if (!this.ringtoneAudio) {
                         this.ringtoneAudio = new Audio('https://actions.google.com/sounds/v1/telephones/phone_ring_louder.ogg');
@@ -2197,7 +2191,6 @@
                     this.ringtoneAudio.play().catch(e => console.warn("Ringtone autoplay deferred:", e));
                 } catch (e) {}
 
-                // 3. Request Screen Wake Lock & System Lock Screen Notification
                 this.requestWakeLock();
                 this.triggerLockScreenNotification(callerExt);
             }
@@ -2206,7 +2199,6 @@
                 if (this.ringbackInterval) { clearInterval(this.ringbackInterval); this.ringbackInterval = null; }
                 if (this.ringtoneInterval) { clearInterval(this.ringtoneInterval); this.ringtoneInterval = null; }
 
-                // Stop Vibration Loop
                 if (this.vibrationInterval) {
                     clearInterval(this.vibrationInterval);
                     this.vibrationInterval = null;
@@ -2215,20 +2207,17 @@
                     navigator.vibrate(0);
                 }
 
-                // Stop Audio Ringtone
                 if (this.ringtoneAudio) {
                     this.ringtoneAudio.pause();
                     this.ringtoneAudio.currentTime = 0;
                 }
 
-                // Close System Lock-Screen Notifications
                 if (this.swRegistration && this.swRegistration.getNotifications) {
                     this.swRegistration.getNotifications({ tag: 'starbridge-call' }).then(notifications => {
                         notifications.forEach(notification => notification.close());
                     }).catch(() => {});
                 }
 
-                // Release Screen Wake Lock
                 if (this.wakeLock) {
                     this.wakeLock.release().catch(() => {});
                     this.wakeLock = null;
