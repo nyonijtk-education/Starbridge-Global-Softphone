@@ -520,7 +520,7 @@
                         </div>
                     </div>
 
-                    <!-- NATIVE VIDEO CONTAINER (NO CANVAS SPLITTING) -->
+                    <!-- NATIVE VIDEO CONTAINER -->
                     <div id="video-viewport-container" class="relative bg-slate-950 rounded-2xl overflow-hidden border border-emerald-900/60 w-full ratio-portrait mx-auto flex items-center justify-center shadow-2xl transition-all duration-300">
                         <video id="remote-video" autoplay playsinline class="w-full h-full object-cover rounded-2xl hidden filter-normal"></video>
                         <video id="local-video" autoplay playsinline muted class="w-full h-full object-cover rounded-2xl block filter-normal"></video>
@@ -708,8 +708,8 @@
                                 <label class="block text-slate-400 mb-1 font-medium">STUN / TURN ICE Relay Servers</label>
                                 <div class="space-y-2 font-mono text-[11px]">
                                     <input type="text" value="stun:stun.l.google.com:19302" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-slate-300">
-                                    <input type="text" value="turn:openrelay.metered.ca:443 (Active UDP/TCP)" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-emerald-400 font-semibold">
-                                    <input type="text" value="turns:openrelay.metered.ca:443?transport=tcp (TLS Fallback)" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-purple-400 font-semibold">
+                                    <input type="text" value="turn:openrelay.metered.ca:443" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-emerald-400 font-semibold">
+                                    <input type="text" value="turns:openrelay.metered.ca:443?transport=tcp" class="w-full bg-slate-950 border border-emerald-900/60 rounded-xl px-3.5 py-2 text-purple-400 font-semibold">
                                 </div>
                             </div>
                         </div>
@@ -898,6 +898,12 @@
                 this.isIntercomMuted = false;
                 this.isMergedConference = false;
 
+                // Lock Screen & Background Ringing State Matrix
+                this.swRegistration = null;
+                this.wakeLock = null;
+                this.ringtoneAudio = null;
+                this.vibrationInterval = null;
+
                 // Multi-Line Call State Matrix
                 this.activeLine = 1;
                 this.lines = {
@@ -928,11 +934,13 @@
 
                 this.packetLogs = [];
 
-                // ICE & TURN Configuration Engine
+                // CLEAN STUN/TURN ICE RELAY topology configuration (No descriptive text appended to URLs)
                 this.iceServers = [
                     { urls: 'stun:stun.l.google.com:19302' },
                     { urls: 'stun:stun1.l.google.com:19302' },
                     { urls: 'stun:stun2.l.google.com:19302' },
+                    { urls: 'stun:stun3.l.google.com:19302' },
+                    { urls: 'stun:stun4.l.google.com:19302' },
                     { urls: 'stun:stun.cloudflare.com:3478' },
                     {
                         urls: 'turn:openrelay.metered.ca:80',
@@ -954,6 +962,7 @@
 
             init() {
                 this.initAudioDSP();
+                this.initServiceWorker();
                 this.setupKeyListeners();
                 this.renderCanvasLoop();
                 this.startAuto6HourThemeCycle();
@@ -961,6 +970,112 @@
                 this.renderDirectory();
                 this.loadPersistentSession();
                 this.refreshLineUi();
+            }
+
+            // BACKGROUND & LOCK SCREEN SERVICE WORKER ENGINE
+            async initServiceWorker() {
+                if ('serviceWorker' in navigator && 'Notification' in window) {
+                    try {
+                        const swCode = `
+                            self.addEventListener('push', event => {
+                                const data = event.data ? event.data.json() : {};
+                                const title = data.title || 'Incoming WebRTC Call';
+                                const options = {
+                                    body: data.body || 'Incoming phone call on Starbridge PBX',
+                                    icon: 'https://cdn-icons-png.flaticon.com/512/724/724664.png',
+                                    badge: 'https://cdn-icons-png.flaticon.com/512/724/724664.png',
+                                    vibrate: [1000, 500, 1000, 500, 1000, 500],
+                                    tag: 'starbridge-call',
+                                    requireInteraction: true,
+                                    renotify: true,
+                                    actions: [
+                                        { action: 'accept', title: '📞 Answer' },
+                                        { action: 'decline', title: '❌ Decline' }
+                                    ]
+                                };
+                                event.waitUntil(self.registration.showNotification(title, options));
+                            });
+
+                            self.addEventListener('notificationclick', event => {
+                                event.notification.close();
+                                event.waitUntil(
+                                    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+                                        for (const client of clientList) {
+                                            if ('focus' in client) {
+                                                client.postMessage({ action: event.action });
+                                                return client.focus();
+                                            }
+                                        }
+                                        if (clients.openWindow) {
+                                            return clients.openWindow('/');
+                                        }
+                                    })
+                                );
+                            });
+                        `;
+                        const blob = new Blob([swCode], { type: 'application/javascript' });
+                        const swUrl = URL.createObjectURL(blob);
+                        this.swRegistration = await navigator.serviceWorker.register(swUrl);
+                        
+                        navigator.serviceWorker.addEventListener('message', (event) => {
+                            if (event.data && event.data.action === 'accept') {
+                                this.acceptIncomingCall();
+                            } else if (event.data && event.data.action === 'decline') {
+                                this.rejectIncomingCall();
+                            }
+                        });
+                    } catch (e) {
+                        console.warn("Service Worker Lock Screen registration deferred:", e);
+                    }
+                }
+            }
+
+            requestNotificationPermissions() {
+                if ('Notification' in window && Notification.permission === 'default') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            this.showToast('Lock-screen Call Alerts Enabled', 'success');
+                        }
+                    });
+                }
+            }
+
+            async requestWakeLock() {
+                if ('wakeLock' in navigator) {
+                    try {
+                        this.wakeLock = await navigator.wakeLock.request('screen');
+                    } catch (err) {
+                        console.warn("Screen wake lock request failed:", err);
+                    }
+                }
+            }
+
+            triggerLockScreenNotification(callerExt) {
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    const title = `Incoming Call from Ext ${callerExt}`;
+                    const options = {
+                        body: 'Tap to open softphone and answer',
+                        icon: 'https://cdn-icons-png.flaticon.com/512/724/724664.png',
+                        vibrate: [1000, 500, 1000, 500, 1000, 500],
+                        tag: 'starbridge-call',
+                        requireInteraction: true,
+                        renotify: true,
+                        actions: [
+                            { action: 'accept', title: 'Answer' },
+                            { action: 'decline', title: 'Decline' }
+                        ]
+                    };
+
+                    if (this.swRegistration && this.swRegistration.showNotification) {
+                        this.swRegistration.showNotification(title, options);
+                    } else {
+                        const notif = new Notification(title, options);
+                        notif.onclick = () => {
+                            window.focus();
+                            this.acceptIncomingCall();
+                        };
+                    }
+                }
             }
 
             loadPersistentSession() {
@@ -1084,6 +1199,7 @@
             }
 
             executeAuthenticatedRegistration({ isBiometric = false }) {
+                this.requestNotificationPermissions();
                 const wssUrl = document.getElementById('cfg-wss-url').value.trim();
                 const ext = String(document.getElementById('cfg-ext').value.trim());
                 const domain = document.getElementById('cfg-domain').value.trim();
@@ -1152,7 +1268,6 @@
                 document.getElementById('reg-status-dot').className = `inline-block w-1.5 h-1.5 rounded-full ${dotClass}`;
             }
 
-            // Multi-Line Management
             selectLine(lineNumber) {
                 this.activeLine = lineNumber;
                 document.getElementById('line-btn-1').className = lineNumber === 1 ?
@@ -1177,7 +1292,6 @@
                 }
             }
 
-            // 3-WAY CALL MERGING AUDIO ENGINE
             async mergeCalls() {
                 const line1 = this.lines[1];
                 const line2 = this.lines[2];
@@ -1364,7 +1478,7 @@
                         currentLine.remoteExt = String(msgObj.from);
                         document.getElementById('modal-caller-ext').textContent = String(msgObj.from);
                         document.getElementById('modal-incoming-call').classList.remove('hidden');
-                        this.startIncomingRingtone();
+                        this.startIncomingRingtone(String(msgObj.from));
                         this.logPacket('RX', `INVITE sip:${msgObj.target} SIP/2.0\r\nFrom: <sip:${msgObj.from}>\r\n\r\n${msgObj.sdp}`);
                         return;
                     }
@@ -1486,6 +1600,26 @@
                 const localVideo = document.getElementById('local-video');
                 const remoteAudio = document.getElementById('remote-audio');
 
+                // Peer Connection State Change Diagnostics
+                lineObj.pc.onconnectionstatechange = () => {
+                    const connState = lineObj.pc.connectionState;
+                    this.logPacket('INFO', `Peer Connection State: ${connState}`);
+                    if (connState === 'failed') {
+                        this.showToast('Media connection failed: NAT/Firewall blocking WebRTC UDP media', 'error');
+                    }
+                };
+
+                // ICE Candidate Connection State Listener
+                lineObj.pc.oniceconnectionstatechange = () => {
+                    const state = lineObj.pc.iceConnectionState;
+                    this.logPacket('INFO', `ICE Connection State: ${state}`);
+                    if (state === 'failed' || state === 'disconnected') {
+                        this.showToast('ICE Relay dropped. Triggering automatic ICE Restart...', 'info');
+                        this.triggerIceRestart(lineObj);
+                    }
+                };
+
+                // Remote Media Stream Handling
                 lineObj.pc.ontrack = (evt) => {
                     this.logPacket('INFO', `Received remote track: ${evt.track.kind}`);
                     let stream = (evt.streams && evt.streams[0]) ? evt.streams[0] : new MediaStream([evt.track]);
@@ -1505,15 +1639,6 @@
                         }
                     }
                     document.getElementById('video-idle-placeholder').classList.add('hidden');
-                };
-
-                lineObj.pc.oniceconnectionstatechange = () => {
-                    const state = lineObj.pc.iceConnectionState;
-                    this.logPacket('INFO', `ICE Connection State: ${state}`);
-                    if (state === 'failed' || state === 'disconnected') {
-                        this.showToast('ICE Relay dropped. Triggering automatic ICE Restart...', 'info');
-                        this.triggerIceRestart(lineObj);
-                    }
                 };
             }
 
@@ -2009,24 +2134,65 @@
                 this.ringbackInterval = setInterval(playPulse, 6000);
             }
 
-            startIncomingRingtone() {
+            // HAPTIC VIBRATION + LOCK SCREEN AUDIO RINGTONE ENGINE
+            startIncomingRingtone(callerExt = 'Unknown') {
                 this.stopTones();
-                if (!this.audioCtx) return;
-                const playRing = () => {
-                    if (!document.getElementById('modal-incoming-call').classList.contains('hidden')) {
-                        const o1 = this.audioCtx.createOscillator();
-                        const o2 = this.audioCtx.createOscillator();
-                        const g = this.audioCtx.createGain();
-                        o1.frequency.value = 852;
-                        o2.frequency.value = 1209;
-                        g.gain.value = 0.08;
-                        o1.connect(g); o2.connect(g); g.connect(this.audioCtx.destination);
-                        o1.start(); o2.start();
-                        setTimeout(() => { o1.stop(); o2.stop(); }, 1200);
+
+                // 1. Hardware Haptic Vibration (Mobile Browsers)
+                if ('vibrate' in navigator) {
+                    navigator.vibrate([1000, 500, 1000, 500, 1000, 500]);
+                    this.vibrationInterval = setInterval(() => {
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate([1000, 500, 1000, 500, 1000, 500]);
+                        }
+                    }, 4500);
+                }
+
+                // 2. High-Quality Looping Audio Ringtone
+                try {
+                    if (!this.ringtoneAudio) {
+                        this.ringtoneAudio = new Audio('https://actions.google.com/sounds/v1/telephones/phone_ring_louder.ogg');
+                        this.ringtoneAudio.loop = true;
                     }
-                };
-                playRing();
-                this.ringtoneInterval = setInterval(playRing, 3000);
+                    this.ringtoneAudio.play().catch(e => console.warn("Ringtone autoplay deferred:", e));
+                } catch (e) {}
+
+                // 3. Request Screen Wake Lock & System Lock Screen Notification
+                this.requestWakeLock();
+                this.triggerLockScreenNotification(callerExt);
+            }
+
+            stopTones() {
+                if (this.ringbackInterval) { clearInterval(this.ringbackInterval); this.ringbackInterval = null; }
+                if (this.ringtoneInterval) { clearInterval(this.ringtoneInterval); this.ringtoneInterval = null; }
+
+                // Stop Vibration Loop
+                if (this.vibrationInterval) {
+                    clearInterval(this.vibrationInterval);
+                    this.vibrationInterval = null;
+                }
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(0);
+                }
+
+                // Stop Audio Ringtone
+                if (this.ringtoneAudio) {
+                    this.ringtoneAudio.pause();
+                    this.ringtoneAudio.currentTime = 0;
+                }
+
+                // Close System Lock-Screen Notifications
+                if (this.swRegistration && this.swRegistration.getNotifications) {
+                    this.swRegistration.getNotifications({ tag: 'starbridge-call' }).then(notifications => {
+                        notifications.forEach(notification => notification.close());
+                    }).catch(() => {});
+                }
+
+                // Release Screen Wake Lock
+                if (this.wakeLock) {
+                    this.wakeLock.release().catch(() => {});
+                    this.wakeLock = null;
+                }
             }
 
             playEndCallSound() {
@@ -2048,11 +2214,6 @@
                     }, 250);
                 };
                 playBeep();
-            }
-
-            stopTones() {
-                if (this.ringbackInterval) { clearInterval(this.ringbackInterval); this.ringbackInterval = null; }
-                if (this.ringtoneInterval) { clearInterval(this.ringtoneInterval); this.ringtoneInterval = null; }
             }
 
             pressDialKey(key) {

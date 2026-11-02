@@ -21,7 +21,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the root directory so index.html works smoothly on Render
+// Serve static files from root directory so index.html loads on Render
 app.use(express.static(__dirname));
 
 // Initialize SQLite Database
@@ -30,7 +30,7 @@ initDb();
 // Active Connected WebSockets Registry: Map<ExtensionNumberString, WebSocket>
 const activeSessions = new Map();
 
-// Helper helpers for strict String-based Map operations
+// Helpers for strict String-based Map operations
 const getSession = (ext) => activeSessions.get(String(ext));
 const setSession = (ext, ws) => activeSessions.set(String(ext), ws);
 const hasSession = (ext) => activeSessions.has(String(ext));
@@ -149,7 +149,23 @@ app.get('/api/cdr/history', async (req, res) => {
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
+// Keepalive Ping Interval (Prevents cloud proxies like Render from timing out active WebSockets)
+const heartbeatInterval = setInterval(() => {
+  wss.clients.forEach((ws) => {
+    if (ws.isAlive === false) return ws.terminate();
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, 30000);
+
+wss.on('close', () => {
+  clearInterval(heartbeatInterval);
+});
+
 wss.on('connection', (ws) => {
+  ws.isAlive = true;
+  ws.on('pong', () => { ws.isAlive = true; });
+
   let boundExtension = null;
 
   ws.on('message', async (message) => {
@@ -159,6 +175,7 @@ wss.on('connection', (ws) => {
     try {
       msg = JSON.parse(rawText);
     } catch (e) {
+      // Fallback parser for raw SIP text packet formats
       if (rawText.includes('REGISTER sip:')) {
         const extMatch = rawText.match(/From:\s*<sip:([^@]+)@/);
         if (extMatch && extMatch[1]) {
@@ -183,7 +200,6 @@ wss.on('connection', (ws) => {
     }
 
     switch (msg.type) {
-      
       case 'register': {
         const reqExt = msg.extension ? String(msg.extension) : null;
         const password = msg.password;
@@ -251,16 +267,19 @@ wss.on('connection', (ws) => {
         const target = String(msg.target);
         const sdp = msg.sdp;
         const callId = msg.callId || `call-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+        const isIceRestart = msg.isIceRestart === true;
         
         const targetWs = getSession(target);
 
-        activeCalls.set(callId, {
-          callId,
-          caller: from,
-          callee: target,
-          startTime: new Date(),
-          answerTime: null
-        });
+        if (!isIceRestart) {
+          activeCalls.set(callId, {
+            callId,
+            caller: from,
+            callee: target,
+            startTime: new Date(),
+            answerTime: null
+          });
+        }
 
         if (targetWs && targetWs.readyState === WebSocket.OPEN) {
           targetWs.send(JSON.stringify({
@@ -268,9 +287,10 @@ wss.on('connection', (ws) => {
             callId,
             from,
             target,
-            sdp
+            sdp,
+            isIceRestart
           }));
-          console.log(`[CALL INVITE FORWARDED] ${from} -> ${target}`);
+          console.log(`[CALL INVITE FORWARDED] ${from} -> ${target} (IceRestart: ${isIceRestart})`);
         } else {
           ws.send(JSON.stringify({
             type: 'error',
@@ -308,7 +328,7 @@ wss.on('connection', (ws) => {
         }
 
         if (targetWs && targetWs.readyState === WebSocket.OPEN) {
-          targetWs.send(JSON.stringify({ type: 'answer', from, target, sdp }));
+          targetWs.send(JSON.stringify({ type: 'answer', from, target, sdp, callId }));
           console.log(`[CALL ANSWERED] ${from} -> ${target}`);
         }
         break;
@@ -330,6 +350,23 @@ wss.on('connection', (ws) => {
         const targetWs = getSession(target);
         if (targetWs && targetWs.readyState === WebSocket.OPEN) {
           targetWs.send(JSON.stringify({ type: 'hold', from: boundExtension, hold }));
+        }
+        break;
+      }
+
+      case 'transfer': {
+        const target = String(msg.target);
+        const { transferTo, callId } = msg;
+        const targetWs = getSession(target);
+
+        if (targetWs && targetWs.readyState === WebSocket.OPEN) {
+          targetWs.send(JSON.stringify({
+            type: 'transfer',
+            from: boundExtension,
+            transferTo,
+            callId
+          }));
+          console.log(`[CALL TRANSFER INITIATED] ${boundExtension} transferring ${target} to ${transferTo}`);
         }
         break;
       }
