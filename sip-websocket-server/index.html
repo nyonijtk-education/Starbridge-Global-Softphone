@@ -894,6 +894,7 @@
                 this.pendingOffer = null;
                 this.iceCandidateQueue = [];
                 this.autoScroll = true;
+                this.pingInterval = null;
 
                 this.isIntercomMuted = false;
                 this.isMergedConference = false;
@@ -1218,6 +1219,14 @@
                     this.ws = new WebSocket(wssUrl);
 
                     this.ws.onopen = () => {
+                        // Start 15s application-level keepalive heartbeat ping
+                        if (this.pingInterval) clearInterval(this.pingInterval);
+                        this.pingInterval = setInterval(() => {
+                            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                                this.ws.send(JSON.stringify({ type: 'ping' }));
+                            }
+                        }, 15000);
+
                         const registerMsg = JSON.stringify({
                             type: 'register',
                             extension: ext,
@@ -1239,11 +1248,19 @@
                     };
 
                     this.ws.onclose = () => {
+                        if (this.pingInterval) clearInterval(this.pingInterval);
                         this.registered = false;
                         this.registeredExtension = null;
                         document.getElementById('local-ext-display').textContent = '--';
                         this.updateRegState('Disconnected', 'text-amber-400', 'bg-amber-400');
                         document.getElementById('reg-btn-text').textContent = 'REGISTER';
+
+                        // Auto-reconnect fallback if disconnected unexpectedly
+                        setTimeout(() => {
+                            if (localStorage.getItem('sb_is_registered') === 'true' && !this.registered) {
+                                this.executeAuthenticatedRegistration({ isBiometric: false });
+                            }
+                        }, 5000);
                     };
 
                 } catch (e) {
@@ -1253,6 +1270,7 @@
             }
 
             unregister() {
+                if (this.pingInterval) clearInterval(this.pingInterval);
                 if (this.ws) { this.ws.close(); }
                 this.registered = false;
                 this.registeredExtension = null;
@@ -1433,6 +1451,10 @@
                 }
 
                 if (msgObj) {
+                    if (msgObj.type === 'pong') {
+                        return; // Silent keepalive heartbeat response
+                    }
+
                     if (msgObj.type === 'error') {
                         this.showToast(msgObj.reason || 'Server error occurred', 'error');
                         if (msgObj.code === 409 || msgObj.code === 401) {
@@ -1487,9 +1509,13 @@
                         this.stopTones();
                         this.logPacket('RX', `SIP/2.0 200 OK\r\n\r\n${msgObj.sdp}`);
                         if (currentLine.pc) {
-                            await currentLine.pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: msgObj.sdp }));
-                            await this.processIceCandidateQueue(currentLine);
-                            this.setCallState('CONNECTED');
+                            if (currentLine.pc.signalingState === 'have-local-offer') {
+                                await currentLine.pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: msgObj.sdp }));
+                                await this.processIceCandidateQueue(currentLine);
+                                this.setCallState('CONNECTED');
+                            } else {
+                                console.warn(`Ignored answer: invalid signaling state (${currentLine.pc.signalingState})`);
+                            }
                         }
                         return;
                     }
@@ -1541,6 +1567,7 @@
 
             async acquireUserMediaStreams() {
                 let stream = null;
+                // Attempt 1: Full Video + High Quality Audio
                 try {
                     stream = await navigator.mediaDevices.getUserMedia({
                         audio: {
@@ -1552,10 +1579,11 @@
                             autoGainControl: true,
                             latency: 0.01
                         },
-                        video: { width: 720, height: 1280 }
+                        video: { width: { ideal: 640 }, height: { ideal: 480 } }
                     });
                     this.isVideoActive = true;
                 } catch (e1) {
+                    // Attempt 2: Audio-Only Fallback Chain
                     try {
                         stream = await navigator.mediaDevices.getUserMedia({
                             audio: {
@@ -1567,27 +1595,25 @@
                             }
                         });
                         this.isVideoActive = false;
+                        this.showToast('Camera unavailable. Defaulting to Audio-Only mode.', 'info');
                     } catch (e2) {
-                        const ctx = new AudioContext();
-                        const osc = ctx.createOscillator();
-                        const dst = ctx.createMediaStreamDestination();
-                        osc.connect(dst);
-                        osc.start();
-                        stream = dst.stream;
-                        this.isVideoActive = false;
+                        console.error("Audio/Video acquisition rejected:", e2);
+                        this.showToast('Microphone permission required to place call', 'error');
+                        throw e2;
                     }
                 }
+
                 this.micStream = stream;
                 this.cameraStream = stream;
 
                 const localVid = document.getElementById('local-video');
                 const pipVid = document.getElementById('pip-video');
 
-                if (localVid && stream) {
+                if (localVid && this.isVideoActive) {
                     localVid.srcObject = stream;
                     localVid.play().catch(() => {});
                 }
-                if (pipVid && stream) {
+                if (pipVid && this.isVideoActive) {
                     pipVid.srcObject = stream;
                     pipVid.play().catch(() => {});
                 }
@@ -1600,12 +1626,13 @@
                 const localVideo = document.getElementById('local-video');
                 const remoteAudio = document.getElementById('remote-audio');
 
-                // Peer Connection State Change Diagnostics
+                // Peer Connection State Change Diagnostics & Auto-Recovery
                 lineObj.pc.onconnectionstatechange = () => {
                     const connState = lineObj.pc.connectionState;
                     this.logPacket('INFO', `Peer Connection State: ${connState}`);
                     if (connState === 'failed') {
-                        this.showToast('Media connection failed: NAT/Firewall blocking WebRTC UDP media', 'error');
+                        this.showToast('UDP Media Blocked. Attempting automatic ICE Restart via TCP/TLS...', 'info');
+                        this.triggerIceRestart(lineObj);
                     }
                 };
 
@@ -1614,7 +1641,6 @@
                     const state = lineObj.pc.iceConnectionState;
                     this.logPacket('INFO', `ICE Connection State: ${state}`);
                     if (state === 'failed' || state === 'disconnected') {
-                        this.showToast('ICE Relay dropped. Triggering automatic ICE Restart...', 'info');
                         this.triggerIceRestart(lineObj);
                     }
                 };
@@ -1690,7 +1716,14 @@
                 currentLine.callId = callId;
                 document.getElementById('active-callid').textContent = `Call-ID: ${callId}`;
 
-                currentLine.pc = new RTCPeerConnection({ iceServers: this.iceServers, bundlePolicy: 'max-bundle' });
+                const peerConnectionConfig = {
+                    iceServers: this.iceServers,
+                    bundlePolicy: 'max-bundle',
+                    rtcpMuxPolicy: 'require',
+                    iceCandidatePoolSize: 10
+                };
+
+                currentLine.pc = new RTCPeerConnection(peerConnectionConfig);
                 this.iceCandidateQueue = [];
 
                 this.setupPeerConnectionTrackListeners(currentLine);
@@ -1731,7 +1764,14 @@
                 currentLine.remoteExt = caller;
                 document.getElementById('dial-display').value = caller;
 
-                currentLine.pc = new RTCPeerConnection({ iceServers: this.iceServers, bundlePolicy: 'max-bundle' });
+                const peerConnectionConfig = {
+                    iceServers: this.iceServers,
+                    bundlePolicy: 'max-bundle',
+                    rtcpMuxPolicy: 'require',
+                    iceCandidatePoolSize: 10
+                };
+
+                currentLine.pc = new RTCPeerConnection(peerConnectionConfig);
                 this.iceCandidateQueue = [];
 
                 this.setupPeerConnectionTrackListeners(currentLine);
